@@ -90,13 +90,14 @@ jobs:
           "
 
       - name: 10 - Restart Frontend Container
-        run: |          
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+        env:
             DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
             CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
             NETWORK: ${{ vars.NET }}_${{ vars.ENV }}
             FRONTEND_PORT: ${{ vars.FRONTEND_PORT }} # Garde le port d'accès public sur 3001
             CONTAINER_PORT: ${{ vars.CONTAINER_PORT }}
+        run: |          
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             echo "Chemin de répertoire : $DEPLOY_DIRECTORY"
             echo "Nom du conteneur : $CONTAINER_NAME"
             echo "Réseau Docker : $NETWORK"
