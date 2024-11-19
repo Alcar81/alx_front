@@ -122,10 +122,18 @@ jobs:
             echo "Conteneur recréé avec succès !"
           EOF
 
-      - name: 11 - Health Check
+      - name: 11 - Health Check and Debugging
         run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
-            echo 'Vérification des ports ouverts sur le serveur...'
-            netstat -tuln
-          "
-          curl --max-time 10 -I http://${SERVER_IP}:${FRONTEND_PORT} || exit 1
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+            echo "=== Vérification du contenu monté dans le conteneur ==="
+            docker exec front_nginx_dev ls -l /usr/share/nginx/html || echo "Erreur : Contenu manquant dans le conteneur."
+
+            echo "=== Vérification de la configuration Nginx ==="
+            docker exec front_nginx_dev cat /etc/nginx/conf.d/default.conf || echo "Erreur : Impossible de lire la configuration Nginx."
+
+            echo "=== Tester la connectivité en local sur le serveur ==="
+            curl -I http://localhost:${FRONTEND_PORT} || echo "Erreur : Le service n'est pas accessible localement sur ${FRONTEND_PORT}."
+
+            echo "=== Vérifier les permissions sur le répertoire local ==="
+            ls -ld ${DEPLOY_DIRECTORY} || echo "Erreur : Problème de permissions ou de chemin sur ${DEPLOY_DIRECTORY}."
+          EOF
