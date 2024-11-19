@@ -2,7 +2,7 @@ name: Déployer Frontend Dev
 
 on:
   push:
-    branches:  
+    branches:
       - dev
 
 jobs:
@@ -11,19 +11,17 @@ jobs:
     environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
 
     env:
-      ENV: ${{ vars.ENV }}      
+      ENV: ${{ vars.ENV }}
       SERVER_IP: ${{ secrets.SERVER_IP }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_USER: ${{ secrets.SSH_USER }}
       DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
       CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
       NETWORK: ${{ vars.NET }}_${{ vars.ENV }}
-      FRONTEND_PORT: ${{ vars.FRONTEND_PORT }} # Garde le port d'accès public sur 3001
-      CONTAINER_PORT: ${{ vars.CONTAINER_PORT }} # Change le port interne exposé par nginx
+      FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
+      CONTAINER_PORT: ${{ vars.CONTAINER_PORT }}
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}
-      
-      
 
     steps:
       - name: 1 - Afficher les variables générées
@@ -34,7 +32,6 @@ jobs:
           echo "Nom du conteneur : $CONTAINER_NAME"
           echo "Port Frontend : $FRONTEND_PORT"
           echo "Port Conteneur : $CONTAINER_PORT"
-          echo "Chemin de répertoire :$DEPLOY_DIRECTORY"
 
       - name: 2 - Checkout repository
         uses: actions/checkout@v3
@@ -54,12 +51,12 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          eval $(ssh-agent -s) # Démarre l'agent SSH
+          eval $(ssh-agent -s)
           echo "$SSH_PRIVATE_KEY" > /tmp/git_id_rsa
           chmod 600 /tmp/git_id_rsa
-          ssh-add /tmp/git_id_rsa # Ajoute la clé à l'agent SSH
-          mkdir -p ~/.ssh # Assure que le répertoire .ssh existe
-          touch ~/.ssh/known_hosts # Assure que le fichier known_hosts existe
+          ssh-add /tmp/git_id_rsa
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
           ssh-keyscan -p ${SSH_PORT} -H ${SERVER_IP} >> ~/.ssh/known_hosts
 
       - name: 7 - Gérer le réseau Docker
@@ -68,7 +65,6 @@ jobs:
             docker network create $NETWORK || true
           "
 
-      # Étape 8 : Copier le build et les fichiers nécessaires sur le serveur
       - name: 8 - Copy build and config to server
         run: |
           mkdir -p build_with_config
@@ -125,9 +121,11 @@ jobs:
       
             echo "Conteneur recréé avec succès !"
           EOF
-              
-    
 
       - name: 11 - Health Check
         run: |
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
+            echo 'Vérification des ports ouverts sur le serveur...'
+            netstat -tuln
+          "
           curl --max-time 10 -I http://${SERVER_IP}:${FRONTEND_PORT} || exit 1
