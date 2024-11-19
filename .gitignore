@@ -131,3 +131,4 @@ dist
 .env
 
 known_hosts
+node_modules/
