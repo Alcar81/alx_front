@@ -16,7 +16,7 @@ jobs:
       SERVER_IP: ${{ secrets.SERVER_IP }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      DEPLOY_DIRECTORY: ${{ secrets.DEPLOY_DIRECTORY }}
+      DEPLOY_DIRECTORY: /home/dev.alxmultimedia.com/frontend # Temporaire pour débogage
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}
       CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
