@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/master' && 'dev' }}
+    environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
 
     env:
       ENV: ${{ vars.ENV }}
@@ -17,10 +17,12 @@ jobs:
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_USER: ${{ secrets.SSH_USER }}
       DEPLOY_DIRECTORY: ${{ secrets.DEPLOY_DIRECTORY }}
+      FRONT: ${{ vars.FRONT }}
+      NGINX: ${{ vars.NGINX }}
+      CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
       FRONTEND_PORT: 3001
 
     steps:
-      # Étape 1 : Afficher les variables générées
       - name: 1 - Afficher les variables générées
         run: |
           echo "Environnement : $ENV"
@@ -28,25 +30,20 @@ jobs:
           echo "Répertoire de déploiement : $DEPLOY_DIRECTORY"
           echo "Port Frontend : $FRONTEND_PORT"
 
-      # Étape 2 : Checkout du dépôt Git
       - name: 2 - Checkout repository
         uses: actions/checkout@v3
 
-      # Étape 3 : Configuration de Node.js
       - name: 3 - Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # Étape 4 : Installation des dépendances
       - name: 4 - Install dependencies
         run: npm install
 
-      # Étape 5 : Build du projet
       - name: 5 - Build project
         run: npm run build
 
-      # Étape 6 : Démarrer l'agent SSH et ajouter la clé
       - name: 6 - Start SSH agent and add key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -57,14 +54,12 @@ jobs:
           ssh-add /tmp/git_id_rsa
           ssh-keyscan -p ${SSH_PORT} -H ${SERVER_IP} >> ~/.ssh/known_hosts
 
-      # Étape 7 : Gérer le réseau Docker
       - name: 7 - Gérer le réseau Docker
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
             docker network create $NETWORK || true
           "
 
-      # Étape 8 : Copier le build et les fichiers nécessaires sur le serveur
       - name: 8 - Copy build and config to server
         run: |
           mkdir -p build_with_config
@@ -76,27 +71,24 @@ jobs:
           rsync -avz --delete --exclude '.env' --exclude 'node_modules/' build_with_config/ ${SSH_USER}@${SERVER_IP}:${DEPLOY_DIRECTORY} -e "ssh -p ${SSH_PORT} -o IdentitiesOnly=yes -i /tmp/git_id_rsa"
           rm -rf build_with_config
 
-      # Étape 9 : Installer les dépendances sur le serveur (si nécessaire)
       - name: 9 - Install dependencies on server
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
-            cd $DEPLOY_DIRECTORY && npm install
+            cd $DEPLOY_DIRECTORY && [ ! -d 'node_modules' ] && npm install || echo 'Dependencies already installed.'
           "
 
-      # Étape 10 : Redémarrer le conteneur Docker du frontend
       - name: 10 - Restart Frontend Container
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
-            docker ps -a --filter \"name=front_$ENV\" --format '{{.Names}}' | grep -w \"front_$ENV\" && docker stop front_$ENV || true &&
-            docker ps -a --filter \"name=front_$ENV\" --format '{{.Names}}' | grep -w \"front_$ENV\" && docker rm front_$ENV || true
-            docker run -d --name front_$ENV \
+            docker ps -a --filter \"name=$CONTAINER_NAME\" --format '{{.Names}}' | grep -w \"$CONTAINER_NAME\" && docker stop $CONTAINER_NAME || true &&
+            docker ps -a --filter \"name=$CONTAINER_NAME\" --format '{{.Names}}' | grep -w \"$CONTAINER_NAME\" && docker rm $CONTAINER_NAME || true
+            docker run -d --name $CONTAINER_NAME \
               --network $NETWORK \
               -p $FRONTEND_PORT:80 \
               -v $DEPLOY_DIRECTORY:/usr/share/nginx/html \
               nginx:alpine
           "
 
-      # Étape 11 : Vérification de l'état
       - name: 11 - Health Check
         run: |
-          curl -I http://${SERVER_IP}:${FRONTEND_PORT} || exit 1
+          curl --max-time 10 -I http://${SERVER_IP}:${FRONTEND_PORT} || exit 1
