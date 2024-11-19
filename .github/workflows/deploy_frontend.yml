@@ -55,6 +55,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > /tmp/git_id_rsa
           chmod 600 /tmp/git_id_rsa
           ssh-add /tmp/git_id_rsa
+          ssh-keyscan -p ${SSH_PORT} -H ${SERVER_IP} >> ~/.ssh/known_hosts
 
       # Étape 7 : Gérer le réseau Docker
       - name: 7 - Gérer le réseau Docker
@@ -69,7 +70,10 @@ jobs:
           mkdir -p build_with_config
           cp -R build/* build_with_config/
           cp package.json package-lock.json build_with_config/
-          rsync -avz build_with_config/ ${SSH_USER}@${SERVER_IP}:${DEPLOY_DIRECTORY} -e "ssh -p ${SSH_PORT} -o IdentitiesOnly=yes -i /tmp/git_id_rsa"
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
+            mkdir -p $DEPLOY_DIRECTORY && chmod -R 755 $DEPLOY_DIRECTORY
+          "
+          rsync -avz --delete --exclude '.env' --exclude 'node_modules/' build_with_config/ ${SSH_USER}@${SERVER_IP}:${DEPLOY_DIRECTORY} -e "ssh -p ${SSH_PORT} -o IdentitiesOnly=yes -i /tmp/git_id_rsa"
           rm -rf build_with_config
 
       # Étape 9 : Installer les dépendances sur le serveur (si nécessaire)
