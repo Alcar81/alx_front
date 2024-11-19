@@ -93,6 +93,14 @@ jobs:
             docker ps -a --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -w "$CONTAINER_NAME" && docker stop $CONTAINER_NAME || true
             docker ps -a --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -w "$CONTAINER_NAME" && docker rm $CONTAINER_NAME || true
 
+            echo "Validation des chemins avant la création du conteneur..."
+            if [ -d "$DEPLOY_DIRECTORY" ]; then
+              echo "Le chemin $DEPLOY_DIRECTORY est valide."
+            else
+              echo "Erreur : le chemin $DEPLOY_DIRECTORY n'existe pas." >&2
+              exit 1
+            fi
+
             echo "Recréation du conteneur avec les dernières configurations..."
             docker run -d --name $CONTAINER_NAME \
               --network $NETWORK \
@@ -102,6 +110,7 @@ jobs:
 
             echo "Conteneur recréé avec succès !"
           EOF
+
 
       - name: 11 - Health Check
         run: |
