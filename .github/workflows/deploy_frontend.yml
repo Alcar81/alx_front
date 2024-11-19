@@ -90,11 +90,13 @@ jobs:
       - name: 10 - Restart Frontend Container
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+            DEPLOY_DIRECTORY="/home/dev.alxmultimedia.com/frontend"
             echo "Chemin de répertoire : $DEPLOY_DIRECTORY"
+
             echo "Arrêt et suppression du conteneur existant, s'il existe..."
             docker ps -a --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -w "$CONTAINER_NAME" && docker stop $CONTAINER_NAME || true
             docker ps -a --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -w "$CONTAINER_NAME" && docker rm $CONTAINER_NAME || true
-      
+
             echo "Validation des chemins avant la création du conteneur..."
             if [ -d "$DEPLOY_DIRECTORY" ]; then
               echo "Le chemin $DEPLOY_DIRECTORY est valide."
@@ -102,17 +104,17 @@ jobs:
               echo "Erreur : le chemin $DEPLOY_DIRECTORY n'existe pas." >&2
               exit 1
             fi
-      
+
             echo "Recréation du conteneur avec les dernières configurations..."
             docker run -d --name $CONTAINER_NAME \
               --network $NETWORK \
               -p $FRONTEND_PORT:$CONTAINER_PORT \
               -v $DEPLOY_DIRECTORY:/usr/share/nginx/html:ro \
               nginx:alpine || exit 1
-      
+
             echo "Conteneur recréé avec succès !"
           EOF
-      
+    
 
       - name: 11 - Health Check
         run: |
