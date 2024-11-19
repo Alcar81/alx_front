@@ -20,7 +20,8 @@ jobs:
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}
       CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
-      FRONTEND_PORT: 3001
+      FRONTEND_PORT: 3001 # Garde le port d'accès public sur 3001
+      CONTAINER_PORT: 8080 # Change le port interne exposé par nginx
 
     steps:
       - name: 1 - Afficher les variables générées
@@ -30,6 +31,7 @@ jobs:
           echo "Répertoire de déploiement : $DEPLOY_DIRECTORY"
           echo "Nom du conteneur : $CONTAINER_NAME"
           echo "Port Frontend : $FRONTEND_PORT"
+          echo "Port Conteneur : $CONTAINER_PORT"
 
       - name: 2 - Checkout repository
         uses: actions/checkout@v3
@@ -49,12 +51,12 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          eval $(ssh-agent -s)
+          eval $(ssh-agent -s) # Démarre l'agent SSH
           echo "$SSH_PRIVATE_KEY" > /tmp/git_id_rsa
           chmod 600 /tmp/git_id_rsa
-          ssh-add /tmp/git_id_rsa
-          mkdir -p ~/.ssh
-          touch ~/.ssh/known_hosts
+          ssh-add /tmp/git_id_rsa # Ajoute la clé à l'agent SSH
+          mkdir -p ~/.ssh # Assure que le répertoire .ssh existe
+          touch ~/.ssh/known_hosts # Assure que le fichier known_hosts existe
           ssh-keyscan -p ${SSH_PORT} -H ${SERVER_IP} >> ~/.ssh/known_hosts
 
       - name: 7 - Gérer le réseau Docker
@@ -63,38 +65,20 @@ jobs:
             docker network create $NETWORK || true
           "
 
-      # Étape 8.1 : Sauvegarder le répertoire de déploiement (si nécessaire)
-      - name: 8.1 - Backup deployment directory
-        run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
-            [ -d $DEPLOY_DIRECTORY ] && cp -r $DEPLOY_DIRECTORY ${DEPLOY_DIRECTORY}_backup || echo 'No directory to backup'
-          "
-
-      # Étape 8.2 : Vérifier les fichiers avant synchronisation
-      - name: 8.2 - Check destination before sync
-        run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
-            [ -d $DEPLOY_DIRECTORY ] && ls -al $DEPLOY_DIRECTORY || echo 'No files to list'
-          "
-
-      # Étape 8.3 : Synchroniser les fichiers
-      - name: 8.3 - Synchronize files to server
+      # Étape 8 : Copier le build et les fichiers nécessaires sur le serveur
+      - name: 8 - Copy build and config to server
         run: |
           mkdir -p build_with_config
           cp -R build/* build_with_config/
           cp package.json package-lock.json build_with_config/
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
+            mkdir -p $DEPLOY_DIRECTORY && chmod -R 755 $DEPLOY_DIRECTORY
+          "
           rsync -avz \
             --exclude='.env' \
             --exclude='node_modules/' \
             build_with_config/ ${SSH_USER}@${SERVER_IP}:${DEPLOY_DIRECTORY} -e "ssh -p ${SSH_PORT} -o IdentitiesOnly=yes -i /tmp/git_id_rsa"
           rm -rf build_with_config
-
-      # Étape 8.4 : Vérifier les fichiers après synchronisation
-      - name: 8.4 - Check destination after sync
-        run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
-            ls -al $DEPLOY_DIRECTORY
-          "
 
       - name: 9 - Install dependencies on server
         run: |
@@ -109,7 +93,7 @@ jobs:
             docker ps -a --filter \"name=$CONTAINER_NAME\" --format '{{.Names}}' | grep -w \"$CONTAINER_NAME\" && docker rm $CONTAINER_NAME || true
             docker run -d --name $CONTAINER_NAME \
               --network $NETWORK \
-              -p $FRONTEND_PORT:80 \
+              -p $FRONTEND_PORT:$CONTAINER_PORT \ # Mappe le port 8080 du conteneur au port 3001 public
               -v $DEPLOY_DIRECTORY:/usr/share/nginx/html \
               nginx:alpine
           "
