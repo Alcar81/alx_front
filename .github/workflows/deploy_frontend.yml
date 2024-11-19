@@ -90,7 +90,7 @@ jobs:
       - name: 10 - Restart Frontend Container
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            DEPLOY_DIRECTORY="/home/dev.alxmultimedia.com/frontend"
+            DEPLOY_DIRECTORY=${{ secrets.DEPLOY_DIRECTORY }}
             echo "Chemin de répertoire : $DEPLOY_DIRECTORY"
 
             echo "Arrêt et suppression du conteneur existant, s'il existe..."
