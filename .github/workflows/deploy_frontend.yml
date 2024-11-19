@@ -16,7 +16,7 @@ jobs:
       SERVER_IP: ${{ secrets.SERVER_IP }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      DEPLOY_DIRECTORY: /home/dev.alxmultimedia.com/frontend # Temporaire pour débogage
+      DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }} # Temporaire pour débogage
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}
       CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
@@ -90,7 +90,7 @@ jobs:
       - name: 10 - Restart Frontend Container
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            DEPLOY_DIRECTORY=${{ secrets.DEPLOY_DIRECTORY }}
+            DEPLOY_DIRECTORY=${{ vars.DEPLOY_DIRECTORY }}
             echo "Chemin de répertoire : $DEPLOY_DIRECTORY"
 
             echo "Arrêt et suppression du conteneur existant, s'il existe..."
