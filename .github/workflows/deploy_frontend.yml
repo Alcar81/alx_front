@@ -111,7 +111,6 @@ jobs:
             echo "Conteneur recréé avec succès !"
           EOF
 
-
       - name: 11 - Health Check
         run: |
           curl --max-time 10 -I http://${SERVER_IP}:${FRONTEND_PORT} || exit 1
