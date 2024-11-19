@@ -11,17 +11,19 @@ jobs:
     environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
 
     env:
-      ENV: ${{ vars.ENV }}
-      NETWORK: ${{ vars.NET }}_${{ vars.ENV }}
+      ENV: ${{ vars.ENV }}      
       SERVER_IP: ${{ secrets.SERVER_IP }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }} # Temporaire pour débogage
+      DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
+      CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
+      NETWORK: ${{ vars.NET }}_${{ vars.ENV }}
+      FRONTEND_PORT: ${{ vars.FRONTEND_PORT }} # Garde le port d'accès public sur 3001
+      CONTAINER_PORT: ${{ vars.CONTAINER_PORT }} # Change le port interne exposé par nginx
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}
-      CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
-      FRONTEND_PORT: 3001 # Garde le port d'accès public sur 3001
-      CONTAINER_PORT: 8080 # Change le port interne exposé par nginx
+      
+      
 
     steps:
       - name: 1 - Afficher les variables générées
@@ -88,8 +90,13 @@ jobs:
           "
 
       - name: 10 - Restart Frontend Container
-        run: |
+        run: |          
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+            DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
+            CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
+            NETWORK: ${{ vars.NET }}_${{ vars.ENV }}
+            FRONTEND_PORT: ${{ vars.FRONTEND_PORT }} # Garde le port d'accès public sur 3001
+            CONTAINER_PORT: ${{ vars.CONTAINER_PORT }}
             echo "Chemin de répertoire : $DEPLOY_DIRECTORY"
             echo "Nom du conteneur : $CONTAINER_NAME"
             echo "Réseau Docker : $NETWORK"
