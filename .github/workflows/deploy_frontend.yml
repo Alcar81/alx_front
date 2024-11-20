@@ -27,6 +27,7 @@ jobs:
       
 
     steps:
+      # Étape 1 - Afficher les variables générées
       - name: 1 - Afficher les variables générées
         run: |
           echo "Environnement : $ENV"
@@ -36,21 +37,30 @@ jobs:
           echo "Port Frontend : $FRONTEND_PORT"
           echo "Port Conteneur : $CONTAINER_PORT"
 
+      # Étape 2 - Checkout repository    
       - name: 2 - Checkout repository
         uses: actions/checkout@v3
 
+      # Étape 3 - Set up Node.js
       - name: 3 - Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Étape 4 - Install dependencies     
       - name: 4 - Install dependencies
         run: npm install
 
-      - name: 5 - Build project
+      # Étape 5 - Exécuter les tests   
+      - name: 5 - Exécuter les tests
+        run: npm test|
+
+      # Étape 6 - Build project
+      - name: 6 - Build project
         run: npm run build
 
-      - name: 6 - Start SSH agent and add key
+      # Étape 7 - Start SSH agent and add key
+      - name: 7 - Start SSH agent and add key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
@@ -62,13 +72,15 @@ jobs:
           touch ~/.ssh/known_hosts
           ssh-keyscan -p ${SSH_PORT} -H ${SERVER_IP} >> ~/.ssh/known_hosts
 
-      - name: 7 - Gérer le réseau Docker
+      # Étape 8 - Gérer le réseau Docker
+      - name: 8 - Gérer le réseau Docker
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
             docker network create $NETWORK || true
           "
 
-      - name: 8 - Copy build and config to server
+      # Étape 9 - Copy build and config to server      
+      - name: 9 - Copy build and config to server
         run: |
           mkdir -p build_with_config
           cp -R build/* build_with_config/
@@ -82,13 +94,15 @@ jobs:
             build_with_config/ ${SSH_USER}@${SERVER_IP}:${DEPLOY_DIRECTORY} -e "ssh -p ${SSH_PORT} -o IdentitiesOnly=yes -i /tmp/git_id_rsa"
           rm -rf build_with_config
 
-      - name: 9 - Install dependencies on server
+      # Étape 10 - Install dependencies on server
+      - name: 10 - Install dependencies on server
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP "
             cd $DEPLOY_DIRECTORY && [ ! -d 'node_modules' ] && npm install || echo 'Dependencies already installed.'
           "
 
-      - name: 10 - Restart Frontend Container
+      # Étape 11 - Restart Frontend Container
+      - name: 11 - Restart Frontend Container
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             DEPLOY_DIRECTORY=${{ vars.DEPLOY_DIRECTORY }}
@@ -125,7 +139,8 @@ jobs:
             echo "Conteneur recréé avec succès !"
           EOF
 
-      - name: 10.1 - Update Nginx configuration
+      # Étape 11.1 - Update Nginx configuration
+      - name: 11.1 - Update Nginx configuration
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             DEPLOY_DIRECTORY=${{ vars.DEPLOY_DIRECTORY }}
@@ -174,7 +189,7 @@ jobs:
                 docker exec front_nginx_dev nginx -s reload
           EOF
         
-
+      # Étape 12 - Health Check and Debugging
       - name: 12 - Health Check and Debugging
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
