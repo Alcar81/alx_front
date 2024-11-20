@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import config from '../config/config';
+import config from './config/config';
 
 function App() {
   const isMaintenance = config.REACT_APP_MAINTENANCE_MODE;
