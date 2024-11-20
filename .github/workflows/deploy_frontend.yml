@@ -173,7 +173,7 @@ jobs:
                 docker exec front_nginx_dev nginx -s reload
           EOF      
 
-      - name: 11 - Validate Nginx configuration
+      - name: 11 - Validate Nginx configuration 
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             echo "Validation de la configuration Nginx..."
