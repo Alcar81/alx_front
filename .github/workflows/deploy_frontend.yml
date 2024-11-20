@@ -53,7 +53,7 @@ jobs:
 
       # Étape 5 - Exécuter les tests   
       - name: 5 - Exécuter les tests
-        run: npm test|
+        run: npm test
 
       # Étape 6 - Build project
       - name: 6 - Build project
