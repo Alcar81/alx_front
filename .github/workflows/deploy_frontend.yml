@@ -24,6 +24,7 @@ jobs:
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}
       REACT_APP_MAINTENANCE_MODE: ${{ vars.REACT_APP_MAINTENANCE_MODE }}
+      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       
 
     steps:
@@ -54,7 +55,7 @@ jobs:
       # Étape 5 - Exécuter les tests   
       - name: 5 - Exécuter les tests
         env:
-          REACT_APP_API_URL: ${{ vars.API_URL }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: npm test
 
       # Étape 6 - Build project
