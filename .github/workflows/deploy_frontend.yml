@@ -53,6 +53,8 @@ jobs:
 
       # Étape 5 - Exécuter les tests   
       - name: 5 - Exécuter les tests
+        env:
+          REACT_APP_API_URL: ${{ vars.API_URL }}
         run: npm test
 
       # Étape 6 - Build project
