@@ -22,8 +22,7 @@ jobs:
       FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
       CONTAINER_PORT: ${{ vars.CONTAINER_PORT }}
       FRONT: ${{ vars.FRONT }}
-      NGINX: ${{ vars.NGINX }}
-      REACT_APP_MAINTENANCE_MODE: ${{ vars.REACT_APP_MAINTENANCE_MODE }}
+      NGINX: ${{ vars.NGINX }}      
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}   
 
@@ -62,8 +61,7 @@ jobs:
       - name: 6 - Build project
         env:
           REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
-          REACT_APP_FRONTEND_URL: ${{ env.REACT_APP_FRONTEND_URL }}
-          REACT_APP_MAINTENANCE_MODE: ${{ env.REACT_APP_MAINTENANCE_MODE }}
+          REACT_APP_FRONTEND_URL: ${{ env.REACT_APP_FRONTEND_URL }}          
         run: npm run build
 
       # Étape 7 - Start SSH agent and add key
