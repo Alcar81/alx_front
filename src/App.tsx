@@ -23,7 +23,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="App" data-testid="live-mode">
+    <div className="App" data-testid="main-container">
       <h1>Bienvenue sur notre application !</h1>
       <a
         href="/learn-react"
