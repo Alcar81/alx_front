@@ -2,12 +2,12 @@ import React from 'react';
 import './App.css';
 import config from './config/config';
 
-function App() {
+const App: React.FC = () => {
   const isMaintenance = config.REACT_APP_MAINTENANCE_MODE;
 
   if (isMaintenance) {
     return (
-      <div className="App">
+      <div className="App" data-testid="maintenance-mode">
         <div className="container">
           <h1>Site en Construction 🚧</h1>
           <p>
@@ -23,12 +23,17 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App" data-testid="live-mode">
       <h1>Bienvenue sur notre application !</h1>
-      {/* Le contenu principal de votre application */}
+      <a
+        href="/learn-react"
+        className="learn-more"
+        data-testid="learn-react-link"
+      >
+        Learn React
+      </a>
     </div>
   );
-}
+};
 
 export default App;
-
