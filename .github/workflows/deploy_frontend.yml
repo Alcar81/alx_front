@@ -199,4 +199,4 @@ jobs:
 
             echo "=== Vérifier les permissions sur le répertoire local ==="
             ls -ld ${DEPLOY_DIRECTORY} || echo "Erreur : Problème de permissions ou de chemin sur ${DEPLOY_DIRECTORY}."
-          EOF 
+          EOF
