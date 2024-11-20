@@ -128,7 +128,7 @@ jobs:
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             DEPLOY_DIRECTORY=${{ vars.DEPLOY_DIRECTORY }}
-            MODE=$(grep REACT_APP_MAINTENANCE_MODE $DEPLOY_DIRECTORY../.env | cut -d '=' -f2 | tr -d ' ')
+            MODE=$(grep REACT_APP_MAINTENANCE_MODE $DEPLOY_DIRECTORY../config/config.js | cut -d ':' -f2 | tr -d ' ,')
             echo "=== Configuration Nginx en mode $MODE ==="
       
             if [ "$MODE" = "true" ]; then
