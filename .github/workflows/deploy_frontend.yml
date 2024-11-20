@@ -25,7 +25,7 @@ jobs:
       NGINX: ${{ vars.NGINX }}
       REACT_APP_MAINTENANCE_MODE: ${{ vars.REACT_APP_MAINTENANCE_MODE }}
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-      
+      REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}   
 
     steps:
       # Étape 1 - Afficher les variables générées
@@ -60,6 +60,10 @@ jobs:
 
       # Étape 6 - Build project
       - name: 6 - Build project
+        env:
+          REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
+          REACT_APP_FRONTEND_URL: ${{ env.REACT_APP_FRONTEND_URL }}
+          REACT_APP_MAINTENANCE_MODE: ${{ env.REACT_APP_MAINTENANCE_MODE }}
         run: npm run build
 
       # Étape 7 - Start SSH agent and add key
