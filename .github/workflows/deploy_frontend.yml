@@ -1,4 +1,3 @@
-# dev.alxmultimedia.com/frontend/.github/workflows/deploy_frontend.yml
 name: Déployer Frontend Dev 
 
 on:
