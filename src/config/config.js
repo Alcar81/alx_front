@@ -5,7 +5,7 @@ const config = {
 
   // Valeurs par défaut hardcodées
   REACT_APP_ENABLE_DEBUG: false, // true pour mode debug
-  REACT_APP_MAINTENANCE_MODE: true, // true pour maintenance 
+  REACT_APP_MAINTENANCE_MODE: false, // true pour maintenance 
 };
 
 export default config;
