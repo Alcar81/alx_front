@@ -38,7 +38,7 @@ jobs:
           echo "Port Frontend : $FRONTEND_PORT"
           echo "Port Conteneur : $CONTAINER_PORT"
 
-      # Étape 2 - Checkout repository    
+      # Étape 2 - Checkout  repository    
       - name: 2 - Checkout repository
         uses: actions/checkout@v3
 
