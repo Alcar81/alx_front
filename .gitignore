@@ -132,3 +132,4 @@ dist
 
 known_hosts
 node_modules/
+script/
