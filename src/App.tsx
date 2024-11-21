@@ -13,7 +13,7 @@ const App: React.FC = () => {
           <p>
             Nous travaillons actuellement sur une nouvelle version du site.<br />
             Revenez bientôt pour découvrir nos nouveautés !
-            Vérification du succès!
+            Vérification du succès! Oh Yeah ça marche
           </p>
           <a href="mailto:contact@alxmultimedia.com" className="button">
             Contactez-nous
