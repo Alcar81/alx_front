@@ -27,8 +27,8 @@ jobs:
       REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}   
 
     steps:
-      # Étape 1 - Afficher les variables générées
-      - name: 1 - Afficher les variables générées
+      # Étape 1 - Afficher les variables
+      - name: 1 - Afficher les variables
         run: |
           echo "Environnement : $ENV"
           echo "Réseau Docker : $NETWORK"

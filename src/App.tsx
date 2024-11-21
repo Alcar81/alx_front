@@ -12,7 +12,8 @@ const App: React.FC = () => {
           <h1>Site en Construction 🚧</h1>
           <p>
             Nous travaillons actuellement sur une nouvelle version du site.<br />
-            Revenez bientôt pour découvrir nos nouveautés ! test2
+            Revenez bientôt pour découvrir nos nouveautés !
+            Vérification du succès!
           </p>
           <a href="mailto:contact@alxmultimedia.com" className="button">
             Contactez-nous
