@@ -24,7 +24,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App" data-testid="main-container">
-      <h1>Bienvenue sur notre application !</h1>
+      <h1>Bienvenue sur notre application web!</h1>
       <a
         href="/learn-react"
         className="learn-more"
