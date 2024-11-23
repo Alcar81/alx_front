@@ -1,0 +1,50 @@
+.menu-container {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-image: url("");
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .menu-left,
+  .menu-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-logo {
+    text-align: center;
+  }
+  
+  .menu-logo-img {
+    width: auto; /* Maintient les proportions */
+    height: 50px; /* Taille suggérée pour un menu compact */
+    max-width: 150px; /* Option pour limiter la largeur maximale */
+    object-fit: contain; /* Assure que l'image reste propre si elle dépasse */
+  }
+  
+  .menu-item {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .menu-item:hover {
+    color: #007bff;
+  }
+  
+  
