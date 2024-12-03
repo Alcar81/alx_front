@@ -228,13 +228,14 @@ ul a:hover {
 .menu-ham-dropdown {
   position: absolute;
   top: 100%;
-  right: 0;
+  right: 0; /* Positionnement du menu à droite */
   background-color: var(--primary-back-color);
   box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
   border-radius: 5px;
-  width: 200px;
+  width: 200px; /* Largeur du menu */
   padding: 10px;
   z-index: 1000;
+  text-align: left; /* Aligne le texte à gauche */
 }
 
 .menu-ham-dropdown ul {
