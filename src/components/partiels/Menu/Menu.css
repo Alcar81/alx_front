@@ -252,10 +252,14 @@ ul a:hover {
 .menu-ham-dropdown ul li {
   display: flex; /* Pour aligner l'icône et le texte */
   align-items: center; /* Centrer verticalement */
-  gap: 10px; /* Espacement entre l'icône et le texte */
-  margin: 5px 0; /* Espacement vertical */
-  border-bottom: 1px solid #ccc;
-  padding: 5px 0;
+  gap: 8px; /* Espacement entre l'icône et le texte */
+  margin: 4px 0; /* Espacement vertical */
+  padding: 1px 0;
+}
+
+.menu-ham-dropdown ul li.divider {
+  border-bottom: 1px solid var(--secondary-color); /* Ligne de séparation */
+  margin: 1px 0; /* Espacement au-dessus et au-dessous */
 }
 
 .menu-ham-dropdown ul li:last-child {

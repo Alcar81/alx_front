@@ -23,10 +23,17 @@ const MenuHam: React.FC = () => {
       {isDropdownOpen && (
         <div className="menu-ham-dropdown">
           <ul>
-            <li>
+            {/*<li>
               <AccountCircleIcon />
               <Link to="/account">Mon Compte</Link>
+            </li>*/}
+            <li>
+              <Link to="/Connexion">Connexion</Link>
             </li>
+            <li>
+              <Link to="/Inscription">Inscription</Link>
+            </li>
+            <li className="divider"></li> {/* Ligne de séparation */}
             <li>
               <Link to="/home">Accueil</Link>
             </li>
