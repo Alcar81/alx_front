@@ -13,13 +13,7 @@ const MenuLeft: React.FC = () => {
                     <ul>
                     <li className="dropdown">
                         <Link to="/Accueil">Accueil</Link>                        
-                    </li>
-                    <li className="dropdown">
-                        <a href="#"></a>                        
-                    </li>
-                    <li className="dropdown">
-                        <a href="#"></a>                        
-                    </li>
+                    </li>                    
                 </ul>
             </nav>
         </div>
