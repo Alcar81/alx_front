@@ -59,7 +59,7 @@ const MenuRight: React.FC = () => {
                         style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }}
                     />
                     {showAccountMenu && (
-                        <ul
+                    <ul
                         className="dropdown-menu account-dropdown"
                         onMouseLeave={() => setShowAccountMenu(false)} // Masque le menu si la souris quitte le menu
                         >
@@ -69,7 +69,7 @@ const MenuRight: React.FC = () => {
                         <li className="dropdown">
                             <Link to="/Inscription">Inscription</Link>
                         </li>
-                        </ul>
+                    </ul>
                     )}
                 </div>    
             </div>        

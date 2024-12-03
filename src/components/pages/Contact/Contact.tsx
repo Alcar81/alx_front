@@ -45,9 +45,9 @@ const Contact: React.FC = () => {
 
           <h3>Suivez-nous</h3>
           <div className="social-icons">
-            <a href="#" className="social-icon facebook">Facebook</a>
-            <a href="#" className="social-icon twitter">Twitter</a>
-            <a href="#" className="social-icon linkedin">LinkedIn</a>
+            <a href="https://www.facebook.com/" className="social-icon facebook">Facebook</a>
+            <a href="https://www.facebook.com/" className="social-icon twitter">Twitter</a>
+            <a href="https://www.facebook.com/" className="social-icon linkedin">LinkedIn</a>
           </div>
         </section>
       </div>
