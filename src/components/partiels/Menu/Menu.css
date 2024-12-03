@@ -29,6 +29,22 @@
   flex: 1; /* Prend tout l'espace disponible */
 }
 
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Logo à gauche, menu à droite */
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: var(--primary-back-color);
+}
+
+/* Styles communs pour le menu gauche et droit */
+.header-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 /* =========================
    Styles Communs des Menus
 ========================= */
@@ -194,32 +210,75 @@ ul a:hover {
 }
 
 /* =========================
+   Menu Hamburger
+========================= */
+.menu-ham {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.menu-ham-icon {
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 2rem;
+}
+
+.menu-ham-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--primary-back-color);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  border-radius: 5px;
+  width: 200px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.menu-ham-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-ham-dropdown ul li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.menu-ham-dropdown ul li:last-child {
+  border-bottom: none;
+}
+
+.menu-ham-dropdown ul li a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1rem;
+  display: block;
+}
+
+.menu-ham-dropdown ul li a:hover {
+  color: var(--secondary-color);
+}
+
+/* =========================
    Responsive Styles
 ========================= */
 @media (width <= 768px) {
-  .container {
-    flex-direction: column; /* Passe en colonne sur mobile */
-    align-items: stretch;
+  .header-menu.menu-left,
+  .header-menu.menu-right {
+    display: none; /* Cache les menus classique */
   }
 
-  .container-left,
-  .container-right {
-    justify-content: center; /* Centre les menus */
+  .menu-ham {
+    display: flex; /* Affiche le menu hamburger */
   }
+}
 
-  ul {
-    flex-direction: column; /* Menu passe en vertical */
-    align-items: center;
-  }
-
-  ul li {
-    margin: 10px 0;
-  }
-
-  .dropdown-menu,
-  .account-dropdown {
-    position: static; /* Permet au menu de s'aligner naturellement */
-    box-shadow: none;
-    border: none;
+@media (width >= 769px) {
+  .menu-ham {
+    display: none; /* Cache le menu hamburger */
   }
 }
