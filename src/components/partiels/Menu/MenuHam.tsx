@@ -1,26 +1,46 @@
 import React, { useState } from "react";
-import MenuLeft from "./MenuLeft";
-import MenuRight from "./MenuRight";
+import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import "./Menu.css";
 
 const MenuHam: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+  };
 
   return (
     <div className="menu-ham">
-      {/* Icône du menu hamburger */}
-      <div className="menu-ham-icon" onClick={toggleMenu}>
-        {isOpen ? <CloseIcon /> : <MenuIcon />}
+      {/* Icone Hamburger */}
+      <div className="menu-ham-icon" onClick={toggleDropdown}>
+        <MenuIcon />
       </div>
 
-      {/* Dropdown menu */}
-      {isOpen && (
+      {/* Dropdown Menu */}
+      {isDropdownOpen && (
         <div className="menu-ham-dropdown">
-          <MenuLeft />
-          <MenuRight />
+          <ul>
+            <li>
+              <AccountCircleIcon />
+              <Link to="/account">Mon Compte</Link>
+            </li>
+            <li>
+              <Link to="/home">Accueil</Link>
+            </li>
+            <li>
+              <Link to="/about">À propos</Link>
+            </li>
+            <li>
+              <Link to="/contact">Nous joindre</Link>
+            </li>
+            <li>
+              <SearchIcon />
+              <Link to="/search">Rechercher</Link>
+            </li>
+          </ul>
         </div>
       )}
     </div>

@@ -210,43 +210,52 @@ ul a:hover {
 }
 
 /* =========================
+   Responsive Styles
+========================= */
+@media (width <= 768px) {
+  .header-menu.menu-left,
+  .header-menu.menu-right {
+    display: none; /* Cache les menus classique */
+  }
+
+/* =========================
    Menu Hamburger
 ========================= */
+
 .menu-ham {
-  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-}
-
-.menu-ham-icon {
-  cursor: pointer;
-  color: var(--primary-color);
-  font-size: 2rem;
+  align-items: flex-start;
 }
 
 .menu-ham-dropdown {
   position: absolute;
-  top: 100%;
-  right: 0; /* Positionnement du menu à droite */
+  top: 100%; /* Place le menu sous l'icône */
+  left: 20px; /* Décale le menu légèrement vers la droite */
   background-color: var(--primary-back-color);
   box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
   border-radius: 5px;
-  width: 200px; /* Largeur du menu */
+  width: 200px; /* Largeur fixe */
   padding: 10px;
   z-index: 1000;
-  text-align: left; /* Aligne le texte à gauche */
+  text-align: left; /* Texte aligné à gauche */
 }
 
 .menu-ham-dropdown ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column; /* Items en colonne */
 }
 
 .menu-ham-dropdown ul li {
-  padding: 10px 0;
+  display: flex; /* Pour aligner l'icône et le texte */
+  align-items: center; /* Centrer verticalement */
+  gap: 10px; /* Espacement entre l'icône et le texte */
+  margin: 5px 0; /* Espacement vertical */
   border-bottom: 1px solid #ccc;
+  padding: 5px 0;
 }
 
 .menu-ham-dropdown ul li:last-child {
@@ -257,29 +266,29 @@ ul a:hover {
   color: var(--text-color);
   text-decoration: none;
   font-size: 1rem;
-  display: block;
+  display: block; /* Chaque lien prend toute la largeur */
+  flex: 1; /* S'assure que le texte prend le reste de l'espace */
+  transition: color 0.3s ease; /* Animation fluide */
 }
 
 .menu-ham-dropdown ul li a:hover {
   color: var(--secondary-color);
 }
 
-/* =========================
-   Responsive Styles
-========================= */
-@media (width <= 768px) {
-  .header-menu.menu-left,
-  .header-menu.menu-right {
-    display: none; /* Cache les menus classique */
-  }
-
-  .menu-ham {
-    display: flex; /* Affiche le menu hamburger */
-  }
+.menu-ham-dropdown ul li svg {
+  font-size: 1.2rem; /* Taille des icônes */
+  color: var(--primary-color);
 }
 
+/* Styles pour les grands écrans */
 @media (width >= 769px) {
+  .header-menu.menu-left,
+  .header-menu.menu-right {
+    display: flex; /* Affiche les menus classiques */
+  }
+
   .menu-ham {
     display: none; /* Cache le menu hamburger */
   }
+}
 }
