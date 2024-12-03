@@ -1,0 +1,61 @@
+/* Layout.css */
+
+.layout {
+  display: flex;
+  flex-direction: column; /* Aligne le contenu de haut en bas. */
+  max-height: 100vh; /* Utilise toute la largeur de l'écran */ 
+  width: 100vw; /* Utilise toute la largeur de l'écran */ 
+  background-color: var(--primary-back-color); 
+}
+
+.content-container {
+  position: relative; /* Permet un décalage contrôlé */  
+  max-width: 1200px; /* Définissez la largeur maximale de votre contenu */
+  margin: 0 auto; /* Centrer horizontalement */   
+  background-color: var(--primary-back-color); /* fond */  
+}
+
+.main {
+  display: flex;
+  flex-grow: 1; /* Prend l'espace restant entre header et footer */  
+  margin-top: 80px;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  top: var(--header-height); /* Décale le contenu pour qu'il commence sous le header */  
+  bottom: var(--footer-height); /* Décale le contenu pour qu'il commence sous le header */  
+  background-color: var(--primary-back-color); /* fond */
+}
+
+body {  
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;  
+}
+
+
+h1, h2, h3 {
+  margin: 0;
+}
+
+p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+@media (width <= 768px) {
+  .content-container {
+    padding: 10px;
+  }
+}

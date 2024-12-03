@@ -1,0 +1,57 @@
+/* Home.css */
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;    
+}
+
+.home-header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow); 
+}
+
+.home-header h1 {
+    font-size: 2.5rem;
+}
+
+.home-about {
+    background-color: var(--light-color);    
+    margin-top: 30px;
+    padding: 40px;
+    border-radius: 8px; /* Si nécessaire, ajoute un contour arrondi. */
+    box-shadow: var(--box-shadow); /* Ajoute une ombre si besoin. */
+}
+
+.home-services {    
+    padding: 40px;
+    margin-bottom: 10px;    
+}
+
+.home-services h2 {
+    font-size: 1.5rem;
+    padding-bottom: 10px;
+}
+
+.services-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;   
+    gap: 20px; /* Espace entre les items */ 
+}
+
+.service-item {
+    flex: 1 1 300px;
+    max-width: 300px;
+    background-color: var(--light-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+}
+
+.service-item h3 {
+    font-size: 1.5rem;
+}

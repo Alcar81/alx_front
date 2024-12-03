@@ -1,0 +1,69 @@
+/* Header.css */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrage horizontal global */  
+  background-color: var(--primary-back-color); /* Couleur de fond de l'en-tête */
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  top: 0;
+  z-index: 1000;
+  height: 135px; /* Ajuste cette valeur */
+  padding: 20px 0; /* Ajoute de l'espace à l'intérieur */ 
+  width: 100vw; /* Utilise toute la largeur de l'écran */
+  position: relative; /* Permet un décalage contrôlé */  
+  max-width: 1200px; /* Définissez la largeur maximale de votre contenu */
+  margin: 0 auto; /* Centrer horizontalement */     
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column; /* Empile le logo et les menus verticalement */
+  align-items: center; /* Centre horizontalement */
+  width: 100%;
+  gap: 0; /* Espacement entre le logo et les menus */
+}
+
+/* Rectangle autour des menus */
+.header-nav {
+  background-color: #fff; /* Fond blanc pour les menus */
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%); /* Ombre subtile */
+  border-radius: 8px; /* Arrondi des coins */
+  padding: 10px 20px; /* Espacement intérieur */
+  width: 100%; /* S'assure que ça occupe toute la largeur */
+  display: flex;
+  justify-content: space-between; /* Sépare les menus gauche et droit */
+  align-items: center;}
+
+/* Menu gauche et droit */
+.header-menu {
+  flex: 1; /* Permet au menu de prendre tout l'espace disponible */
+}
+
+.menu-left, .menu-right {
+  display: flex;  
+  flex: 1; /* Permet de prendre l'espace restant */
+  text-align: left; /* Aligne le menu gauche à gauche */
+}
+
+.menu-left {
+  display: flex;
+  justify-content: flex-start; /* Aligne le menu à gauche */ 
+}
+
+.menu-right {
+  display: flex;
+  justify-content: flex-end; /* Aligne le menu à droite */  
+}
+
+/* Style du logo */
+.header-logo {
+  display: flex;
+  justify-content: center;
+}
+
+.header-logo-img {
+  max-height: 160px;
+  object-fit: contain;
+  transform: translateY(45px); /* Descend le logo de 30px */
+}
+

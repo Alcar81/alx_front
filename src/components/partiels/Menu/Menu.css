@@ -1,50 +1,225 @@
-.menu-container {
-    background-color: #f8f9fa;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background-image: url("");
-    background-size: cover;
-    background-position: center;
+/* =========================
+   Menu Principal
+========================= */
+
+/* Conteneur principal */
+.container {
+  display: flex;
+  justify-content: space-between; /* Menu gauche à gauche, menu droit à droite */
+  align-items: center; /* Aligne les éléments verticalement */
+  flex-wrap: nowrap; /* Empêche les menus de passer à la ligne */
+  width: 100%; /* Menu occupe toute la largeur */
+  font-size: 1.5rem;
+}
+
+/* Menu gauche */
+.container-left {
+  display: flex;
+  justify-content: flex-start; /* Menu aligné à gauche */
+  align-items: center; /* Centre verticalement */
+  gap: 20px; /* Espacement entre les éléments */
+}
+
+/* Menu droit */
+.container-right {
+  display: flex;
+  justify-content: flex-end; /* Menu aligné à droite */
+  align-items: center; /* Centre verticalement */
+  gap: 20px; /* Espacement entre les éléments */
+  flex: 1; /* Prend tout l'espace disponible */
+}
+
+/* =========================
+   Styles Communs des Menus
+========================= */
+ul {
+  list-style: none; /* Supprime les puces */
+  margin: 0;
+  padding: 0;
+  display: flex; /* Aligne les items horizontalement */
+
+}
+
+ul li {
+  position: relative;
+  margin: 0 10px; /* Espacement horizontal entre les items */
+}
+
+ul a {
+  text-decoration: none; /* Supprime le soulignement */
+  color: #333; /* Couleur du texte */
+  font-weight: 500;
+  transition: color 0.3s ease; /* Animation fluide au survol */
+}
+
+ul a:hover {
+  color: #007bff; /* Couleur au survol */
+}
+
+.menu-account {  
+  display: inline-block;  
+  align-items: center; /* Centre l'icône verticalement */
+  justify-content: center;
+  position: relative; /* Nécessaire pour le positionnement absolu du dropdown */  
+  cursor: pointer;
+  transform: translateY(-3px); /* Ajustez la valeur pour remonter légèrement */
+}
+
+/* =========================
+   Dropdown (Menus Déroulants)
+========================= */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* Position en dessous du parent */
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  padding: 10px 0;
+  list-style: none;
+  min-width: 200px; /* Largeur minimale */
+  z-index: 1000;
+  border: 1px solid #ddd; /* Bordure légère */
+  border-radius: 4px; /* Ajoute un peu de rondeur */  
+}
+
+/* Affichage du menu déroulant au survol */
+.dropdown:hover > .dropdown-menu,
+.menu-account:hover .account-dropdown {
+  display: block;
+}
+
+/* Alignement spécifique pour les menus déroulants */
+
+/* Position ajustée pour aligner le menu du petit bonhomme */
+.account-dropdown {
+  position: absolute;
+  top: 30px; /* Position du menu sous l'icône */
+  right: 0;
+  background-color: var(--primary-back-color);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  list-style: none;
+  padding: 5px; /* Réduit l'espacement interne */
+  z-index: 1000;
+  width: 120px; /* Largeur fixe réduite */
+  text-align: right; /* Texte aligné à gauche */
+  box-sizing: border-box;  
+}
+
+.account-dropdown li {
+  padding: 5px 10px; /* Équilibre l'espacement interne */
+}
+
+.account-dropdown li a {
+  color: #333;
+  text-decoration: none; /* Taille de police */
+  display: block; /* Chaque lien prend toute la largeur */
+  transition: color 0.3s ease;
+  font-size: 1.5rem;
+}
+
+.account-dropdown li a:hover {
+  color: #007bff; /* Couleur au survol */
+}
+
+/* Items à l'intérieur des menus déroulants */
+.dropdown-menu li,
+.account-dropdown li {
+  margin: 0;
+  padding: 5px 10px;
+}
+
+/* Liens dans les menus déroulants */
+.dropdown-menu a,
+.account-dropdown a {
+  text-decoration: none; /* Supprime le soulignement */
+  color: #333; /* Couleur du texte */
+  font-weight: 500;
+  transition: color 0.3s ease; /* Animation fluide */
+}
+
+/* Effet au survol des liens */
+.dropdown-menu a:hover,
+.account-dropdown a:hover {
+  color: #007bff; /* Couleur au survol */
+}
+
+/* =========================
+   Recherche (Icône et Boîte de Saisie)
+========================= */
+.menu-search {
+  display: flex;
+  align-items: center; /* Centre verticalement */
+  justify-content: center; /* Centre horizontalement */
+  cursor: pointer; /* Curseur clic */
+  transform: translateY(-2px); /* Ajustez la valeur pour remonter légèrement */
+}
+
+.menu-search i {
+  font-size: 25px; /* Taille de l'icône */
+  color: #007bff; /* Couleur */
+  transition: color 0.3s ease; /* Animation fluide */
+}
+
+.menu-search i:hover {
+  color: #0056b3; /* Couleur légèrement plus foncée au survol */
+}
+
+/* Boîte de saisie pour la recherche */
+.search-box {
+  position: absolute;
+  top: 100%; /* Position sous le bas du header */
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+  transform: translateY(40px); /* Ajoute un petit espacement sous le header */
+}
+
+.search-input {
+  width: 200px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* =========================
+   Responsive Styles
+========================= */
+@media (width <= 768px) {
+  .container {
+    flex-direction: column; /* Passe en colonne sur mobile */
+    align-items: stretch;
   }
-  
-  .menu {
-    display: flex;
-    justify-content: space-between;
+
+  .container-left,
+  .container-right {
+    justify-content: center; /* Centre les menus */
+  }
+
+  ul {
+    flex-direction: column; /* Menu passe en vertical */
     align-items: center;
-    padding: 10px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
   }
-  
-  .menu-left,
-  .menu-right {
-    display: flex;
-    align-items: center;
+
+  ul li {
+    margin: 10px 0;
   }
-  
-  .menu-logo {
-    text-align: center;
+
+  .dropdown-menu,
+  .account-dropdown {
+    position: static; /* Permet au menu de s'aligner naturellement */
+    box-shadow: none;
+    border: none;
   }
-  
-  .menu-logo-img {
-    width: auto; /* Maintient les proportions */
-    height: 50px; /* Taille suggérée pour un menu compact */
-    max-width: 150px; /* Option pour limiter la largeur maximale */
-    object-fit: contain; /* Assure que l'image reste propre si elle dépasse */
-  }
-  
-  .menu-item {
-    text-decoration: none;
-    color: #333;
-    margin: 0 10px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-  
-  .menu-item:hover {
-    color: #007bff;
-  }
-  
-  
+}

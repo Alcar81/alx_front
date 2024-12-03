@@ -1,0 +1,120 @@
+/* About.css */
+.about-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; 
+  }
+  
+  .about-header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow); 
+    margin-bottom: 40px;
+  }
+  
+  .about-header h1 {    
+    font-size: 2.5rem;
+  }
+  
+  .about-section {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    text-align: left; 
+    border-radius: 8px; /* Si nécessaire, ajoute un contour arrondi. */
+    box-shadow: var(--box-shadow); /* Ajoute une ombre si besoin. */   
+  }
+  
+  .about-content {
+    margin-bottom: 30px;
+  }
+  
+  .about-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+  }
+  
+  .about-content p {
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .about-content ul {
+    padding-left: 20px;
+  }
+  
+  .about-content ul li {
+    margin-bottom: 10px;
+  }
+
+  .about-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;   
+    gap: 40px; /* Espace entre les items */
+    margin-top: 20px; 
+  }
+  
+  .about-item {
+    flex: 1 1 300px;
+    max-width: 250px;
+    background-color: var(--light-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .about-team {
+    padding: 40px 20px;
+    text-align: center;    
+  }
+  
+  .about-team h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007bff;
+  }
+  
+  .team-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .team-member {
+    text-align: center;
+    max-width: 400px;
+    background-color: var(--light-color);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .team-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .team-member h3 {
+    margin: 10px 0 5px;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .team-member p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  

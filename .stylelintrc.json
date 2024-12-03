@@ -1,0 +1,14 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {      
+      "color-no-invalid-hex": true,      
+      "block-no-empty": true,
+      "max-nesting-depth": 3,
+      "declaration-block-single-line-max-declarations": null,
+      "no-duplicate-selectors": true,
+      "no-empty-source": true,
+      "no-descending-specificity": null
+    },
+    "ignoreFiles": ["static/**/*.css"]
+  }
+  
