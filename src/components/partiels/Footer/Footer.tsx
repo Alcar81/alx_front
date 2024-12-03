@@ -32,29 +32,19 @@ const Footer: React.FC = () => {
             <h4>Liens rapides</h4>
             <ul>
               <li>
-                <Link to="/Accueil">
-                  <a>Accueil</a>
-                </Link>
+                <Link to="/Accueil">Accueil</Link>
               </li>
               <li>
-                <Link to="/À-propos">
-                  <a>À propos</a>
-                </Link>
+                <Link to="/À-propos">À propos</Link>
               </li>
               <li>
-                <Link to="/À-propos">
-                  <a>Service</a>
-                </Link>
+                <Link to="/À-propos">Service</Link>
               </li>
               <li>
-                <Link to="/À-propos">
-                  <a>Contact</a>
-                </Link>
+                <Link to="/À-propos">Contact</Link>
               </li>
               <li>
-                <Link to="/À-propos">
-                  <a>FAQ</a>
-                </Link>
+                <Link to="/À-propos">FAQ</Link>
               </li>
             </ul>
           </div>

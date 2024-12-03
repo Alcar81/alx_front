@@ -22,14 +22,10 @@ const MenuRight: React.FC = () => {
                 {/* Menu items */}
                 <ul>
                     <li className="dropdown">
-                        <Link to="/À-propos">
-                            <a href="#">À propos</a>
-                        </Link>                      
+                        <Link to="/À-propos">À propos</Link>                      
                     </li>
                     <li className="dropdown">
-                        <Link to="/Contact">
-                            <a href="#">Nous joindre</a> 
-                        </Link>                       
+                        <Link to="/Contact">Nous joindre</Link>                       
                     </li>                    
                 </ul>
 
@@ -68,14 +64,10 @@ const MenuRight: React.FC = () => {
                         onMouseLeave={() => setShowAccountMenu(false)} // Masque le menu si la souris quitte le menu
                         >
                         <li className="dropdown">
-                            <Link to="/login">
-                            Connexion
-                            </Link>
+                            <Link to="/Connexion">Connexion</Link>
                         </li>
                         <li className="dropdown">
-                            <Link to="/register">
-                            Inscription
-                            </Link>
+                            <Link to="/Inscription">Inscription</Link>
                         </li>
                         </ul>
                     )}

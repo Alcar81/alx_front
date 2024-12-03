@@ -12,9 +12,7 @@ const MenuLeft: React.FC = () => {
                 <div className="container-left"></div>
                     <ul>
                     <li className="dropdown">
-                        <Link to="/Accueil">
-                        <a href="/">Accueil</a>
-                        </Link>                        
+                        <Link to="/Accueil">Accueil</Link>                        
                     </li>
                     <li className="dropdown">
                         <a href="#"></a>                        
