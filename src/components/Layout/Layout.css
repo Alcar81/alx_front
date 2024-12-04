@@ -1,5 +1,4 @@
 /* Layout.css */
-
 .layout {
   display: flex;
   flex-direction: column; /* Aligne le contenu de haut en bas. */
@@ -13,15 +12,15 @@
   max-width: 1200px; /* Définissez la largeur maximale de votre contenu */
   margin: 0 auto; /* Centrer horizontalement */   
   background-color: var(--primary-back-color); /* fond */  
+  margin-bottom: 30px;
+  padding: 0 15px; /* Padding ajusté pour les petits écrans */
 }
 
 .main {
   display: flex;
   flex-grow: 1; /* Prend l'espace restant entre header et footer */  
-  margin-top: 80px;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  top: var(--header-height); /* Décale le contenu pour qu'il commence sous le header */  
-  bottom: var(--footer-height); /* Décale le contenu pour qu'il commence sous le header */  
+  margin-top: 30px;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));  
   background-color: var(--primary-back-color); /* fond */
 }
 

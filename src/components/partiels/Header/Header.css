@@ -1,69 +1,129 @@
-/* Header.css */
+/* =========================
+   Header Global Styles
+========================= */
 .header {
   display: flex;
+  flex-direction: column; /* Aligne le contenu verticalement */
   align-items: center;
-  justify-content: center; /* Centrage horizontal global */  
   background-color: var(--primary-back-color); /* Couleur de fond de l'en-tête */
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--box-shadow);
   top: 0;
   z-index: 1000;
-  height: 135px; /* Ajuste cette valeur */
-  padding: 20px 0; /* Ajoute de l'espace à l'intérieur */ 
-  width: 100vw; /* Utilise toute la largeur de l'écran */
-  position: relative; /* Permet un décalage contrôlé */  
+  width: 100%; /* Utilise toute la largeur de l'écran */
+  position: relative; /* Nécessaire pour le box-shadow */
+  margin: 0 auto; /* Centrer horizontalement */
   max-width: 1200px; /* Définissez la largeur maximale de votre contenu */
-  margin: 0 auto; /* Centrer horizontalement */     
+  border-radius: 10px; /* Arrondi des coins */  
 }
 
+/* Conteneur principal */
 .header-container {
-  display: flex;
-  flex-direction: column; /* Empile le logo et les menus verticalement */
-  align-items: center; /* Centre horizontalement */
   width: 100%;
-  gap: 0; /* Espacement entre le logo et les menus */
-}
-
-/* Rectangle autour des menus */
-.header-nav {
-  background-color: #fff; /* Fond blanc pour les menus */
-  box-shadow: 0 4px 6px rgb(0 0 0 / 10%); /* Ombre subtile */
-  border-radius: 8px; /* Arrondi des coins */
-  padding: 10px 20px; /* Espacement intérieur */
-  width: 100%; /* S'assure que ça occupe toute la largeur */
+  max-width: 1200px; /* Largeur maximale alignée avec le contenu */
   display: flex;
-  justify-content: space-between; /* Sépare les menus gauche et droit */
-  align-items: center;}
-
-/* Menu gauche et droit */
-.header-menu {
-  flex: 1; /* Permet au menu de prendre tout l'espace disponible */
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px; /* Ajoute de l'espacement interne */
 }
 
-.menu-left, .menu-right {
-  display: flex;  
-  flex: 1; /* Permet de prendre l'espace restant */
-  text-align: left; /* Aligne le menu gauche à gauche */
-}
-
-.menu-left {
-  display: flex;
-  justify-content: flex-start; /* Aligne le menu à gauche */ 
-}
-
-.menu-right {
-  display: flex;
-  justify-content: flex-end; /* Aligne le menu à droite */  
-}
-
-/* Style du logo */
+/* =========================
+   Logo
+========================= */
 .header-logo {
   display: flex;
   justify-content: center;
 }
 
 .header-logo-img {
-  max-height: 160px;
+  max-height: 200px;
   object-fit: contain;
-  transform: translateY(45px); /* Descend le logo de 30px */
+  transform: translateY(-10px); /* Ajuste la position verticale du logo */
 }
 
+/* =========================
+   Navigation
+========================= */
+.header-nav {
+  width: 100%;
+  max-width: 1200px; /* Aligné avec le header */
+  display: flex;
+  justify-content: space-between; /* Sépare les menus gauche et droit */
+  align-items: center;
+  background-color: var(--primary-back-color); /* Fond blanc pour les menus */  
+  padding: 6px; /* Espacement interne */
+  margin-top: -60px; /* Superpose légèrement avec le logo */
+  margin-bottom: -10px;
+}
+
+/* =========================
+   Menus (gauche et droite)
+========================= */
+.header-menu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.menu-left,
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Espacement entre les éléments */
+  background: none; /* Pas de fond */
+  border: none; /* Pas de bordure */
+}
+
+/* =========================
+   Liens des menus
+========================= */
+ul {
+  list-style: none; /* Supprime les puces */
+  margin: 0;
+  padding: 0;
+  display: flex; /* Aligne les items horizontalement */
+}
+
+ul li {
+  margin: 0 10px; /* Espacement horizontal entre les items */
+}
+
+ul a {
+  text-decoration: none; /* Supprime le soulignement */
+  color: var(--text-color); /* Couleur du texte */
+  font-weight: 500;
+  transition: color 0.3s ease; /* Animation fluide au survol */
+}
+
+ul a:hover {
+  color: var(--hover-color); /* Couleur au survol */
+}
+
+/* =========================
+   Responsive Styles
+========================= */
+@media (width <= 768px) {
+  /* Masque les menus classiques sur petits écrans */
+  .header-menu {
+    display: none;
+  }
+
+  /* Affiche le menu hamburger */
+  .menu-ham {
+    display: flex;
+    justify-content: flex-end;
+    width: auto;
+    padding: 0 15px;
+  }
+}
+
+@media (width >= 769px) {
+  /* Cache le menu hamburger sur grands écrans */
+  .menu-ham {
+    display: none;
+  }
+
+  /* Affiche les menus classiques */
+  .header-menu {
+    display: flex;
+  }
+}

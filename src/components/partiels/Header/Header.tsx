@@ -30,22 +30,21 @@ const Header: React.FC = () => {
         {/* Navigation */}
         <nav className="header-nav">
           {isMobile ? (
-            // Menu hamburger pour petits écrans
-            <MenuHam />
+            <MenuHam /> // Menu hamburger visible uniquement sur petits écrans
           ) : (
-            <>
+            <div className="header-menu">
               {/* Menu gauche */}
-              <div className="header-menu menu-left">
+              <div className="menu-left">
                 <MenuLeft />
               </div>
 
               {/* Menu droit */}
-              <div className="header-menu menu-right">
+              <div className="menu-right">
                 <MenuRight />
               </div>
-            </>
+            </div>
           )}
-        </nav>
+        </nav>       
       </div>
     </header>
   );

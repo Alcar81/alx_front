@@ -89,7 +89,7 @@ ul a:hover {
   position: absolute;
   top: 100%; /* Position en dessous du parent */
   background-color: #fff;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  box-shadow: var(--box-shadow);
   padding: 10px 0;
   list-style: none;
   min-width: 200px; /* Largeur minimale */
@@ -120,7 +120,7 @@ ul a:hover {
   z-index: 1000;
   width: 120px; /* Largeur fixe réduite */
   text-align: right; /* Texte aligné à gauche */
-  box-sizing: border-box;  
+  box-sizing: border-box;   
 }
 
 .account-dropdown li {
@@ -188,7 +188,7 @@ ul a:hover {
   top: 100%; /* Position sous le bas du header */
   right: 0;
   background-color: #fff;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  box-shadow: var(--box-shadow);
   border: 1px solid #ddd;
   padding: 10px;
   border-radius: 5px;
@@ -233,7 +233,7 @@ ul a:hover {
   top: 100%; /* Place le menu sous l'icône */
   left: 20px; /* Décale le menu légèrement vers la droite */
   background-color: var(--primary-back-color);
-  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  box-shadow: var(--box-shadow);
   border-radius: 5px;
   width: 200px; /* Largeur fixe */
   padding: 10px;
