@@ -68,9 +68,7 @@
 .menu-right {
   display: flex;
   align-items: center;
-  gap: 20px; /* Espacement entre les éléments */
-  background: none; /* Pas de fond */
-  border: none; /* Pas de bordure */
+  gap: 20px; /* Espacement entre les éléments */  
 }
 
 /* =========================
