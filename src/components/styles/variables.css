@@ -7,4 +7,7 @@
     --font-family: 'Arial, sans-serif';
     --box-shadow: 0px 2px 4px rgb(0 0 0 / 20%);
     --primary-back-color: #fff;
+    --input-border-color: #dcdcdc; /* Couleur du contour par défaut */  
+    --hover-color: #1e2a38;
+
 }
