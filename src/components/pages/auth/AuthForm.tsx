@@ -6,6 +6,7 @@ interface AuthFormProps {
   title: string; // Titre du formulaire (Connexion ou Inscription)
   onSubmit: (e: React.FormEvent) => void; // Fonction de soumission du formulaire
   buttonText: string; // Texte du bouton principal
+  isSignup?: boolean; // Détermine si c'est un formulaire d'inscription
   showGoogle?: boolean; // Afficher ou non le bouton Google
 }
 
@@ -13,6 +14,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
   title,
   onSubmit,
   buttonText,
+  isSignup = false, // Par défaut, ce n'est pas un formulaire d'inscription
   showGoogle = true, // Par défaut, Google est activé
 }) => {
   return (
@@ -27,7 +29,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       {showGoogle && (
         <>
           <button type="button" className="google-btn">
-            <span>Se connecter avec Google</span>
+            <span>{isSignup ? 'S’inscrire avec Google' : 'Se connecter avec Google'}</span>
           </button>
           <div className="divider">
             <span>ou</span>
@@ -50,6 +52,15 @@ const AuthForm: React.FC<AuthFormProps> = ({
           className="auth-input"
           required
         />
+        {isSignup && (
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirmez le mot de passe *"
+            className="auth-input"
+            required
+          />
+        )}
 
         <div className="auth-remember-me">
           <label>

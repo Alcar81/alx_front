@@ -2,6 +2,9 @@
 .auth-container {
   width: 100%;
   max-width: 400px; /* Taille fixe pour les deux formulaires */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: var(--primary-back-color);
   border-radius: 10px;
   box-shadow: var(--box-shadow);

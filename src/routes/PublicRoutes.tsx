@@ -5,7 +5,7 @@ import Home from "../components/pages/Home/Home";
 import About from "../components/pages/About/About";
 import Contact from "../components/pages/Contact/Contact";
 import Login from "../components/pages/Login/Login";
-import Register from "../components/pages/Register/Register";
+import Register from "../components/pages/auth/Register/Register";
 import NotFound from "../components/pages/Notfound/Notfound";
 
 const PublicRoutes: React.FC = () => {

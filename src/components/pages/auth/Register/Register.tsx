@@ -1,6 +1,6 @@
 // src/pages/Register.tsx
 import React from 'react';
-import AuthForm from '../auth/AuthForm';
+import AuthForm from '../AuthForm';
 
 const Register: React.FC = () => {
   const handleRegister = (e: React.FormEvent) => {
@@ -12,12 +12,13 @@ const Register: React.FC = () => {
   return (
     <div className="register">      
         <section className="register-form"> 
-          <AuthForm
-            title="Inscription"
-            onSubmit={handleRegister}
-            buttonText="Enregistrer"
-            showGoogle={true} // Activer ou désactiver le bouton Google
-          />
+        <AuthForm
+          title="Inscription"
+          onSubmit={handleRegister}
+          buttonText="S’inscrire"
+          isSignup={true} // Active le champ "Confirmez le mot de passe"
+        />
+
         </section>    
     </div>
   );
