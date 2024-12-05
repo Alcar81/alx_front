@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -7,31 +7,29 @@ import "./Menu.css";
 const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
-  let closeTimeout: NodeJS.Timeout | null = null;
+  const closeTimeout = useRef<NodeJS.Timeout | null>(null); // Utilisez useRef pour éviter les dépendances inutiles
 
   const toggleAccountMenu = () => {
     setShowAccountMenu((prev) => !prev);
 
-    // Ajoute un délai pour refermer le menu
     if (!showAccountMenu) {
-      closeTimeout = setTimeout(() => {
+      closeTimeout.current = setTimeout(() => {
         setShowAccountMenu(false);
       }, 3000); // 3 secondes
     }
   };
 
-  // Annule le délai si la souris revient
   const clearCloseTimeout = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      closeTimeout = null;
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
+      closeTimeout.current = null;
     }
   };
 
   useEffect(() => {
-    // Nettoie le délai au démontage
+    // Nettoyage lors du démontage
     return () => clearCloseTimeout();
-  }, []);
+  }, []); // Pas besoin de dépendances supplémentaires grâce à useRef
 
   return (
     <div id="menu-right" className="light">
@@ -79,18 +77,20 @@ const MenuRight: React.FC = () => {
               <AccountCircleIcon
                 style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }}
               />
-              <ul
-                className="dropdown-menu account-dropdown"
-                onMouseEnter={clearCloseTimeout} // Annule le délai si la souris est sur le menu
-                onMouseLeave={() => setShowAccountMenu(false)} // Ferme le menu si la souris quitte
-              >
-                <li className="dropdown">
-                  <Link to="/Connexion">Connexion</Link>
-                </li>
-                <li className="dropdown">
-                  <Link to="/Inscription">Inscription</Link>
-                </li>
-              </ul>
+              {showAccountMenu && (
+                <ul
+                  className="dropdown-menu account-dropdown"
+                  onMouseEnter={clearCloseTimeout} // Annule le délai si la souris est sur le menu
+                  onMouseLeave={() => setShowAccountMenu(false)} // Ferme le menu si la souris quitte
+                >
+                  <li className="dropdown">
+                    <Link to="/Connexion">Connexion</Link>
+                  </li>
+                  <li className="dropdown">
+                    <Link to="/Inscription">Inscription</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
         </nav>
