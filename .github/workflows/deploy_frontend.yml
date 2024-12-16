@@ -238,11 +238,11 @@ jobs:
                     [ -f /var/run/nginx.pid ] && kill -USR1 \`cat /var/run/nginx.pid\`
                 endscript
             }
-            EOT
+          EOT
                           echo "[SUCCESS] Configuration logrotate créée : \$LOGROTATE_CONF"
                         fi
 
                         # Vérifier la configuration logrotate
                         echo "[INFO] Test de la configuration logrotate..."
                         logrotate -d \$LOGROTATE_CONF
-            EOF
+          EOF
