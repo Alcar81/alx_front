@@ -218,31 +218,30 @@ jobs:
             LOGROTATE_CONF="/etc/logrotate.d/dev.alxmultimedia.com"
             LOG_FILE="/home/dev.alxmultimedia.com/logs/dev.alxmultimedia.com.access_log"
 
-            echo "[INFO] Configuration de logrotate pour $LOG_FILE..."
+            echo "[INFO] Configuration de logrotate pour \$LOG_FILE..."
 
             if [ -f "\$LOGROTATE_CONF" ]; then
               echo "[INFO] La configuration logrotate existe déjà : \$LOGROTATE_CONF"
             else
               echo "[INFO] Création de la configuration logrotate..."
-              cat <<EOT > \$LOGROTATE_CONF
-            \$LOG_FILE {
-                daily
-                rotate 7
-                compress
-                delaycompress
-                missingok
-                notifempty
-                create 0640 www-data www-data
-                sharedscripts
-                postrotate
-                    [ -f /var/run/nginx.pid ] && kill -USR1 \`cat /var/run/nginx.pid\`
-                endscript
-            }
-          EOT
-                          echo "[SUCCESS] Configuration logrotate créée : \$LOGROTATE_CONF"
-                        fi
+              echo "\$LOG_FILE {
+                  daily
+                  rotate 7
+                  compress
+                  delaycompress
+                  missingok
+                  notifempty
+                  create 0640 www-data www-data
+                  sharedscripts
+                  postrotate
+                      [ -f /var/run/nginx.pid ] && kill -USR1 \`cat /var/run/nginx.pid\`
+                  endscript
+              }" > \$LOGROTATE_CONF
 
-                        # Vérifier la configuration logrotate
-                        echo "[INFO] Test de la configuration logrotate..."
-                        logrotate -d \$LOGROTATE_CONF
+              echo "[SUCCESS] Configuration logrotate créée : \$LOGROTATE_CONF"
+            fi
+
+            # Vérifier la configuration logrotate
+            echo "[INFO] Test de la configuration logrotate..."
+            logrotate -d \$LOGROTATE_CONF
           EOF
