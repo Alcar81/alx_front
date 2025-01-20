@@ -80,6 +80,12 @@ ul a:hover {
   cursor: pointer;
 }
 
+.menu-search, .menu-account {
+  display: inline-flex !important; /* Forcer leur affichage */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* =========================
    Dropdown (Menus Déroulants)
 ========================= */
