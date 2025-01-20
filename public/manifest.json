@@ -1,0 +1,20 @@
+{
+  "short_name": "AlxMultimedia",
+  "name": "AlxMultimedia Application",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "Signe_logo_ALX_XL.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
