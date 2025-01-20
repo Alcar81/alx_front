@@ -1,4 +1,4 @@
-// Header.tsx
+// src/components/partiels/Header/Header.tsx
 import "./Header.css";
 import { Link } from "react-router-dom";
 import logo from "../../../images/Logo/Logo_ALX_XL_v3.png";

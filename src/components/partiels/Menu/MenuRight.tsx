@@ -1,3 +1,4 @@
+// src/components/partiels/Menu/MenuRight.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
