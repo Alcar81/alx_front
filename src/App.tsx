@@ -1,4 +1,3 @@
-// App.tsx
 import React from "react";
 import "./App.css";
 import config from "./config/config";
@@ -26,12 +25,11 @@ const App: React.FC = () => {
   const isMaintenance = config.REACT_APP_MAINTENANCE_MODE;
   const errors = validateConfig();
 
-  // Si des erreurs de configuration sont détectées, les afficher immédiatement
+  if (isMaintenance) {
+    return <Maintenance />;
+  }
+
   if (errors.length > 0) {
-    errors.forEach((error) => {
-      console.error(error); // Log chaque erreur individuellement
-    });
-  
     return (
       <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
         <h1>Erreur de configuration</h1>
@@ -45,18 +43,11 @@ const App: React.FC = () => {
       </div>
     );
   }
-  
-  // Si le mode maintenance est activé, afficher la page de maintenance
-  if (isMaintenance) {
-    return <Maintenance />;
-  }
 
-  // Si le mode debug est activé, afficher les configurations dans la console
   if (config.REACT_APP_ENABLE_DEBUG) {
-    console.log("Mode debug activé. Configuration actuelle :", config);
+    console.log("Mode debug activé. Configuration actuelle  :", config);
   }
 
-  // Charger le layout principal si tout est correct
   return <Layout />;
 };
 
