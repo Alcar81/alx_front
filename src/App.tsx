@@ -1,9 +1,9 @@
 // App.tsx
-import React from 'react';
-import './App.css';
-import config from './config/config';
-import Maintenance from './components/pages/Maintenance/Maintenance';
-import Layout from './components/Layout/Layout';
+import React from "react";
+import "./App.css";
+import config from "./config/config";
+import Maintenance from "./components/pages/Maintenance/Maintenance";
+import Layout from "./components/Layout/Layout";
 
 // Fonction utilitaire pour valider les configurations importantes
 const validateConfig = (): string[] => {
@@ -26,15 +26,12 @@ const App: React.FC = () => {
   const isMaintenance = config.REACT_APP_MAINTENANCE_MODE;
   const errors = validateConfig();
 
-  // Si le mode maintenance est activé, affiche la page de maintenance
-  if (isMaintenance) {
-    return <Maintenance />;
-  }
-
-  // Si des erreurs de configuration sont détectées, affiche une page d'erreur explicite
+  // Si des erreurs de configuration sont détectées, les afficher immédiatement
   if (errors.length > 0) {
+    console.error("Erreurs de configuration détectées :", errors);
+
     return (
-      <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+      <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
         <h1>Erreur de configuration</h1>
         <p>Les erreurs suivantes ont été détectées :</p>
         <ul>
@@ -47,15 +44,17 @@ const App: React.FC = () => {
     );
   }
 
-  // Validation des configurations
-  validateConfig();
+  // Si le mode maintenance est activé, afficher la page de maintenance
+  if (isMaintenance) {
+    return <Maintenance />;
+  }
 
-  // Si le mode debug est activé, affiche la configuration dans la console
+  // Si le mode debug est activé, afficher les configurations dans la console
   if (config.REACT_APP_ENABLE_DEBUG) {
     console.log("Mode debug activé. Configuration actuelle :", config);
   }
 
-  // Charge le layout principal si tout est correct
+  // Charger le layout principal si tout est correct
   return <Layout />;
 };
 
