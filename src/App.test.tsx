@@ -36,17 +36,19 @@ describe('App Component', () => {
   });
 
   test('renders Maintenance page when maintenance mode is active', () => {
+    // Mock de la configuration
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
         REACT_APP_API_URL: 'https://api.example.com',
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
-        REACT_APP_MAINTENANCE_MODE: true,
+        REACT_APP_MAINTENANCE_MODE: true, // Activer le mode maintenance
         REACT_APP_ENABLE_DEBUG: false,
       },
     }));
 
+    // Charger l'application avec le mock
     const App = require('./App').default;
 
     render(<App />);
@@ -56,17 +58,19 @@ describe('App Component', () => {
   });
 
   test('renders Layout when maintenance mode is inactive', () => {
+    // Mock de la configuration
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
         REACT_APP_API_URL: 'https://api.example.com',
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
-        REACT_APP_MAINTENANCE_MODE: false,
+        REACT_APP_MAINTENANCE_MODE: false, // Désactiver le mode maintenance
         REACT_APP_ENABLE_DEBUG: false,
       },
     }));
 
+    // Charger l'application avec le mock
     const App = require('./App').default;
 
     render(<App />);
@@ -88,11 +92,12 @@ describe('App Component', () => {
       },
     }));
 
+    // Charger l'application avec le mock
     const App = require('./App').default;
 
     render(<App />);
 
-    expect(consoleErrorSpy).toHaveBeenCalled(); // Vérifie qu'une erreur est appelée
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1); // Vérifie qu'une erreur est appelée
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Erreurs de configuration détectées :",
       ["REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"]
@@ -100,6 +105,7 @@ describe('App Component', () => {
   });
 
   test('outputs debug information when debug mode is enabled', () => {
+    // Mock de la configuration avec le mode debug activé
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -111,17 +117,18 @@ describe('App Component', () => {
       },
     }));
 
+    // Charger l'application avec le mock
     const App = require('./App').default;
 
     render(<App />);
 
-    expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+    expect(consoleLogSpy).toHaveBeenCalledTimes(1); // Vérifie qu'une seule fois est loggé
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "Mode debug activé. Configuration actuelle :",
       {
-        REACT_APP_API_URL: "https://api.example.com",
-        REACT_APP_FRONTEND_URL: "https://frontend.example.com",
-        REACT_APP_WEBSITE_NAME: "AlxMultimedia",
+        REACT_APP_API_URL: 'https://api.example.com',
+        REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
+        REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
         REACT_APP_ENABLE_DEBUG: true,
       }
