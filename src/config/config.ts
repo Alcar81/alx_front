@@ -1,3 +1,4 @@
+//src/congif/config.ts
 const config = {
   REACT_APP_API_URL: process.env.REACT_APP_API_URL || "https://dev.alxmultimedia.com/api",
   REACT_APP_WEBSITE_NAME: process.env.REACT_APP_WEBSITE_NAME || "alxmultimedia",

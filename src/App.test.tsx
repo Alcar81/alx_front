@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import dotenv from 'dotenv';
 
@@ -35,8 +34,7 @@ describe('App Component', () => {
     jest.resetModules();
   });
 
-  test('renders Maintenance page when maintenance mode is active', () => {
-    // Mock de la configuration
+  test('renders Maintenance page when maintenance mode is active', async () => {
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -48,8 +46,7 @@ describe('App Component', () => {
       },
     }));
 
-    // Charger l'application avec le mock
-    const App = require('./App').default;
+    const App = (await import('./App')).default;
 
     render(<App />);
 
@@ -57,8 +54,7 @@ describe('App Component', () => {
     expect(maintenanceElement).toBeInTheDocument();
   });
 
-  test('renders Layout when maintenance mode is inactive', () => {
-    // Mock de la configuration
+  test('renders Layout when maintenance mode is inactive', async () => {
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -70,8 +66,7 @@ describe('App Component', () => {
       },
     }));
 
-    // Charger l'application avec le mock
-    const App = require('./App').default;
+    const App = (await import('./App')).default;
 
     render(<App />);
 
@@ -79,12 +74,11 @@ describe('App Component', () => {
     expect(layoutElement).toBeInTheDocument();
   });
 
-  test('validates required configuration keys', () => {
-    // Mock de la configuration avec une valeur manquante
+  test('validates required configuration keys', async () => {
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
-        REACT_APP_API_URL: undefined, // Configuration manquante
+        REACT_APP_API_URL: undefined, // Clé manquante
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
@@ -92,18 +86,16 @@ describe('App Component', () => {
       },
     }));
 
-    // Charger l'application avec le mock
-    const App = require('./App').default;
+    const App = (await import('./App')).default;
 
     render(<App />);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining("REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts")
+      "REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"
     );
   });
 
-  test('outputs debug information when debug mode is enabled', () => {
-    // Mock de la configuration avec le mode debug activé
+  test('outputs debug information when debug mode is enabled', async () => {
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -111,12 +103,11 @@ describe('App Component', () => {
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
-        REACT_APP_ENABLE_DEBUG: true, // Activer le mode debug
+        REACT_APP_ENABLE_DEBUG: true, // Mode debug activé
       },
     }));
 
-    // Charger l'application avec le mock
-    const App = require('./App').default;
+    const App = (await import('./App')).default;
 
     render(<App />);
 

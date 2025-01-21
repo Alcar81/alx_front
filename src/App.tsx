@@ -28,8 +28,10 @@ const App: React.FC = () => {
 
   // Si des erreurs de configuration sont détectées, les afficher immédiatement
   if (errors.length > 0) {
-    console.error("Erreurs de configuration détectées :", errors);
-
+    errors.forEach((error) => {
+      console.error(error); // Log chaque erreur individuellement
+    });
+  
     return (
       <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
         <h1>Erreur de configuration</h1>
@@ -43,7 +45,7 @@ const App: React.FC = () => {
       </div>
     );
   }
-
+  
   // Si le mode maintenance est activé, afficher la page de maintenance
   if (isMaintenance) {
     return <Maintenance />;
