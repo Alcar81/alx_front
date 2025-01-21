@@ -34,7 +34,8 @@ describe('App Component', () => {
     jest.resetModules();
   });
 
-  test('renders Maintenance page when maintenance mode is active', async () => {
+  test('renders Maintenance page when maintenance mode is active', () => {
+    // Mock de la configuration
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -46,7 +47,7 @@ describe('App Component', () => {
       },
     }));
 
-    const App = (await import('./App')).default;
+    const App = require('./App').default;
 
     render(<App />);
 
@@ -54,7 +55,8 @@ describe('App Component', () => {
     expect(maintenanceElement).toBeInTheDocument();
   });
 
-  test('renders Layout when maintenance mode is inactive', async () => {
+  test('renders Layout when maintenance mode is inactive', () => {
+    // Mock de la configuration
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -66,7 +68,7 @@ describe('App Component', () => {
       },
     }));
 
-    const App = (await import('./App')).default;
+    const App = require('./App').default;
 
     render(<App />);
 
@@ -74,11 +76,12 @@ describe('App Component', () => {
     expect(layoutElement).toBeInTheDocument();
   });
 
-  test('validates required configuration keys', async () => {
+  test('validates required configuration keys', () => {
+    // Mock de la configuration avec une valeur manquante
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
-        REACT_APP_API_URL: undefined, // Clé manquante
+        REACT_APP_API_URL: undefined, // Configuration manquante
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
@@ -86,16 +89,19 @@ describe('App Component', () => {
       },
     }));
 
-    const App = (await import('./App')).default;
+    const App = require('./App').default;
 
     render(<App />);
 
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1); // Vérifie qu'une seule erreur est appelée
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"
+      "Erreurs de configuration détectées :",
+      ["REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"]
     );
   });
 
-  test('outputs debug information when debug mode is enabled', async () => {
+  test('outputs debug information when debug mode is enabled', () => {
+    // Mock de la configuration avec le mode debug activé
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -103,17 +109,24 @@ describe('App Component', () => {
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
-        REACT_APP_ENABLE_DEBUG: true, // Mode debug activé
+        REACT_APP_ENABLE_DEBUG: true, // Activer le mode debug
       },
     }));
 
-    const App = (await import('./App')).default;
+    const App = require('./App').default;
 
     render(<App />);
 
+    expect(consoleLogSpy).toHaveBeenCalledTimes(1); // Vérifie qu'une seule fois est loggé
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      'Mode debug activé. Configuration actuelle :',
-      expect.any(Object)
+      "Mode debug activé. Configuration actuelle :",
+      {
+        REACT_APP_API_URL: "https://api.example.com",
+        REACT_APP_FRONTEND_URL: "https://frontend.example.com",
+        REACT_APP_WEBSITE_NAME: "AlxMultimedia",
+        REACT_APP_MAINTENANCE_MODE: false,
+        REACT_APP_ENABLE_DEBUG: true,
+      }
     );
   });
 });
