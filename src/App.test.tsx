@@ -36,21 +36,18 @@ describe('App Component', () => {
   });
 
   test('renders Maintenance page when maintenance mode is active', () => {
-    // Mock de la configuration
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
         REACT_APP_API_URL: 'https://api.example.com',
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
-        REACT_APP_MAINTENANCE_MODE: true, // Activer le mode maintenance
+        REACT_APP_MAINTENANCE_MODE: true,
         REACT_APP_ENABLE_DEBUG: false,
       },
     }));
 
-    // Charger l'application avec le mock
     const App = require('./App').default;
-
     render(<App />);
 
     const maintenanceElement = screen.getByTestId('maintenance-mode');
@@ -58,33 +55,10 @@ describe('App Component', () => {
   });
 
   test('renders Layout when maintenance mode is inactive', () => {
-    // Mock de la configuration
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
         REACT_APP_API_URL: 'https://api.example.com',
-        REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
-        REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
-        REACT_APP_MAINTENANCE_MODE: false, // Désactiver le mode maintenance
-        REACT_APP_ENABLE_DEBUG: false,
-      },
-    }));
-
-    // Charger l'application avec le mock
-    const App = require('./App').default;
-
-    render(<App />);
-
-    const layoutElement = screen.getByTestId('main-layout');
-    expect(layoutElement).toBeInTheDocument();
-  });
-
-  test('validates required configuration keys', () => {
-    // Mock de la configuration avec une valeur manquante
-    jest.mock('./config/config', () => ({
-      __esModule: true,
-      default: {
-        REACT_APP_API_URL: undefined, // Clé manquante
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
@@ -92,9 +66,26 @@ describe('App Component', () => {
       },
     }));
 
-    // Charger l'application avec le mock
     const App = require('./App').default;
+    render(<App />);
 
+    const layoutElement = screen.getByTestId('main-layout');
+    expect(layoutElement).toBeInTheDocument();
+  });
+
+  test('validates required configuration keys', () => {
+    jest.mock('./config/config', () => ({
+      __esModule: true,
+      default: {
+        REACT_APP_API_URL: undefined,
+        REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
+        REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
+        REACT_APP_MAINTENANCE_MODE: false,
+        REACT_APP_ENABLE_DEBUG: false,
+      },
+    }));
+
+    const App = require('./App').default;
     render(<App />);
 
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1); // Vérifie qu'une erreur est appelée
@@ -105,7 +96,6 @@ describe('App Component', () => {
   });
 
   test('outputs debug information when debug mode is enabled', () => {
-    // Mock de la configuration avec le mode debug activé
     jest.mock('./config/config', () => ({
       __esModule: true,
       default: {
@@ -113,16 +103,14 @@ describe('App Component', () => {
         REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
         REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
         REACT_APP_MAINTENANCE_MODE: false,
-        REACT_APP_ENABLE_DEBUG: true, // Activer le mode debug
+        REACT_APP_ENABLE_DEBUG: true,
       },
     }));
 
-    // Charger l'application avec le mock
     const App = require('./App').default;
-
     render(<App />);
 
-    expect(consoleLogSpy).toHaveBeenCalledTimes(1); // Vérifie qu'une seule fois est loggé
+    expect(consoleLogSpy).toHaveBeenCalledTimes(1);
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "Mode debug activé. Configuration actuelle :",
       {

@@ -45,7 +45,7 @@ const App: React.FC = () => {
   }
 
   if (config.REACT_APP_ENABLE_DEBUG) {
-    console.log("Mode debug activé. Configuration actuelle  :", config);
+    console.log("Mode debug activé. Configuration actuelle :", config);
   }
 
   return <Layout />;
