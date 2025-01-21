@@ -2,24 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/Signe_logo_ALX_XL.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>AlxMultimedia</title>
 
-    <!-- Placeholder for nonce -->
+    <!-- Icône et manifest -->
+    <link rel="icon" href="%PUBLIC_URL%/Signe_logo_ALX_XL.ico" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Placeholder pour le nonce -->
     <script nonce="__NONCE_PLACEHOLDER__">
       // Injected nonce script for runtime logic
       window.__NONCE__ = "__NONCE_PLACEHOLDER__";
     </script>
 
-    <!-- Scripts and styles with nonce -->
-    <script defer="defer" src="/static/js/main.js" nonce="__NONCE_PLACEHOLDER__"></script>
+    <!-- Inclusion sécurisée des scripts et styles -->
+    <script defer src="/static/js/main.js" nonce="__NONCE_PLACEHOLDER__"></script>
     <link href="/static/css/main.css" rel="stylesheet" nonce="__NONCE_PLACEHOLDER__" />
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
     <div id="root"></div>
   </body>
 </html>
