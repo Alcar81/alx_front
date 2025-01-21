@@ -2,8 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 import config from './config/config';
-import Maintenance from './components/pages/Maintenance/Maintenance';
-import Layout from './components/Layout/Layout';
 
 // Mockez les sous-composants pour éviter des problèmes avec leurs dépendances
 jest.mock('./components/pages/Maintenance/Maintenance', () => {
@@ -14,17 +12,30 @@ jest.mock('./components/Layout/Layout', () => {
   return () => <div data-testid="main-layout">Main Layout</div>;
 });
 
-jest.mock('./config/config', () => {
-  return {
-    REACT_APP_API_URL: 'https://api.example.com',
-    REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
-    REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
-    REACT_APP_MAINTENANCE_MODE: false,
-    REACT_APP_ENABLE_DEBUG: false,
-  };
-});
+jest.mock('./config/config', () => ({
+  REACT_APP_API_URL: 'https://api.example.com',
+  REACT_APP_FRONTEND_URL: 'https://frontend.example.com',
+  REACT_APP_WEBSITE_NAME: 'AlxMultimedia',
+  REACT_APP_MAINTENANCE_MODE: false,
+  REACT_APP_ENABLE_DEBUG: false,
+}));
 
 describe('App Component', () => {
+  let consoleErrorSpy: jest.SpyInstance;
+  let consoleLogSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    // Mock console.error et console.log
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    // Restaurer les mocks après chaque test
+    consoleErrorSpy.mockRestore();
+    consoleLogSpy.mockRestore();
+  });
+
   test('renders Maintenance page when maintenance mode is active', () => {
     // Simulez le mode maintenance
     (config.REACT_APP_MAINTENANCE_MODE as boolean) = true;
@@ -46,32 +57,25 @@ describe('App Component', () => {
   });
 
   test('validates required configuration keys', () => {
-    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    // Testez sans certaines configurations pour valider les erreurs
+    // Simulez l'absence d'une configuration essentielle
     (config.REACT_APP_API_URL as string | undefined) = undefined;
 
     render(<App />);
 
-    expect(console.error).toHaveBeenCalledWith(
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
       expect.stringContaining("REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts")
     );
-
-    spy.mockRestore();
   });
 
   test('outputs debug information when debug mode is enabled', () => {
-    const spy = jest.spyOn(console, 'log').mockImplementation(() => {});
-
+    // Simulez le mode debug activé
     (config.REACT_APP_ENABLE_DEBUG as boolean) = true;
 
     render(<App />);
 
-    expect(console.log).toHaveBeenCalledWith(
-      "Mode debug activé. Configuration actuelle :",
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'Mode debug activé. Configuration actuelle :',
       expect.any(Object)
     );
-
-    spy.mockRestore();
   });
 });
