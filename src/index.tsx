@@ -1,4 +1,3 @@
-// index.tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -7,20 +6,20 @@ import reportWebVitals from "./reportWebVitals";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
-// Récupérez le nonce injecté par le backend
+// Récupération du nonce injecté par le backend
 const nonce = (window as any).__NONCE__;
 
-// Vérifiez si le nonce est défini
+// Vérification et message clair en cas d'absence du nonce
 if (!nonce) {
-  console.error(
-    "Aucun nonce trouvé dans la configuration du backend. Assurez-vous que le nonce est correctement injecté via __NONCE__."
+  console.warn(
+    "Aucun nonce trouvé. Assurez-vous que le backend injecte correctement le nonce dans le HTML avec le placeholder __NONCE__."
   );
 }
 
-// Créez un cache Emotion configuré avec le nonce
+// Création du cache Emotion avec le nonce
 const cache = createCache({
   key: "css",
-  nonce: nonce || "", // Utilise un nonce vide comme fallback
+  nonce: nonce || "", // Utilise un nonce vide comme fallback pour éviter les erreurs
 });
 
 const root = ReactDOM.createRoot(
@@ -30,22 +29,22 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {nonce ? (
-      // Utilisation de CacheProvider si le nonce est défini
+      // Si le nonce est présent, utilise CacheProvider pour Emotion
       <CacheProvider value={cache}>
         <App />
       </CacheProvider>
     ) : (
-      // Affiche un message d'erreur si le nonce est absent
+      // Affiche un message explicite si le nonce est absent
       <div style={{ textAlign: "center", padding: "50px" }}>
         <h1 style={{ color: "red" }}>Erreur de configuration</h1>
         <p>
-          Le nonce requis pour sécuriser les styles n'est pas disponible.
-          Veuillez vérifier la configuration du backend.
+          Le nonce requis pour sécuriser les styles est manquant. Veuillez
+          vérifier la configuration du backend et le fichier HTML généré.
         </p>
       </div>
     )}
   </React.StrictMode>
 );
 
-// Mesure des performances
+// Mesure des performances de l'application
 reportWebVitals();
