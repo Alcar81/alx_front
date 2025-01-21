@@ -24,14 +24,14 @@ describe('App Component', () => {
   let consoleErrorSpy: jest.SpyInstance;
   let consoleLogSpy: jest.SpyInstance;
 
-  beforeEach(() => {
-    // Mock console.error et console.log
+  beforeAll(() => {
+    // Mock console.error et console.log une seule fois avant tous les tests
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
-  afterEach(() => {
-    // Restaurer les mocks après chaque test
+  afterAll(() => {
+    // Restaurer les mocks une fois après tous les tests
     consoleErrorSpy.mockRestore();
     consoleLogSpy.mockRestore();
   });
@@ -57,6 +57,9 @@ describe('App Component', () => {
   });
 
   test('validates required configuration keys', () => {
+    // Réinitialisez le mock pour ce test
+    consoleErrorSpy.mockClear();
+
     // Simulez l'absence d'une configuration essentielle
     (config.REACT_APP_API_URL as string | undefined) = undefined;
 
@@ -68,7 +71,9 @@ describe('App Component', () => {
   });
 
   test('outputs debug information when debug mode is enabled', () => {
-    // Simulez le mode debug activé
+    // Réinitialisez le mock pour ce test
+    consoleLogSpy.mockClear();
+
     (config.REACT_APP_ENABLE_DEBUG as boolean) = true;
 
     render(<App />);
