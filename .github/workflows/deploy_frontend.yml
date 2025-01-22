@@ -57,8 +57,14 @@ jobs:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: npm test
 
-      # Étape 6 - Build project
-      - name: 6 - Build project
+      # Étape 6.1 - Nettoyer le répertoire `build` local avant le nouveau build
+      - name: 6.1 - Nettoyer le répertoire build local
+        run: |
+          echo "Nettoyage du répertoire build local..."
+          rm -rf build || true
+
+      # Étape 6.2 - Build project
+      - name: 6.2 - Build project
         env:
           REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
           REACT_APP_FRONTEND_URL: ${{ env.REACT_APP_FRONTEND_URL }}          
