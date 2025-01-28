@@ -1,3 +1,4 @@
+//indext.tsx est le point d'entrée de l'application React. Il est responsable de l'initialisation de l'application et de son rendu dans le DOM.
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -19,8 +20,8 @@ if (!nonce) {
 
 // Création du cache Emotion avec le nonce
 const cache = createCache({
-  key: "css", // Nom de clé du cache
-  nonce: nonce || "", // Utilisation du nonce ou d'un fallback vide
+  key: "css",
+  nonce: nonce || "",
 });
 
 const root = ReactDOM.createRoot(
@@ -35,5 +36,4 @@ root.render(
   </React.StrictMode>
 );
 
-// Mesure des performances de l'application
 reportWebVitals();
