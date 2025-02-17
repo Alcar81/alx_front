@@ -8,13 +8,15 @@
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#000000"/>
 
+  <!-- Injection du nonce côté backend -->
   <script nonce="__NONCE__">window.__NONCE__="__NONCE__"</script>
-  
+
+  <!-- Inclusion des styles -->
   <link href="/static/css/main.css" rel="stylesheet" nonce="__NONCE__"/>
-  <script defer="defer" src="/static/js/main.js" nonce="__NONCE__"></script>
-  
-  <script defer="defer" src="/static/js/main.0490bafe.js"></script>
   <link href="/static/css/main.1e8fc512.css" rel="stylesheet"/>
+
+  <!-- Inclusion du bon fichier JavaScript avec nonce -->
+  <script defer="defer" src="/static/js/main.0490bafe.js" nonce="__NONCE__"></script>
 </head>
 
 <body>
