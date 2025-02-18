@@ -1,17 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AlxMultimedia</title>
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico"/>
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
-  <meta name="theme-color" content="#000000"/>
-  <!-- Placeholder pour le nonce -->
-  <script>window.__NONCE__="__NONCE__"</script>
+
+  <!-- Icône du site -->
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
+
+  <!-- Manifest pour PWA -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+
+  <!-- Couleur du thème -->
+  <meta name="theme-color" content="#000000">
+
+  <!-- Injection dynamique du nonce pour la CSP -->
+  <script nonce="__NONCE__">window.__NONCE__ = "__NONCE__";</script>
+
+  <!-- Styles (garder dans le head) -->
+  <link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.css" nonce="__NONCE__">
 </head>
+
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <noscript>Vous devez activer JavaScript pour exécuter cette application.</noscript>
   <div id="root"></div>
+
+  <!-- ✅ Déplacement du script à la fin pour garantir que le DOM est prêt -->
+  <script defer src="%PUBLIC_URL%/static/js/main.js" nonce="__NONCE__"></script>
 </body>
 </html>
