@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AlxMultimedia</title>
 
-  <!-- Icône du site -->
+  <!-- ✅ Icônes et manifest -->
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
-
-  <!-- Manifest pour PWA -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-
-  <!-- Couleur du thème -->
   <meta name="theme-color" content="#000000">
 
-  <!-- Injection dynamique du nonce pour la CSP -->
-  <script nonce="__NONCE__">window.__NONCE__ = "__NONCE__";</script>
+  <!-- ✅ Injection du nonce pour les scripts -->
+  <script nonce="__NONCE__">window.__NONCE__="__NONCE__"</script>
 
-  <!-- Styles (garder dans le head) -->
+  <!-- ✅ Styles CSS -->
   <link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.[hash].css" nonce="__NONCE__">
 </head>
 
@@ -25,5 +21,7 @@
   <noscript>Vous devez activer JavaScript pour exécuter cette application.</noscript>
   <div id="root"></div>
 
+  <!-- ✅ Scripts JS à la fin pour charger après le DOM -->
+  <script defer="defer" src="%PUBLIC_URL%/static/js/main.[hash].js" nonce="__NONCE__"></script>
 </body>
 </html>
