@@ -5,23 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AlxMultimedia</title>
 
-  <!-- ✅ Icônes et manifest -->
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
   <meta name="theme-color" content="#000000">
 
-  <!-- ✅ Injection du nonce pour les scripts -->
   <script nonce="__NONCE__">window.__NONCE__="__NONCE__"</script>
 
-  <!-- ✅ Styles CSS -->
-  <link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.[hash].css" nonce="__NONCE__">
-</head>
+  <!-- ✅ Lien CSS dynamique -->
+  <link rel="stylesheet" href="%PUBLIC_URL%/%HASH_CSS%" nonce="__NONCE__">
 
+</head>
 <body>
   <noscript>Vous devez activer JavaScript pour exécuter cette application.</noscript>
   <div id="root"></div>
 
-  <!-- ✅ Scripts JS à la fin pour charger après le DOM -->
-  <script defer="defer" src="%PUBLIC_URL%/static/js/main.[hash].js" nonce="__NONCE__"></script>
+  <!-- ✅ Script JS dynamique -->
+  <script defer="defer" src="%PUBLIC_URL%/%HASH_JS%" nonce="__NONCE__"></script>
+
 </body>
 </html>
