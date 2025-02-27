@@ -18,14 +18,12 @@
   <script nonce="__NONCE__">window.__NONCE__ = "__NONCE__";</script>
 
   <!-- Styles (garder dans le head) -->
-  <link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.css" nonce="__NONCE__">
+  <link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.[hash].css" nonce="__NONCE__">
 </head>
 
 <body>
   <noscript>Vous devez activer JavaScript pour exécuter cette application.</noscript>
   <div id="root"></div>
 
-  <!-- ✅ Déplacement du script à la fin pour garantir que le DOM est prêt -->
-  <script defer src="%PUBLIC_URL%/static/js/main.js" nonce="__NONCE__"></script>
 </body>
 </html>
