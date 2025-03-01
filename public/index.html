@@ -9,18 +9,17 @@
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
   <meta name="theme-color" content="#000000">
 
+  <!-- ✅ Injection du nonce pour les scripts inline -->
   <script nonce="__NONCE__">window.__NONCE__="__NONCE__"</script>
 
   <!-- ✅ Lien CSS dynamique -->
-  <link rel="stylesheet" href="%PUBLIC_URL%/%HASH_CSS%" nonce="__NONCE__">
-
+  <link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.css" nonce="__NONCE__">
 </head>
 <body>
   <noscript>Vous devez activer JavaScript pour exécuter cette application.</noscript>
   <div id="root"></div>
 
   <!-- ✅ Script JS dynamique -->
-  <script defer="defer" src="%PUBLIC_URL%/%HASH_JS%" nonce="__NONCE__"></script>
-
+  <script defer="defer" src="%PUBLIC_URL%/static/js/main.js" nonce="__NONCE__"></script>
 </body>
 </html>
