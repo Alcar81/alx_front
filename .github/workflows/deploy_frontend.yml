@@ -36,7 +36,8 @@ jobs:
           echo "Environnement : $ENV"
           echo "Réseau Docker : $NETWORK"
           echo "Répertoire de déploiement : $DEPLOY_DIRECTORY"
-          echo "Nom du conteneur : $CONTAINER_NAME"
+          echo "Nom du conteneur frontend : $CONTAINER_NAME"
+          echo "Nom du conteneur backend : $CONTAINER_BACKEND_NAME"
           echo "Port Frontend : $FRONTEND_PORT"
           echo "Port Conteneur : $CONTAINER_PORT"
 
@@ -258,21 +259,19 @@ jobs:
       - name: 14 - Restart Backend After Frontend Deployment
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            ENVIRONMENT=${{ vars.ENV }}
-            BACKEND_CONTAINER="${{ vars.BACK }}_${{ vars.NODE }}_${{ vars.ENV }}"
-      
+                  
             echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENVIRONMENT"
-            echo "🧐 Vérification du conteneur backend : $BACKEND_CONTAINER"
+            echo "🧐 Vérification du conteneur backend : $CONTAINER_BACKEND_NAME"
             echo "🖥 Liste des conteneurs existants :"
             docker ps -a --format '{{.Names}}'
       
             # Vérifier si le conteneur existe avant de tenter un restart
-            if docker ps -a --format '{{.Names}}' | grep -w "$BACKEND_CONTAINER"; then
-              echo "✅ Conteneur $BACKEND_CONTAINER trouvé, tentative de redémarrage..."
-              docker stop "$BACKEND_CONTAINER" && docker start "$BACKEND_CONTAINER"
+            if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
+              echo "✅ Conteneur $CONTAINER_BACKEND_NAME trouvé, tentative de redémarrage..."
+              docker stop "$CONTAINER_BACKEND_NAME" && docker start "$CONTAINER_BACKEND_NAME"
               echo "✅ Backend redémarré avec succès."
             else
-              echo "⚠️ Aucun conteneur nommé $BACKEND_CONTAINER trouvé. Vérifiez si le backend est bien déployé."
+              echo "⚠️ Aucun conteneur nommé $CONTAINER_BACKEND_NAME trouvé. Vérifiez si le backend est bien déployé."
             fi
           EOF
         
