@@ -260,10 +260,11 @@ jobs:
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             
-            CONTAINER_BACKEND_NAME: back_node_${{ vars.ENV }}
+            ENVIRONMENT=${{ vars.ENV }}
+            CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
           
-            echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENVIRONMENT"
-            echo "🧐 Vérification du conteneur backend : $CONTAINER_BACKEND_NAME"
+            echo "🔄 Vérification et redémarrage du backend pour l'environnement :" $ENVIRONMENT
+            echo "🧐 Vérification du conteneur backend :" $CONTAINER_BACKEND_NAME
             echo "🖥 Liste des conteneurs existants :"
             docker ps -a --format '{{.Names}}'
       
