@@ -7,7 +7,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // 🔄 Détection de l'environnement
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.REACT_APP_ENV === "dev";
 
 // 🔄 Récupération du nonce injecté par le backend
 let nonce: string | undefined;

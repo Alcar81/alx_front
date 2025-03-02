@@ -24,7 +24,8 @@ jobs:
       FRONT: ${{ vars.FRONT }}
       NGINX: ${{ vars.NGINX }}      
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-      REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}   
+      REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
+      REACT_APP_ENV: ${{ vars.ENV }}
 
     steps:
       # Étape 1 - Afficher les variables
@@ -251,3 +252,22 @@ jobs:
                 echo "[INFO] Test de la configuration logrotate..."
                 logrotate -d "\$LOGROTATE_CONF"
           EOF
+
+      - name: 14 - Restart Backend After Frontend Deployment
+        run: |
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+            ENVIRONMENT=${{ vars.ENV }}
+            BACKEND_CONTAINER="backend_node_${ENVIRONMENT}"
+            
+            echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENVIRONMENT"
+            
+            # Vérifier si le conteneur existe avant d'essayer de le redémarrer
+            if docker ps -a --format '{{.Names}}' | grep -q "$BACKEND_CONTAINER"; then
+              echo "✅ Conteneur $BACKEND_CONTAINER trouvé, redémarrage en cours..."
+              docker restart "$BACKEND_CONTAINER"
+              echo "✅ Backend redémarré avec succès."
+            else
+              echo "⚠️ Aucun conteneur nommé $BACKEND_CONTAINER trouvé. Vérifiez si le backend est bien déployé."
+            fi
+          EOF
+        
