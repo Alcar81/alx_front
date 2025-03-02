@@ -18,6 +18,7 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
       DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
       CONTAINER_NAME: ${{ vars.FRONT }}_${{ vars.NGINX }}_${{ vars.ENV }}
+      CONTAINER_BACKEND_NAME: ${{ vars.BACK }}_${{ vars.NODE }}_${{ vars.ENV }}
       NETWORK: ${{ vars.NET }}_${{ vars.ENV }}
       FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
       CONTAINER_PORT: ${{ vars.CONTAINER_PORT }}
@@ -26,6 +27,7 @@ jobs:
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
       REACT_APP_ENV: ${{ vars.ENV }}
+      
 
     steps:
       # Étape 1 - Afficher les variables
@@ -257,7 +259,7 @@ jobs:
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
             ENVIRONMENT=${{ vars.ENV }}
-            BACKEND_CONTAINER="backend_node_${ENVIRONMENT}"
+            BACKEND_CONTAINER="${CONTAINER_BACKEND_NAME}"
             
             echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENVIRONMENT"
             
