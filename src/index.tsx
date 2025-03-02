@@ -6,6 +6,9 @@ import reportWebVitals from "./reportWebVitals";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
+// 🔄 Détection de l'environnement
+const isDev = process.env.NODE_ENV === "development";
+
 // 🔄 Récupération du nonce injecté par le backend
 let nonce: string | undefined;
 
@@ -14,11 +17,11 @@ try {
 
   if (!nonce) {
     throw new Error("⚠️ Aucun nonce trouvé ! Vérifiez que le backend injecte bien le nonce.");
-  } else {
-    console.log("✅ Nonce détecté :", nonce);
+  } else if (isDev) {
+    console.debug("✅ Nonce détecté :", nonce); // Utilisation de console.debug pour éviter l'affichage en prod
   }
 } catch (error) {
-  console.error(error);
+  if (isDev) console.error(error);
   nonce = undefined; // Assurer une valeur définie pour éviter des erreurs
 }
 
