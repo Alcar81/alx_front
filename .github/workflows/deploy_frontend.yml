@@ -272,7 +272,10 @@ jobs:
             if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
               echo "✅ Conteneur $CONTAINER_BACKEND_NAME trouvé, tentative de redémarrage..."
               docker stop "$CONTAINER_BACKEND_NAME" && docker start "$CONTAINER_BACKEND_NAME"
+              echo "🟢 Statut du conteneur après redémarrage :"
+              docker ps -a --filter "name=$CONTAINER_BACKEND_NAME"
               echo "✅ Backend redémarré avec succès."
+              
             else
               echo "⚠️ Aucun conteneur nommé $CONTAINER_BACKEND_NAME trouvé. Vérifiez si le backend est bien déployé."
             fi
