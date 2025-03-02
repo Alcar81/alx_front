@@ -257,20 +257,22 @@ jobs:
 
       - name: 14 - Restart Backend After Frontend Deployment
         run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'                       
-            
-            echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENV"
-            echo "🧐 Vérification du conteneur backend : $CONTAINER_BACKEND_NAME"
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+            ENVIRONMENT=${{ vars.ENV }}
+            BACKEND_CONTAINER="${{ vars.BACK }}_${{ vars.NODE }}_${{ vars.ENV }}"
+      
+            echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENVIRONMENT"
+            echo "🧐 Vérification du conteneur backend : $BACKEND_CONTAINER"
             echo "🖥 Liste des conteneurs existants :"
             docker ps -a --format '{{.Names}}'
-            
-            # Vérifier si le conteneur existe avant d'essayer de le redémarrer
-            if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
-              echo "✅ Conteneur $CONTAINER_BACKEND_NAME trouvé, tentative de redémarrage..."
-              docker stop  "$CONTAINER_BACKEND_NAME" && docker start "$CONTAINER_BACKEND_NAME"
+      
+            # Vérifier si le conteneur existe avant de tenter un restart
+            if docker ps -a --format '{{.Names}}' | grep -w "$BACKEND_CONTAINER"; then
+              echo "✅ Conteneur $BACKEND_CONTAINER trouvé, tentative de redémarrage..."
+              docker stop "$BACKEND_CONTAINER" && docker start "$BACKEND_CONTAINER"
               echo "✅ Backend redémarré avec succès."
             else
-              echo "⚠️ Aucun conteneur nommé $CONTAINER_BACKEND_NAME trouvé. Vérifiez si le backend est bien déployé."
+              echo "⚠️ Aucun conteneur nommé $BACKEND_CONTAINER trouvé. Vérifiez si le backend est bien déployé."
             fi
           EOF
         
