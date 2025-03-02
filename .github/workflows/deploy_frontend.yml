@@ -259,18 +259,18 @@ jobs:
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'                       
             
-            echo "🔄 Vérification et redémarrage du backend pour l'environnement : ${{ vars.ENV }}"
-            echo "🧐 Vérification du conteneur backend : ${CONTAINER_BACKEND_NAME}"
+            echo "🔄 Vérification et redémarrage du backend pour l'environnement : $ENV"
+            echo "🧐 Vérification du conteneur backend : $CONTAINER_BACKEND_NAME"
             echo "🖥 Liste des conteneurs existants :"
             docker ps -a --format '{{.Names}}'
             
             # Vérifier si le conteneur existe avant d'essayer de le redémarrer
-            if docker ps -a --format '{{.Names}}' | grep -w "${CONTAINER_BACKEND_NAME}"; then
-              echo "✅ Conteneur ${CONTAINER_BACKEND_NAME} trouvé, tentative de redémarrage..."
-              docker stop  "${CONTAINER_BACKEND_NAME}" && docker start "${CONTAINER_BACKEND_NAME}"
+            if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
+              echo "✅ Conteneur $CONTAINER_BACKEND_NAME trouvé, tentative de redémarrage..."
+              docker stop  "$CONTAINER_BACKEND_NAME" && docker start "$CONTAINER_BACKEND_NAME"
               echo "✅ Backend redémarré avec succès."
             else
-              echo "⚠️ Aucun conteneur nommé ${CONTAINER_BACKEND_NAME} trouvé. Vérifiez si le backend est bien déployé."
+              echo "⚠️ Aucun conteneur nommé $CONTAINER_BACKEND_NAME trouvé. Vérifiez si le backend est bien déployé."
             fi
           EOF
         
