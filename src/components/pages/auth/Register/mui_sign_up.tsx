@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import AppTheme from '../../../theme/AppTheme';
 import ColorModeSelect from '../../../theme/ColorModeSelect';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../../../theme/CustomIcons';
-import { Card, AuthContainer } from './styles/authStyles';
+import { Card, AuthContainer } from '../styles/authStyles';
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [nom, setNom] = React.useState('');
