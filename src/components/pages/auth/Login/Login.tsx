@@ -1,6 +1,6 @@
 // src/pages/Login.tsx
 import React from 'react';
-import AuthForm from '../auth/AuthForm';
+import AuthForm from '../AuthForm';
 
 const Login: React.FC = () => {
   const handleLogin = (e: React.FormEvent) => {
