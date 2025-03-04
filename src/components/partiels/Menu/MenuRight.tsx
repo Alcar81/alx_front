@@ -88,7 +88,13 @@ const MenuRight: React.FC = () => {
                     <Link to="/Connexion">Connexion</Link>
                   </li>
                   <li className="dropdown">
+                    <Link to="/Connexion2">Connexion</Link>
+                  </li>
+                  <li className="dropdown">
                     <Link to="/Inscription">Inscription</Link>
+                  </li>
+                  <li className="dropdown">
+                    <Link to="/Inscription2">Inscription</Link>
                   </li>
                 </ul>
               )}
