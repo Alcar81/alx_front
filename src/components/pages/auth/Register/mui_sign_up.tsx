@@ -13,51 +13,51 @@ import Typography from '@mui/material/Typography';
 import AppTheme from '../../../theme/AppTheme';
 import ColorModeSelect from '../../../theme/ColorModeSelect';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../../../theme/CustomIcons';
-import { Card, AuthContainer } from '../styles/authStyles';
+import { Card, AuthContainer } from './styles/authStyles';
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
-  const [name, setName] = React.useState('');
+  const [nom, setNom] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [nameError, setNameError] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
+  const [motDePasse, setMotDePasse] = React.useState('');
+  const [nomErreur, setNomErreur] = React.useState('');
+  const [emailErreur, setEmailErreur] = React.useState('');
+  const [motDePasseErreur, setMotDePasseErreur] = React.useState('');
 
-  const validateInputs = () => {
-    let isValid = true;
+  const validerChamps = () => {
+    let estValide = true;
 
-    if (!name.trim()) {
-      setNameError('Name is required.');
-      isValid = false;
+    if (!nom.trim()) {
+      setNomErreur('Le nom est requis.');
+      estValide = false;
     } else {
-      setNameError('');
+      setNomErreur('');
     }
 
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Please enter a valid email address.');
-      isValid = false;
+      setEmailErreur('Veuillez entrer une adresse e-mail valide.');
+      estValide = false;
     } else {
-      setEmailError('');
+      setEmailErreur('');
     }
 
-    if (!password.trim() || password.length < 6) {
-      setPasswordError('Password must be at least 6 characters long.');
-      isValid = false;
+    if (!motDePasse.trim() || motDePasse.length < 6) {
+      setMotDePasseErreur('Le mot de passe doit contenir au moins 6 caractères.');
+      estValide = false;
     } else {
-      setPasswordError('');
+      setMotDePasseErreur('');
     }
 
-    return isValid;
+    return estValide;
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validateInputs()) return;
+    if (!validerChamps()) return;
 
     console.log({
-      name,
+      nom,
       email,
-      password,
+      motDePasse,
     });
   };
 
@@ -69,36 +69,70 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
         <Card variant="outlined">
           <SitemarkIcon />
           <Typography component="h1" variant="h4">
-            Sign up
+            Inscription
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <TextField required fullWidth id="name" placeholder="Jon Snow" value={name} onChange={(e) => setName(e.target.value)} error={!!nameError} helperText={nameError} />
+              <FormLabel htmlFor="nom">Nom complet</FormLabel>
+              <TextField
+                required
+                fullWidth
+                id="nom"
+                placeholder="Jean Dupont"
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                error={!!nomErreur}
+                helperText={nomErreur}
+              />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField required fullWidth id="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} error={!!emailError} helperText={emailError} />
+              <FormLabel htmlFor="email">E-mail</FormLabel>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                placeholder="votre@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={!!emailErreur}
+                helperText={emailErreur}
+              />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <TextField required fullWidth id="password" placeholder="••••••" type="password" value={password} onChange={(e) => setPassword(e.target.value)} error={!!passwordError} helperText={passwordError} />
+              <FormLabel htmlFor="motDePasse">Mot de passe</FormLabel>
+              <TextField
+                required
+                fullWidth
+                id="motDePasse"
+                placeholder="••••••"
+                type="password"
+                value={motDePasse}
+                onChange={(e) => setMotDePasse(e.target.value)}
+                error={!!motDePasseErreur}
+                helperText={motDePasseErreur}
+              />
             </FormControl>
-            <FormControlLabel control={<Checkbox value="allowExtraEmails" color="primary" />} label="I want to receive updates via email." />
+            <FormControlLabel
+              control={<Checkbox value="recevoirMisesAJour" color="primary" />}
+              label="Je souhaite recevoir des mises à jour par e-mail."
+            />
             <Button type="submit" fullWidth variant="contained">
-              Sign up
+              S'inscrire
             </Button>
           </Box>
           <Divider />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>
-              Sign up with Google
+              S'inscrire avec Google
             </Button>
             <Button fullWidth variant="outlined" startIcon={<FacebookIcon />}>
-              Sign up with Facebook
+              S'inscrire avec Facebook
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
-              Already have an account? <Link href="/sign-in">Sign in</Link>
+              Vous avez déjà un compte ?{' '}
+              <Link href="/sign-in">
+                Se connecter
+              </Link>
             </Typography>
           </Box>
         </Card>
