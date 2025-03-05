@@ -134,10 +134,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>
               Connexion avec Google
-            </Button>
-            <Button fullWidth variant="outlined" startIcon={<FacebookIcon />}>
-              Connexion avec Facebook
-            </Button>
+            </Button>            
             <Typography sx={{ textAlign: 'center' }}>
               Pas encore de compte ?{' '}
               <Link href="/register" variant="body2">

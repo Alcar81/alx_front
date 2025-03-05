@@ -124,10 +124,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>
               S'inscrire avec Google
-            </Button>
-            <Button fullWidth variant="outlined" startIcon={<FacebookIcon />}>
-              S'inscrire avec Facebook
-            </Button>
+            </Button>            
             <Typography sx={{ textAlign: 'center' }}>
               Vous avez déjà un compte ?{' '}
               <Link href="/sign-in">
