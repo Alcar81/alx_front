@@ -1,3 +1,4 @@
+// Code: frontend/src/components/pages/auth/Register/mui_sign_up.tsx
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,8 +13,9 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import AppTheme from '../../../theme/AppTheme';
 import ColorModeSelect from '../../../theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../../../theme/CustomIcons';
+import { GoogleIcon } from '../../../theme/CustomIcons';
 import { Card, AuthContainer } from '../styles/authStyles';
+import { Alx_logo_long } from '../../../../images/Alx_logo_long';
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [nom, setNom] = React.useState('');
@@ -67,7 +69,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <AuthContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <SitemarkIcon />
+          <Alx_logo_long />
           <Typography component="h1" variant="h4">
             Inscription
           </Typography>

@@ -1,3 +1,4 @@
+// Code: src/components/pages/auth/Login/mui_sign_in.tsx
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,8 +14,9 @@ import Typography from '@mui/material/Typography';
 import ForgotPassword from '../ForgotPassword';
 import AppTheme from '../../../theme/AppTheme';
 import ColorModeSelect from '../../../theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../../../theme/CustomIcons';
+import { GoogleIcon } from '../../../theme/CustomIcons';
 import { Card, AuthContainer } from '../styles/authStyles';
+import { Alx_logo_long } from '../../../../images/Alx_logo_long';
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const emailRef = React.useRef<HTMLInputElement>(null);
@@ -75,7 +77,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       <AuthContainer direction="column" justifyContent="space-between">
         <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
         <Card variant="outlined">
-          <SitemarkIcon />
+          <Alx_logo_long />
           <Typography component="h1" variant="h4">
             Connexion
           </Typography>
