@@ -27,7 +27,7 @@
       "@auth/*": ["components/pages/auth/*"],
       "@pages/*": ["components/pages/*"],
       "@images/*": ["assets/images/*"],
-      "@menu/*": ["components/pages/menu/*"],
+      "@menu/*": ["components/pages/partiels/Menu/*"],
     }
   },
   "include": ["src"],
