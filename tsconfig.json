@@ -19,14 +19,15 @@
     // 📌 Ajout des alias pour éviter les imports relatifs longs
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"],
-      "@assets/*": ["assets/*"],
+      "@/*": ["./*"],      
       "@theme/*": ["theme/*"],
       "@styles/*": ["theme/styles/*"],
       "@components/*": ["components/*"],
       "@utils/*": ["utils/*"],
       "@auth/*": ["components/pages/auth/*"],
-      "@pages/*": ["components/pages/*"]
+      "@pages/*": ["components/pages/*"],
+      "@images/*": ["assets/images/*"],
+      "@menu/*": ["components/pages/menu/*"],
     }
   },
   "include": ["src"],

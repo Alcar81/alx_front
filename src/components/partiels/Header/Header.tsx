@@ -2,9 +2,9 @@
 import "./Header.css";
 import { Link } from "react-router-dom";
 import logo from "@/images/Logos/Logo_ALX_XL_v3.png";
-import MenuRight from "../Menu/MenuRight";
-import MenuLeft from "../Menu/MenuLeft";
-import MenuHam from "../Menu/MenuHam"; // Import du menu hamburger
+import MenuRight from "@/menu/MenuRight";
+import MenuLeft from "@/menu/MenuLeft";
+import MenuHam from "@/menu/MenuHam";
 import { useState, useEffect } from "react";
 
 const Header: React.FC = () => {
