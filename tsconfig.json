@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",  // Passage à ES6 pour de meilleures performances
+    "target": "es6",  // Améliore la compatibilité avec les navigateurs modernes
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -9,19 +9,26 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ESNext",  // Meilleure gestion des modules modernes
+    "moduleResolution": "bundler", // Gestion efficace des modules en build moderne
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
 
-    // 📌 Ajout de `baseUrl` et `paths` pour un alias `@`
+    // 📌 Ajout des alias pour éviter les imports relatifs longs
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@assets/*": ["assets/*"],
+      "@theme/*": ["theme/*"],
+      "@styles/*": ["theme/styles/*"],
+      "@components/*": ["components/*"],
+      "@utils/*": ["utils/*"],
+      "@auth/*": ["components/pages/auth/*"],
+      "@pages/*": ["components/pages/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"] // Exclusion des fichiers non nécessaires
+  "exclude": ["node_modules", "dist", "build"] // Exclusion des dossiers inutiles pour TypeScript
 }

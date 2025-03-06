@@ -10,12 +10,12 @@ import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import ForgotPassword from "../ForgotPassword";
-import AppTheme from "@/components/theme/AppTheme";
-import ColorModeSelect from "@/components/theme/ColorModeSelect";
-import { GoogleIcon } from "@/components/theme/CustomIcons";
-import { Card, AuthContainer } from "../styles/authStyles";
-import alxLogo from "@/components/images/logo/alx_logo_long.png";
+import ForgotPassword from "@pages/auth/ForgotPassword";
+import AppTheme from "@/theme/AppTheme";
+import ColorModeSelect from "@/theme/ColorModeSelect";
+import { GoogleIcon } from "@/theme/CustomIcons";
+import { Card, AuthContainer } from "@/theme/styles/authStyles";
+import alxLogo from "@/assets/images/logo/alx_logo_long.png";
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const emailRef = React.useRef<HTMLInputElement>(null);
