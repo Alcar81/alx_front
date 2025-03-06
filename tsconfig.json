@@ -28,6 +28,7 @@
       "@pages/*": ["components/pages/*"],
       "@images/*": ["assets/images/*"],
       "@menus/*": ["components/partiels/Menu/*"],
+      "logos/*": ["assets/images/logos/*"],
     }
   },
   "include": ["src"],
