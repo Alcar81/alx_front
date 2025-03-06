@@ -19,7 +19,7 @@
     // 📌 Ajout de `baseUrl` et `paths` pour un alias `@`
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./*"]
     }
   },
   "include": ["src"],
