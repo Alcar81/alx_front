@@ -1,7 +1,7 @@
 // src/components/partiels/Header/Header.tsx
 import "./Header.css";
 import { Link } from "react-router-dom";
-import logo from "../../../images/Logo/Logo_ALX_XL_v3.png";
+import logo from "@/images/Logos/Logo_ALX_XL_v3.png";
 import MenuRight from "../Menu/MenuRight";
 import MenuLeft from "../Menu/MenuLeft";
 import MenuHam from "../Menu/MenuHam"; // Import du menu hamburger
