@@ -1,10 +1,10 @@
 // src/components/partiels/Header/Header.tsx 
 import "./Header.css";
 import { Link } from "react-router-dom";
-import logo from "@/images/Logos/Logo_ALX_XL_v3.png";
-import MenuRight from "@/menus/MenuRight";
-import MenuLeft from "@/menus/MenuLeft";
-import MenuHam from "@/menus/MenuHam";
+import logo from "@images/Logos/Logo_ALX_XL_v3.png";
+import MenuRight from "@menus/MenuRight";
+import MenuLeft from "@menus/MenuLeft";
+import MenuHam from "@menus/MenuHam";
 import { useState, useEffect } from "react";
 
 const Header: React.FC = () => {

@@ -11,11 +11,11 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import ForgotPassword from "@pages/auth/ForgotPassword";
-import AppTheme from "@/theme/AppTheme";
-import ColorModeSelect from "@/theme/ColorModeSelect";
-import { GoogleIcon } from "@/theme/CustomIcons";
-import { Card, AuthContainer } from "@/theme/styles/authStyles";
-import alxLogo from "@/images/logo/alx_logo_long.png";
+import AppTheme from "@theme/AppTheme";
+import ColorModeSelect from "@theme/ColorModeSelect";
+import { GoogleIcon } from "@theme/CustomIcons";
+import { Card, AuthContainer } from "@theme/styles/authStyles";
+import alxLogo from "@images/logo/alx_logo_long.png";
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const emailRef = React.useRef<HTMLInputElement>(null);
