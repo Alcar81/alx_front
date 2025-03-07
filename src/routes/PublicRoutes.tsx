@@ -9,8 +9,8 @@ import Contact from "@pages/Contact";
 
 import NotFound from "@pages/Notfound";
 
-import Login from "@auth/Login/mui_sign_in";
-import Register from "@auth/Register/mui_sign_up";
+import Login from "@auth/mui_sign_in";
+import Register from "@auth/mui_sign_up";
 
 
 const PublicRoutes: React.FC = () => {
