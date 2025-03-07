@@ -1,15 +1,17 @@
 // src/routes/routes.ts
-import LandingPage from "@pages/LandingPage";
-import LandingPage from "@pages/LandingPage";
-import Home from "@pages/Home";
-import About from "@pages/About";
-import Contact from "@pages/Contact";
-import Login from "@auth/mui_sign_in";
-import Register from "@auth/mui_sign_up";
-import Dashboard from "@admin/Dashbord";
-import Settings from "@admin/Settings";
-import NotFound from "@pages/Notfound";
-import AdminNotFound from "@admin/AdminNotFound";
+import LandingPage from "../pages/LandingPage";
+import Home from "../pages/Home";
+import About from "../pages/About";
+import Contact from "../pages/Contact";
+
+import Login from "../pages/auth/mui_sign_in";
+import Register from "../pages/auth/mui_sign_up";
+
+import Dashboard from "../pages/admin/Dashbord";
+import Settings from "../pages/admin/Settings";
+
+import NotFound from "../pages/pages/Notfound";
+import AdminNotFound from "../pages/admin/AdminNotFound";
 
 
 

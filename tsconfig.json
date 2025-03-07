@@ -21,17 +21,7 @@
     // 📌 Ajout des alias pour éviter les imports relatifs longs
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"],      
-      "@theme/*": ["theme/*"],
-      "@styles/*": ["theme/styles/*"],
-      "@components/*": ["components/*"],
-      "@utils/*": ["utils/*"],
-      "@auth/*": ["components/pages/auth/*"],
-      "@pages/*": ["components/pages/*"],
-      "@images/*": ["assets/images/*"],
-      "@menus/*": ["components/partiels/Menu/*"],
-      "@logos/*": ["assets/images/logos/*"],
-      "@admin/*": ["components/pages/admin/*"],
+      "@/*": ["./*"], 
     }
   },
   "include": ["src"],

@@ -10,11 +10,11 @@ import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import AppTheme from "@theme/AppTheme";
-import ColorModeSelect from "@theme/ColorModeSelect";
-import { GoogleIcon } from "@theme/CustomIcons";
-import { Card, AuthContainer } from "@theme/styles/authStyles";
-import alxLogo from "@images/logos/alx_logo_long.png";
+import AppTheme from "../../theme/AppTheme";
+import ColorModeSelect from "../../theme/ColorModeSelect";
+import { GoogleIcon } from "../../theme/CustomIcons";
+import { Card, AuthContainer } from "../../styles/authStyles";
+import alxLogo from "../../../images/logos/alx_logo_long.png";
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [nom, setNom] = React.useState("");
