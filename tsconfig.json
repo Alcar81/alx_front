@@ -1,3 +1,5 @@
+// tsconfig.json est un fichier de configuration TypeScript qui permet de définir les options de compilation du projet.
+
 {
   "compilerOptions": {
     "target": "es6",  // Améliore la compatibilité avec les navigateurs modernes
