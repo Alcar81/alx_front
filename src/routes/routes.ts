@@ -6,10 +6,10 @@ import About from "@pages/About";
 import Contact from "@pages/Contact";
 import Login from "@auth/Login/mui_sign_in";
 import Register from "@auth/Register/mui_sign_up";
-import Dashboard from "@admin/Dashbord/Dashbord";
-import Settings from "@admin/Settings/Settings";
-import NotFound from "@pages/Notfound/Notfound";
-import AdminNotFound from "@admin/AdminNotFound/AdminNotFound";
+import Dashboard from "@admin/Dashbord";
+import Settings from "@admin/Settings";
+import NotFound from "@pages/Notfound";
+import AdminNotFound from "@admin/AdminNotFound";
 
 
 

@@ -7,7 +7,7 @@ import Home from "@pagesHome";
 import About from "@pages/About";
 import Contact from "@pages/Contact";
 
-import NotFound from "@pages/Notfound/Notfound";
+import NotFound from "@pages/Notfound";
 
 import Login from "@auth/Login/mui_sign_in";
 import Register from "@auth/Register/mui_sign_up";
