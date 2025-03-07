@@ -28,7 +28,8 @@
       "@pages/*": ["components/pages/*"],
       "@images/*": ["assets/images/*"],
       "@menus/*": ["components/partiels/Menu/*"],
-      "logos/*": ["assets/images/logos/*"],
+      "@logos/*": ["assets/images/logos/*"],
+      "@admin/*": ["components/pages/admin/*"],
     }
   },
   "include": ["src"],

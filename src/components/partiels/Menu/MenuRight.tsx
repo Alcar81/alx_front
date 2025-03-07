@@ -83,15 +83,9 @@ const MenuRight: React.FC = () => {
                   className="dropdown-menu account-dropdown"
                   onMouseEnter={clearCloseTimeout} // Annule le délai si la souris est sur le menu
                   onMouseLeave={() => setShowAccountMenu(false)} // Ferme le menu si la souris quitte
-                >
-                  <li className="dropdown">
-                    <Link to="/Connexion">Connexion</Link>
-                  </li>
+                >                  
                   <li className="dropdown">
                     <Link to="/Connexion2">Connexion</Link>
-                  </li>
-                  <li className="dropdown">
-                    <Link to="/Inscription">Inscription</Link>
                   </li>
                   <li className="dropdown">
                     <Link to="/Inscription2">Inscription</Link>

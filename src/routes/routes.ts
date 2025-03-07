@@ -1,16 +1,14 @@
 // src/routes/routes.ts
-import LandingPage from "../components/pages/LandingPage/LandingPage"; //
-import Home from "../components/pages/Home/Home";
-import About from "../components/pages/About/About";
-import Contact from "../components/pages/Contact/Contact";
-import Login from "../components/pages/auth/Login/Login";
-import Login2 from "../components/pages/auth/Login/mui_sign_in";
-import Register from "../components/pages/auth/Register/Register";
-import Register2 from "../components/pages/auth/Register/mui_sign_up";
-import Dashboard from "../components/pages/admin/Dashbord/Dashbord";
-import Settings from "../components/pages/admin/Settings/Settings";
-import NotFound from "../components/pages/Notfound/Notfound";
-import AdminNotFound from "../components/pages/admin/AdminNotFound/AdminNotFound";
+import LandingPage from "@pages/LandingPage/LandingPage"; //
+import Home from "@pages/Home/Home";
+import About from "@pages/About/About";
+import Contact from "@pages/Contact/Contact";
+import Login from "@auth/Login/mui_sign_in";
+import Register from "@auth/Register/mui_sign_up";
+import Dashboard from "@admin/Dashbord/Dashbord";
+import Settings from "@admin/Settings/Settings";
+import NotFound from "@pages/Notfound/Notfound";
+import AdminNotFound from "@admin/AdminNotFound/AdminNotFound";
 
 
 
@@ -20,10 +18,8 @@ const routes = {
     { path: "/home", component: Home }, // Route pour la page d'accueil classique
     { path: "/about", component: About },
     { path: "/contact", component: Contact },
-    { path: "/login", component: Login },
-    { path: "/login2", component: Login2 },
-    { path: "/register", component: Register },    
-    { path: "/register2", component: Register2 },
+    { path: "/login", component: Login },    
+    { path: "/register", component: Register },
     { path: "*", component: NotFound }, // Catch-all pour les erreurs 404
     
   ],
