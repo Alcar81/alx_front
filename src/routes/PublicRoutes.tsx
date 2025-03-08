@@ -2,15 +2,15 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import LandingPage from "../pages/LandingPage";
-import Home from "../component/pages/Home";
-import About from "../component/pages/About";
-import Contact from "../component/pages/Contact";
+import LandingPage from "../components/pages/LandingPage";
+import Home from "../components/pages/Home";
+import About from "../components/pages/About";
+import Contact from "../components/pages/Contact";
 
-import NotFound from "../component/pages/Notfound";
+import NotFound from "../components/pages/Notfound";
 
-import Login from "../component/pages/auth/mui_sign_in";
-import Register from "../component/pages/auth/mui_sign_up";
+import Login from "../components/pages/auth/mui_sign_in";
+import Register from "../components/pages/auth/mui_sign_up";
 
 
 const PublicRoutes: React.FC = () => {
