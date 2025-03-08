@@ -3,8 +3,8 @@ import Home from "../components/pages/Home";
 import About from "../components/pages/About";
 import Contact from "../components/pages/Contact";
 
-import Login from "../components/pages/auth/mui_sign_in";
-import Register from "../components/pages/auth/mui_sign_up";
+import Login from "../components/pages/auth/Login/mui_sign_in";
+import Register from "../components/pages/auth/Registermui_sign_up";
 
 import Dashboard from "../components/pages/admin/Dashboard";
 import Settings from "../components/pages/admin/Settings";
