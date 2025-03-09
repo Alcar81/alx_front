@@ -12,9 +12,6 @@ import Register from "../components/pages/auth/Register/mui_sign_up";
 
 import NotFound from "../components/pages/NotFound/NotFound";
 
-
-
-
 const PublicRoutes: React.FC = () => {
   return (
     <Routes>
