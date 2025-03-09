@@ -14,7 +14,7 @@ import AppTheme from "../../../../theme/AppTheme";
 import ColorModeSelect from "../../../../theme/ColorModeSelect";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
 import { Card, AuthContainer } from "../../../../theme/styles/authStyles";
-import alxLogo from "../../../../assets/images/logos/alx_logo_long.png";
+import alxLogo from "../../../../assets/images/logos/Alx_logo_long2.png";
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [nom, setNom] = React.useState("");
