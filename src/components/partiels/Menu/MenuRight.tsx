@@ -85,10 +85,10 @@ const MenuRight: React.FC = () => {
                   onMouseLeave={() => setShowAccountMenu(false)} // Ferme le menu si la souris quitte
                 >                  
                   <li className="dropdown">
-                    <Link to="/Connexion2">Connexion</Link>
+                    <Link to="/Connexion">Connexion</Link>
                   </li>
                   <li className="dropdown">
-                    <Link to="/Inscription2">Inscription</Link>
+                    <Link to="/Inscription">Inscription</Link>
                   </li>
                 </ul>
               )}

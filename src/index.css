@@ -1,7 +1,7 @@
 /* index.css */
-@import url('./components/styles/reset.css');
-@import url('./components/styles/variables.css');
-@import url('./components/styles/global.css');
+@import url('./theme/styles/reset.css');
+@import url('./theme/styles/variables.css');
+@import url('./theme/styles/global.css');
 
 body {
   margin: 0;
