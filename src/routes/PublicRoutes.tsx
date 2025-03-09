@@ -10,7 +10,7 @@ import Contact from "../components/pages/Contact/Contact";
 import Login from "../components/pages/auth/Login/mui_sign_in";
 import Register from "../components/pages/auth/Register/mui_sign_up";
 
-import NotFound from "../components/pages/Notfound/NotFound";
+import NotFound from "../components/pages/NotFound/NotFound";
 
 
 

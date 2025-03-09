@@ -9,7 +9,7 @@ import Register from "../components/pages/auth/Register/mui_sign_up";
 import Dashboard from "../components/pages/admin/Dashboard/Dashboard";
 import Settings from "../components/pages/admin/Settings/Settings";
 
-import NotFound from "../components/pages/Notfound/NotFound";
+import NotFound from "../components/pages/NotFound/NotFound";
 import AdminNotFound from "../components/pages/admin/AdminNotFound/AdminNotFound";
 
 const routes = {
