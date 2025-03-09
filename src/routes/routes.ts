@@ -1,16 +1,16 @@
-import LandingPage from "../components/pages/LandingPage";
-import Home from "../components/pages/Home";
-import About from "../components/pages/About";
-import Contact from "../components/pages/Contact";
+import LandingPage from "../components/pages/LandingPage/LandingPage";
+import Home from "../components/pages/Home/Home";
+import About from "../components/pages/About/";
+import Contact from "../components/pages/Contact/Contact";
 
 import Login from "../components/pages/auth/Login/mui_sign_in";
 import Register from "../components/pages/auth/Register/mui_sign_up";
 
-import Dashboard from "../components/pages/admin/Dashboard";
-import Settings from "../components/pages/admin/Settings";
+import Dashboard from "../components/pages/admin/Dashboard/Dashboard";
+import Settings from "../components/pages/admin/Settings/Settings";
 
-import NotFound from "../components/pages/Notfound";
-import AdminNotFound from "../components/pages/admin/AdminNotFound";
+import NotFound from "../components/pages/Notfound/NotFound";
+import AdminNotFound from "../components/pages/admin/AdminNotFound/AdminNotFound";
 
 const routes = {
   publicRoutes: [
