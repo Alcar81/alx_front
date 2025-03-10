@@ -13,14 +13,20 @@ const MenuHam: React.FC = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
+  // Fonction pour ouvrir le modal (via événement global)
+  const handleOpenAuthModal = (type: "signIn" | "signUp") => {
+    const event = new CustomEvent("openAuthModal", { detail: { type } });
+    window.dispatchEvent(event);
+  };
+
   return (
     <div className="menu-ham">
-      {/* Icone Hamburger */}
+      {/* 📌 Icône Hamburger */}
       <div className="menu-ham-icon" onClick={toggleDropdown}>
         <MenuIcon />
       </div>
 
-      {/* Dropdown Menu */}
+      {/* 📌 Dropdown Menu */}
       {isDropdownOpen && (
         <div className="menu-ham-dropdown">
           <ul>
@@ -34,7 +40,23 @@ const MenuHam: React.FC = () => {
             <li>
               <Link to="/Inscription">Inscription</Link>
             </li>
-            <li className="divider"></li> {/* Ligne de séparation */}
+            <li>
+              <span 
+                onClick={() => handleOpenAuthModal("signUp")} 
+                className="popup-link"
+              >
+                Inscription (Popup)
+              </span>
+            </li>
+            <li>
+              <span 
+                onClick={() => handleOpenAuthModal("signIn")} 
+                className="popup-link"
+              >
+                Connexion (Popup)
+              </span>
+            </li>
+            <li className="divider"></li> {/* 📌 Ligne de séparation */}
             <li>
               <Link to="/home">Accueil</Link>
             </li>

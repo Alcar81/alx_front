@@ -14,7 +14,7 @@ import AppTheme from "../../../../theme/AppTheme";
 import ColorModeSelect from "../../../../theme/ColorModeSelect";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
 import { Card, AuthContainer } from "../../../../theme/styles/authStyles";
-import alxLogo from "../../../../assets/images/logos/Alx_logo_long2.png";
+import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [nom, setNom] = React.useState("");
@@ -25,8 +25,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [motDePasseErreur, setMotDePasseErreur] = React.useState("");
 
   const validerChamps = () => {
-    let estValide = true;
-
     setNomErreur(nom.trim() ? "" : "Le nom est requis.");
     setEmailErreur(
       /\S+@\S+\.\S+/.test(email) ? "" : "Veuillez entrer une adresse e-mail valide."
@@ -34,7 +32,8 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     setMotDePasseErreur(
       motDePasse.length >= 6 ? "" : "Le mot de passe doit contenir au moins 6 caractères."
     );
-
+  
+    // ✅ Supprime `estValide`, et retourne directement le boolean.
     return nom.trim() && /\S+@\S+\.\S+/.test(email) && motDePasse.length >= 6;
   };
 
@@ -51,7 +50,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
       <AuthContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <img src={alxLogo} alt="Logo AlxMultimedia" width="200" />
+          <img src={SitemarkIcon} alt="Logo AlxMultimedia" width="200" />
           <Typography component="h1" variant="h4">
             Inscription
           </Typography>

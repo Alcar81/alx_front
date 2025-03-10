@@ -93,7 +93,7 @@ ul a:hover {
   display: none; /* Par défaut, caché */
   position: absolute;
   top: calc(100% + 8px); /* Place le menu sous le header avec un espacement */
-  right: -25px; /* Ajuste cette valeur pour décaler le menu vers la droite */
+  right: -10px; /* Ajuste cette valeur pour décaler le menu vers la droite */
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -101,9 +101,10 @@ ul a:hover {
   list-style: none;
   padding: 5px;
   z-index: 1000;
-  width: 120px; /* Largeur fixe */
+  width: 160px; /* Ajustement pour l'alignement */
   text-align: right; /* Texte aligné à droite */
   box-sizing: border-box;
+  padding-right: 10px; /* Ajuste l'alignement */
 
   /* Transition pour un effet fluide */
   opacity: 0;
@@ -122,21 +123,60 @@ ul a:hover {
 
 /* Styles pour les éléments dans le dropdown */
 .account-dropdown li {
-  padding: 3px 5px; /* Réduit l'espacement interne */
+  padding: 5px 10px; /* Ajuste l'espacement */
   margin: 0; /* Supprime la marge */
   line-height: 1.4; /* Ajuste l'espacement vertical */
 }
 
+/* Suppression du soulignement des liens */
 .account-dropdown li a {
-  color: #333;
-  text-decoration: none; /* Supprime le soulignement */
+  color: inherit; /* Utilise la couleur de base */
+  text-decoration: none !important; /* Supprime définitivement le soulignement */
   display: block; /* Chaque lien prend toute la largeur */
   transition: color 0.3s ease;
   font-size: 1rem;
+  text-align: right;
 }
 
+/* Effet au survol */
 .account-dropdown li a:hover {
-  color: #007bff; /* Couleur au survol */
+  color: #007bff; /* Changement de couleur au survol */
+}
+
+/* Styles spécifiques pour les liens du popup */
+.account-dropdown .popup-link {
+  display: block;
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: right;
+  color: inherit;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+/* Effet au survol */
+.account-dropdown .popup-link:hover {
+  color: #007bff;
+}
+
+/* =========================
+   Correction de l'affichage du modal
+========================= */
+
+
+/* stylelint-disable-next-line selector-class-pattern */
+.MuiDialog-paper {
+  width: 100%; /* Prend toute la largeur disponible */
+  max-width: 450px !important; /* Ajuste la taille max */
+  padding: 0 !important;
+  box-shadow: var(--box-shadow);
+}
+
+/* Appliquer le fond ombragé du modal à 100% */
+/* stylelint-disable-next-line selector-class-pattern */
+.MuiBackdrop-root {
+  background-color: rgb(0 0 0 / 70%) !important; /* Ombrage plus intense */
 }
 
 /* =========================
@@ -144,26 +184,26 @@ ul a:hover {
 ========================= */
 .menu-search {
   display: flex;
-  align-items: center; /* Centre verticalement */
-  justify-content: center; /* Centre horizontalement */
-  cursor: pointer; /* Curseur clic */
-  transform: translateY(0); /* Ajustez la valeur pour remonter légèrement */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translateY(0);
 }
 
 .menu-search i {
-  font-size: 25px; /* Taille de l'icône */
-  color: #007bff; /* Couleur */
-  transition: color 0.3s ease; /* Animation fluide */
+  font-size: 25px;
+  color: #007bff;
+  transition: color 0.3s ease;
 }
 
 .menu-search i:hover {
-  color: #0056b3; /* Couleur légèrement plus foncée au survol */
+  color: #0056b3;
 }
 
 /* Boîte de saisie pour la recherche */
 .search-box {
   position: absolute;
-  top: 100%; /* Position sous le bas du header */
+  top: 100%;
   right: 0;
   background-color: #fff;
   box-shadow: var(--box-shadow);
@@ -192,7 +232,7 @@ ul a:hover {
 @media (width <= 768px) {
   .header-menu.menu-left,
   .header-menu.menu-right {
-    display: none; /* Cache les menus classique */
+    display: none;
   }
 
   /* =========================
@@ -205,69 +245,56 @@ ul a:hover {
   }
 
   .menu-ham-dropdown {
-    position: absolute;
-    top: 100%; /* Place le menu sous l'icône */
-    left: 20px; /* Décale le menu légèrement vers la droite */
+    display: flex;
+    flex-direction: column; /* Assure un affichage en colonne */
+    align-items: flex-start; /* Alignement du texte à gauche */
+    width: 200px; /* Largeur ajustable selon ton design */
+    padding: 10px;
     background-color: var(--primary-back-color);
     box-shadow: var(--box-shadow);
     border-radius: 5px;
-    width: 200px; /* Largeur fixe */
-    padding: 10px;
     z-index: 1000;
-    text-align: left; /* Texte aligné à gauche */
+    text-align: left;
   }
-
+  
   .menu-ham-dropdown ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Items en colonne */
+    flex-direction: column; /* Forcer l'affichage en colonne */
+    width: 100%;
   }
-
+  
   .menu-ham-dropdown ul li {
-    display: flex; /* Pour aligner l'icône et le texte */
-    align-items: center; /* Centrer verticalement */
+    display: flex;
+    align-items: center; /* Centre verticalement */
     gap: 8px; /* Espacement entre l'icône et le texte */
-    margin: 4px 0; /* Espacement vertical */
-    padding: 1px 0;
+    margin: 4px 0;
+    padding: 5px 10px;
+    width: 100%; /* Prend toute la largeur */
   }
-
-  .menu-ham-dropdown ul li.divider {
-    border-bottom: 1px solid var(--secondary-color); /* Ligne de séparation */
-    margin: 1px 0; /* Espacement au-dessus et au-dessous */
-  }
-
-  .menu-ham-dropdown ul li:last-child {
-    border-bottom: none;
-  }
-
+  
   .menu-ham-dropdown ul li a {
-    color: var(--text-color);
     text-decoration: none;
+    color: var(--text-color);
     font-size: 1rem;
-    display: block; /* Chaque lien prend toute la largeur */
-    flex: 1; /* S'assure que le texte prend le reste de l'espace */
-    transition: color 0.3s ease; /* Animation fluide */
+    flex: 1; /* Permet de bien répartir l’espace */
+    transition: color 0.3s ease;
   }
-
+  
   .menu-ham-dropdown ul li a:hover {
-    color: var(--secondary-color);
-  }
-
-  .menu-ham-dropdown ul li svg {
-    font-size: 1.2rem; /* Taille des icônes */
-    color: var(--primary-color);
+    color: var(--secondary-color);  
   }
 }
 
 @media (width >= 769px) {
   .header-menu.menu-left,
   .header-menu.menu-right {
-    display: flex; /* Affiche les menus classiques */
+    display: flex;
   }
 
   .menu-ham {
-    display: none; /* Cache le menu hamburger */
+    display: none;
   }
 }
