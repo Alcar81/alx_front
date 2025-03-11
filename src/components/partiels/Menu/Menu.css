@@ -6,224 +6,103 @@
 .container {
   display: flex;
   justify-content: space-between; /* Menu gauche à gauche, menu droit à droite */
-  align-items: center; /* Aligne les éléments verticalement */
-  flex-wrap: nowrap; /* Empêche les menus de passer à la ligne */
-  width: 100%; /* Menu occupe toute la largeur */
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
   font-size: 1.5rem;
 }
 
 /* Menu gauche */
 .container-left {
   display: flex;
-  justify-content: flex-start; /* Menu aligné à gauche */
-  align-items: center; /* Centre verticalement */
-  gap: 20px; /* Espacement entre les éléments */
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
 }
 
 /* Menu droit */
 .container-right {
   display: flex;
-  justify-content: flex-end; /* Menu aligné à droite */
-  align-items: center; /* Centre verticalement */
-  gap: 20px; /* Espacement entre les éléments */
-  flex: 1; /* Prend tout l'espace disponible */
-}
-
-.header-container {
-  display: flex;
-  justify-content: space-between; /* Logo à gauche, menu à droite */
+  justify-content: flex-end;
   align-items: center;
-  width: 100%;
-  padding: 10px 20px;
-  background-color: var(--primary-back-color);
-}
-
-/* Styles communs pour le menu gauche et droit */
-.header-menu {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  gap: 20px;
+  flex: 1;
 }
 
 /* =========================
-   Styles Communs des Menus
+   Menu Hamburger
 ========================= */
-ul {
-  list-style: none; /* Supprime les puces */
-  margin: 0;
-  padding: 0;
-  display: flex; /* Aligne les items horizontalement */
-}
 
-ul li {
-  position: relative;
-  margin: 0 10px; /* Espacement horizontal entre les items */
-}
-
-ul a {
-  text-decoration: none; /* Supprime le soulignement */
-  color: #333; /* Couleur du texte */
-  font-weight: 500;
-  transition: color 0.3s ease; /* Animation fluide au survol */
-}
-
-ul a:hover {
-  color: #007bff; /* Couleur au survol */
-}
-
-/* Ajuste l'icône pour qu'elle soit alignée avec le menu */
-.menu-account {
-  display: inline-flex;
-  align-items: center; /* Centre verticalement */
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
-}
-
-.menu-search, .menu-account {
-  display: inline-flex !important; /* Forcer leur affichage */
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* =========================
-   Dropdown (Menus Déroulants)
-========================= */
-.account-dropdown {
-  display: none; /* Par défaut, caché */
+/* 📌 Conteneur du menu hamburger */
+.menu-ham-container {
+  display: flex;
+  justify-content: flex-end;
   position: absolute;
-  top: calc(100% + 8px); /* Place le menu sous le header avec un espacement */
-  right: -10px; /* Ajuste cette valeur pour décaler le menu vers la droite */
-  background-color: var(--primary-back-color);
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: var(--box-shadow);
-  list-style: none;
-  padding: 5px;
+  top: 10px;
+  right: 20px;
   z-index: 1000;
-  width: 160px; /* Ajustement pour l'alignement */
-  text-align: right; /* Texte aligné à droite */
-  box-sizing: border-box;
-  padding-right: 10px; /* Ajuste l'alignement */
+}
 
-  /* Transition pour un effet fluide */
+/* 📌 Icône du menu hamburger */
+.menu-ham-icon {
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+/* 📌 Dropdown du menu hamburger */
+.menu-ham-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  background-color: var(--primary-back-color);
+  box-shadow: var(--box-shadow);
+  border-radius: 5px;
+  padding: 10px;
+  width: 220px;
+  z-index: 1000;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Affiche le menu lorsqu'il est actif */
-.menu-account.active .account-dropdown {
-  display: block;
+/* 📌 Affichage du dropdown si le menu est ouvert */
+.menu-ham-container .menu-ham-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-/* Styles pour les éléments dans le dropdown */
-.account-dropdown li {
-  padding: 5px 10px; /* Ajuste l'espacement */
-  margin: 0; /* Supprime la marge */
-  line-height: 1.4; /* Ajuste l'espacement vertical */
+/* 📌 Styles des liens dans le menu */
+.menu-ham-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Suppression du soulignement des liens */
-.account-dropdown li a {
-  color: inherit; /* Utilise la couleur de base */
-  text-decoration: none !important; /* Supprime définitivement le soulignement */
-  display: block; /* Chaque lien prend toute la largeur */
-  transition: color 0.3s ease;
-  font-size: 1rem;
-  text-align: right;
-}
-
-/* Effet au survol */
-.account-dropdown li a:hover {
-  color: #007bff; /* Changement de couleur au survol */
-}
-
-/* Styles spécifiques pour les liens du popup */
-.account-dropdown .popup-link {
-  display: block;
-  padding: 5px 10px;
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: right;
-  color: inherit;
-  text-decoration: none !important;
-  cursor: pointer;
-}
-
-/* Effet au survol */
-.account-dropdown .popup-link:hover {
-  color: #007bff;
-}
-
-/* =========================
-   Correction de l'affichage du modal
-========================= */
-
-
-/* stylelint-disable-next-line selector-class-pattern */
-.MuiDialog-paper {
-  width: 100%; /* Prend toute la largeur disponible */
-  max-width: 450px !important; /* Ajuste la taille max */
-  padding: 0 !important;
-  box-shadow: var(--box-shadow);
-}
-
-/* Appliquer le fond ombragé du modal à 100% */
-/* stylelint-disable-next-line selector-class-pattern */
-.MuiBackdrop-root {
-  background-color: rgb(0 0 0 / 70%) !important; /* Ombrage plus intense */
-}
-
-/* =========================
-   Recherche (Icône et Boîte de Saisie)
-========================= */
-.menu-search {
+.menu-ham-dropdown ul li {
+  padding: 8px 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transform: translateY(0);
 }
 
-.menu-search i {
-  font-size: 25px;
-  color: #007bff;
+.menu-ham-dropdown ul li a,
+.menu-ham-dropdown ul li span.popup-link {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 1rem;
   transition: color 0.3s ease;
+  cursor: pointer;
 }
 
-.menu-search i:hover {
-  color: #0056b3;
-}
-
-/* Boîte de saisie pour la recherche */
-.search-box {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #fff;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 1000;  
-}
-
-.search-input {
-  width: 200px;
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #007bff;
+/* 📌 Changement de couleur au survol */
+.menu-ham-dropdown ul li a:hover,
+.menu-ham-dropdown ul li span.popup-link:hover {
+  color: var(--secondary-color);
 }
 
 /* =========================
@@ -235,67 +114,105 @@ ul a:hover {
     display: none;
   }
 
-  /* =========================
-     Menu Hamburger
-  ========================= */
   .menu-ham {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
   }
 
   .menu-ham-dropdown {
-    display: flex;
-    flex-direction: column; /* Assure un affichage en colonne */
-    align-items: flex-start; /* Alignement du texte à gauche */
-    width: 200px; /* Largeur ajustable selon ton design */
+    width: 200px;
     padding: 10px;
-    background-color: var(--primary-back-color);
-    box-shadow: var(--box-shadow);
-    border-radius: 5px;
-    z-index: 1000;
     text-align: left;
   }
-  
+
   .menu-ham-dropdown ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
-    flex-direction: column; /* Forcer l'affichage en colonne */
-    width: 100%;
+    flex-direction: column;
   }
-  
+
   .menu-ham-dropdown ul li {
     display: flex;
-    align-items: center; /* Centre verticalement */
-    gap: 8px; /* Espacement entre l'icône et le texte */
+    align-items: center;
+    gap: 8px;
     margin: 4px 0;
     padding: 5px 10px;
-    width: 100%; /* Prend toute la largeur */
-  }
-  
-  .menu-ham-dropdown ul li a {
-    text-decoration: none;
-    color: var(--text-color);
-    font-size: 1rem;
-    flex: 1; /* Permet de bien répartir l’espace */
-    transition: color 0.3s ease;
-  }
-  
-  .menu-ham-dropdown ul li a:hover {
-    color: var(--secondary-color);  
+    width: 100%;
   }
 }
 
-/* 🔹 Règle pour hover sur les span du menu hamburger */
-.menu-ham-dropdown ul li span.popup-link {
-  transition: color 0.3s ease;
-  cursor: pointer;
+/* =========================
+   Responsive Styles
+========================= */
+@media (width <= 768px) {
+  .header-menu.menu-left,
+  .header-menu.menu-right {
+    display: none;
+  }
+
+  .menu-ham {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .menu-ham-dropdown {
+    width: 200px;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .menu-ham-dropdown ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-ham-dropdown ul li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    padding: 5px 10px;
+    width: 100%;
+  }
 }
 
-.menu-ham-dropdown ul li span.popup-link:hover {
-  color: var(--secondary-color);
+
+/* =========================
+   Responsive Styles
+========================= */
+
+@media (width <= 768px) {
+  .header-menu.menu-left,
+  .header-menu.menu-right {
+    display: none;
+  }
+
+  .menu-ham {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alignement à droite */
+  }
+
+  .menu-ham-dropdown {
+    width: 200px;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .menu-ham-dropdown ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-ham-dropdown ul li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    padding: 5px 10px;
+    width: 100%;
+  }
 }
 
 @media (width >= 769px) {

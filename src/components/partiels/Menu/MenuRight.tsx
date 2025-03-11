@@ -1,14 +1,16 @@
-// 📌 src/components/partiels/Menu/MenuRight.tsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Menu.css";
+import { ThemeContext } from "../../../theme/ThemeContext"; // ✅ Ajoute cette ligne
 
 const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const { mode, toggleColorMode } = useContext(ThemeContext); // ✅ Utilise ton contexte ici
 
   const toggleAccountMenu = () => {
     setShowAccountMenu((prev) => !prev);
@@ -30,7 +32,6 @@ const MenuRight: React.FC = () => {
     return () => clearCloseTimeout();
   }, []);
 
-  // 📌 Fonction pour déclencher le modal via événement global
   const handleOpenAuthModal = (type: "signIn" | "signUp") => {
     const event = new CustomEvent("openAuthModal", { detail: { type } });
     window.dispatchEvent(event);
@@ -51,7 +52,6 @@ const MenuRight: React.FC = () => {
                 </li>
               </ul>
 
-              {/* Icône de recherche */}
               <div
                 id="top-search"
                 className="menu-search"
@@ -60,14 +60,12 @@ const MenuRight: React.FC = () => {
                 <SearchIcon style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }} />
               </div>
 
-              {/* Barre de recherche */}
               {showSearch && (
                 <div className="search-box">
                   <input type="text" placeholder="Rechercher..." className="search-input" />
                 </div>
               )}
 
-              {/* Icône de compte avec menu déroulant */}
               <div
                 id="account-icon"
                 className={`menu-account ${showAccountMenu ? "active" : ""}`}
@@ -83,7 +81,6 @@ const MenuRight: React.FC = () => {
                     onMouseEnter={clearCloseTimeout}
                     onMouseLeave={() => setShowAccountMenu(false)}
                   >
-                    {/* Liens classiques vers les pages */}
                     <li className="dropdown">
                       <Link to="/Inscription">Inscription</Link>
                     </li>
@@ -100,13 +97,18 @@ const MenuRight: React.FC = () => {
                         Connexion (Popup)
                       </span>
                     </li>
+                    <li className="dropdown">
+                      <span className="popup-link" onClick={toggleColorMode}>
+                        {mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}
+                      </span>
+                    </li>
                   </ul>
                 )}
               </div>
             </div>
           </nav>
         </div>
-      </div>      
+      </div>
     </>
   );
 };
