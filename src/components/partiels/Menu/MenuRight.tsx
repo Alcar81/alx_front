@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Menu.css";
-import AuthModal from "../../pages/auth/AuthModal"; // ✅ Import du modal SANS lui passer de props
 
 const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false);
@@ -107,10 +106,7 @@ const MenuRight: React.FC = () => {
             </div>
           </nav>
         </div>
-      </div>
-
-      {/* ✅ Le modal est simplement rendu ici */}
-      <AuthModal />
+      </div>      
     </>
   );
 };

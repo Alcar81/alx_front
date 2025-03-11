@@ -1,4 +1,4 @@
-// src/components/partiels/Menu/MenuHam.tsx
+// 📌 src/components/partiels/Menu/MenuHam.tsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -13,7 +13,7 @@ const MenuHam: React.FC = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
-  // Fonction pour ouvrir le modal (via événement global)
+  // 🔹 Fonction pour ouvrir le modal (via événement global)
   const handleOpenAuthModal = (type: "signIn" | "signUp") => {
     const event = new CustomEvent("openAuthModal", { detail: { type } });
     window.dispatchEvent(event);
@@ -30,43 +30,37 @@ const MenuHam: React.FC = () => {
       {isDropdownOpen && (
         <div className="menu-ham-dropdown">
           <ul>
-            <li>
+            <li className="dropdown">
               <AccountCircleIcon />
               <Link to="/account">Mon Compte</Link>
             </li>
-            <li>
+            <li className="dropdown">
               <Link to="/Connexion">Connexion</Link>
             </li>
-            <li>
+            <li className="dropdown">
               <Link to="/Inscription">Inscription</Link>
             </li>
-            <li>
-              <span 
-                onClick={() => handleOpenAuthModal("signUp")} 
-                className="popup-link"
-              >
+            <li className="dropdown">
+              <span onClick={() => handleOpenAuthModal("signUp")} className="popup-link">
                 Inscription (Popup)
               </span>
             </li>
-            <li>
-              <span 
-                onClick={() => handleOpenAuthModal("signIn")} 
-                className="popup-link"
-              >
+            <li className="dropdown">
+              <span onClick={() => handleOpenAuthModal("signIn")} className="popup-link">
                 Connexion (Popup)
               </span>
             </li>
             <li className="divider"></li> {/* 📌 Ligne de séparation */}
-            <li>
+            <li className="dropdown">
               <Link to="/home">Accueil</Link>
             </li>
-            <li>
+            <li className="dropdown">
               <Link to="/about">À propos</Link>
             </li>
-            <li>
+            <li className="dropdown">
               <Link to="/contact">Nous joindre</Link>
             </li>
-            <li>
+            <li className="dropdown">
               <SearchIcon />
               <Link to="/search">Rechercher</Link>
             </li>

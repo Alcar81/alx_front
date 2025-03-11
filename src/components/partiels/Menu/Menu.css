@@ -288,6 +288,16 @@ ul a:hover {
   }
 }
 
+/* 🔹 Règle pour hover sur les span du menu hamburger */
+.menu-ham-dropdown ul li span.popup-link {
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.menu-ham-dropdown ul li span.popup-link:hover {
+  color: var(--secondary-color);
+}
+
 @media (width >= 769px) {
   .header-menu.menu-left,
   .header-menu.menu-right {
