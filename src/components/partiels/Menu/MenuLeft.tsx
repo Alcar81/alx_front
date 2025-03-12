@@ -6,16 +6,14 @@ import "./Menu.css";
 const MenuLeft: React.FC = () => {
   return (
     <div id="menu-left" className="light">
-        <div className="container">        
-            <nav>
-                {/* Left menu */}
-                <div className="container-left"></div>
-                    <ul>
-                    <li className="dropdown">
-                        <Link to="/Accueil">Accueil</Link>                        
-                    </li>                    
-                </ul>
-            </nav>
+          <div className="container-left">
+            <nav className="menu-items">
+              <ul>
+                <li>
+                    <Link to="/Accueil">Accueil</Link>  
+                </li>                
+              </ul>
+            </nav>    
         </div>
     </div>
   );

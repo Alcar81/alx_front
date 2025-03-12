@@ -1,15 +1,16 @@
 /* =========================
-   Menu Principal Menu.css
+   Styles Généraux du Menu
 ========================= */
 
-/* Conteneur principal */
 .container {
   display: flex;
-  justify-content: space-between; /* Menu gauche à gauche, menu droit à droite */
+  justify-content: space-between; /* Alignement gauche, centre, droite */
   align-items: center;
   flex-wrap: nowrap;
   width: 100%;
   font-size: 1.5rem;
+  padding: 10px 20px;
+  position: relative;
 }
 
 /* Menu gauche */
@@ -18,6 +19,14 @@
   justify-content: flex-start;
   align-items: center;
   gap: 20px;
+}
+
+/* Menu central (logo) */
+.container-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
 
 /* Menu droit */
@@ -30,20 +39,167 @@
 }
 
 /* =========================
-   Menu Hamburger
+   Menu Gauche (MenuLeft)
 ========================= */
 
-/* 📌 Conteneur du menu hamburger */
-.menu-ham-container {
+.menu-left {
+  flex: 1;
   display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  z-index: 1000;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
 }
 
-/* 📌 Icône du menu hamburger */
+/* Liste des éléments dans MenuLeft */
+.menu-left ul {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-left li {
+  display: flex;
+  align-items: center;
+}
+
+/* =========================
+   Menu Droit (MenuRight)
+========================= */
+
+.menu-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Liste des éléments dans MenuRight */
+.menu-items {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu-items ul {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-items li {
+  display: flex;
+  align-items: center;
+}
+
+/* =========================
+   Icônes (Recherche, Compte)
+========================= */
+
+.menu-search,
+.menu-account {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* =========================
+   Zone de Recherche (s'affiche sous le header)
+========================= */
+
+.search-box {
+  position: absolute;
+  top: 100%; /* Juste sous le header */
+  right: 0;
+  background-color: var(--primary-back-color);
+  border: 1px solid #ddd;
+  padding: 5px;
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.search-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* =========================
+   Dropdown du Compte (sous le header)
+========================= */
+
+.account-dropdown {
+  position: absolute;
+  top: 100%; /* Juste sous le header */
+  right: 0;
+  background-color: var(--primary-back-color);
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.menu-account.active .account-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.account-dropdown li {
+  padding: 8px 12px;
+  font-size: 1rem;
+}
+
+.account-dropdown li a,
+.account-dropdown li span {
+  display: block;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.account-dropdown li a:hover,
+.account-dropdown li span:hover {
+  color: var(--secondary-color);
+}
+
+/* =========================
+   Menu Hamburger (Mobile)
+========================= */
+
+/* ✅ Caché en mode grand écran */
+.menu-ham-container {
+  display: none;
+}
+
+/* ✅ Affiché uniquement en mobile */
+@media (width <= 768px) {
+  .menu-ham-container {
+    display: flex !important;
+    justify-content: flex-end;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+  }
+}
+
+/* Icône du menu hamburger */
 .menu-ham-icon {
   cursor: pointer;
   font-size: 24px;
@@ -51,7 +207,7 @@
   transition: color 0.3s ease;
 }
 
-/* 📌 Dropdown du menu hamburger */
+/* Dropdown du menu hamburger */
 .menu-ham-dropdown {
   position: absolute;
   top: 40px;
@@ -68,14 +224,12 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* 📌 Affichage du dropdown si le menu est ouvert */
-.menu-ham-container .menu-ham-dropdown {
+.menu-ham-container:hover .menu-ham-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-/* 📌 Styles des liens dans le menu */
 .menu-ham-dropdown ul {
   list-style: none;
   margin: 0;
@@ -99,99 +253,54 @@
   cursor: pointer;
 }
 
-/* 📌 Changement de couleur au survol */
 .menu-ham-dropdown ul li a:hover,
 .menu-ham-dropdown ul li span.popup-link:hover {
   color: var(--secondary-color);
 }
 
 /* =========================
-   Responsive Styles
+   Ajustement du Logo
 ========================= */
+
+.header-logo {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* Alignement bas */
+  height: 100px; /* Hauteur ajustée */
+}
+
+.header-logo-img {
+  max-height: 140px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: -10px; /* Descend légèrement le logo */
+}
+
+/* Ajustement pour mobile */
 @media (width <= 768px) {
-  .header-menu.menu-left,
-  .header-menu.menu-right {
-    display: none;
+  .header-logo {
+    height: 90px;
   }
 
-  .menu-ham {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .menu-ham-dropdown {
-    width: 200px;
-    padding: 10px;
-    text-align: left;
-  }
-
-  .menu-ham-dropdown ul {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .menu-ham-dropdown ul li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 4px 0;
-    padding: 5px 10px;
-    width: 100%;
+  .header-logo-img {
+    max-height: 110px;
+    margin-bottom: -5px;
   }
 }
 
 /* =========================
-   Responsive Styles
+   Ajustements Responsive
 ========================= */
+
 @media (width <= 768px) {
-  .header-menu.menu-left,
-  .header-menu.menu-right {
-    display: none;
+  .header-menu {
+    display: none; /* Masque le menu classique */
   }
 
   .menu-ham {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .menu-ham-dropdown {
-    width: 200px;
-    padding: 10px;
-    text-align: left;
-  }
-
-  .menu-ham-dropdown ul {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .menu-ham-dropdown ul li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 4px 0;
-    padding: 5px 10px;
-    width: 100%;
-  }
-}
-
-
-/* =========================
-   Responsive Styles
-========================= */
-
-@media (width <= 768px) {
-  .header-menu.menu-left,
-  .header-menu.menu-right {
-    display: none;
-  }
-
-  .menu-ham {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* Alignement à droite */
+    justify-content: flex-end;
+    padding: 0 15px;
   }
 
   .menu-ham-dropdown {
@@ -216,12 +325,11 @@
 }
 
 @media (width >= 769px) {
-  .header-menu.menu-left,
-  .header-menu.menu-right {
-    display: flex;
+  .menu-ham {
+    display: none; /* Cache le menu hamburger */
   }
 
-  .menu-ham {
-    display: none;
+  .header-menu {
+    display: flex; /* Affiche le menu classique */
   }
 }

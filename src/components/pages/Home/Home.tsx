@@ -1,9 +1,9 @@
-// Home.tsx
+// src/components/pages/Home/Home.tsx
 import React from "react";
 import "./Home.css";
 
 const Home: React.FC = () => {
-  return (
+  return (    
     <div className="home">
       <section className="home-header">
         <h1>Bienvenue chez AlxMultimedia</h1>

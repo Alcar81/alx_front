@@ -1,11 +1,11 @@
-// src/components/partiels/Header/Header.tsx 
-import "./Header.css";
+// src/components/partiels/Header/Header.tsx
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../../assets/images/logos/Logo_ALX_XL_v3.png";
+import logo from "../../../assets/images/logos/logo-desktop.png";
 import MenuRight from "../Menu/MenuRight";
 import MenuLeft from "../Menu/MenuLeft";
-import MenuHam from "../Menu/MenuHam";
-import { useState, useEffect } from "react";
+import MenuHam from "../Menu/MenuHam"; // ✅ Gestion unique du menu hamburger
+import "./Header.css";
 
 const Header: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -13,38 +13,27 @@ const Header: React.FC = () => {
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <header id="header" className="header">
-      <div id="header-wrap" className="header-container">
-        {/* Logo */}
-        <div className="header-logo">
+    <header className="header">
+      <div className="header-container">
+        {/* ✅ Afficher le menu hamburger UNIQUEMENT en mobile */}
+        {isMobile && <MenuHam />}
+
+        {/* ✅ Masquer MenuLeft en mobile */}
+        {!isMobile && <MenuLeft />}
+
+        {/* ✅ Logo centré */}
+        <div className="menu-center">
           <Link to="/">
             <img src={logo} alt="Logo" className="header-logo-img" />
           </Link>
         </div>
 
-        {/* Navigation */}
-        <nav className="header-nav">
-          {isMobile ? (
-            <MenuHam /> // Menu hamburger visible uniquement sur petits écrans
-          ) : (
-            <div className="header-menu">
-              {/* Menu gauche */}
-              <div className="menu-left">
-                <MenuLeft />
-              </div>
-
-              {/* Menu droit */}
-              <div className="menu-right">
-                <MenuRight />
-              </div>
-            </div>
-          )}
-        </nav>       
+        {/* ✅ Masquer MenuRight en mobile */}
+        {!isMobile && <MenuRight />}
       </div>
     </header>
   );

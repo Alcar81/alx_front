@@ -1,127 +1,125 @@
 /* =========================
-   Header Global Styles Header.css
+   Styles du Header
 ========================= */
+
 .header {
   display: flex;
-  flex-direction: column; /* Aligne le contenu verticalement */
-  align-items: center;
-  background-color: var(--primary-back-color); /* Couleur de fond de l'en-tête */
+  justify-content: center; /* Centre le contenu */
+  align-items: flex-end; /* Aligne les éléments en bas */
+  width: 100%;
+  height: 100px; /* Hauteur ajustable */
+  background-color: var(--primary-back-color);
   box-shadow: var(--box-shadow);
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 1000;
-  width: 100%; /* Utilise toute la largeur de l'écran */
-  position: relative; /* Nécessaire pour le box-shadow */
-  margin: 0 auto; /* Centrer horizontalement */
-  max-width: 1200px; /* Définissez la largeur maximale de votre contenu */
-  border-radius: 10px; /* Arrondi des coins */  
+  padding: 0 20px;
 }
 
-/* Conteneur principal */
+/* Conteneur du header */
 .header-container {
-  width: 100%;
-  max-width: 1200px; /* Largeur maximale alignée avec le contenu */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px 20px; /* Ajoute de l'espacement interne */
+  justify-content: space-between; /* Répartit l'espace entre les éléments */
+  align-items: center; /* Centre verticalement */
+  width: 100%;
+  max-width: 1200px;
+  padding-bottom: 10px; /* Ajuste la position au bas */
 }
 
 /* =========================
-   Logo
+   Logo (Ajustement)
 ========================= */
 .header-logo {
   display: flex;
   justify-content: center;
-}
-
-.header-logo-img {
-  max-height: 200px;
-  object-fit: contain;
-  transform: translateY(-10px); /* Ajuste la position verticale du logo */
-}
-
-/* =========================
-   Navigation
-========================= */
-.header-nav {
-  width: 100%;
-  max-width: 1200px; /* Aligné avec le header */
-  display: flex;
-  justify-content: space-between; /* Sépare les menus gauche et droit */
   align-items: center;
-  background-color: var(--primary-back-color); /* Fond blanc pour les menus */  
-  padding: 6px; /* Espacement interne */
-  margin-top: -60px; /* Superpose légèrement avec le logo */
-  margin-bottom: -10px;
+  flex: 1; /* Permet au logo de rester centré */
+  padding-bottom: 5px; /* 🔽 Ajuste l'espace en bas */
+}
+
+.header-logo img {
+  max-height: 25px; /* 🔽 Taille ajustée pour être ni trop grande ni trop petite */
+  max-width: 100px; /* 🔽 Largeur max pour éviter les débordements */
+  object-fit: contain;
+  margin: 5px 0; /* 🔽 Ajuste l'espace autour */
 }
 
 /* =========================
    Menus (gauche et droite)
 ========================= */
-.header-menu {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
 
 .menu-left,
 .menu-right {
   display: flex;
-  align-items: center;
-  gap: 20px; /* Espacement entre les éléments */  
+  align-items: center; /* Centre verticalement */
+  gap: 20px;
+}
+
+/* Menu gauche */
+.menu-left {
+  justify-content: flex-start;
+  flex: 1; /* Permet au menu gauche de rester à gauche */
+}
+
+/* Menu droit */
+.menu-right {
+  justify-content: flex-end;
+  flex: 1; /* Permet au menu droit de rester à droite */
 }
 
 /* =========================
-   Liens des menus
+   Styles des liens du menu
 ========================= */
-ul {
-  list-style: none; /* Supprime les puces */
-  margin: 0;
-  padding: 0;
-  display: flex; /* Aligne les items horizontalement */
+.menu-left a,
+.menu-right a {
+  text-decoration: none;
+  color: var(--primary-text-color);
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
 }
 
-ul li {
-  margin: 0 10px; /* Espacement horizontal entre les items */
-}
-
-ul a {
-  text-decoration: none; /* Supprime le soulignement */
-  color: var(--text-color); /* Couleur du texte */
-  font-weight: 500;
-  transition: color 0.3s ease; /* Animation fluide au survol */
-}
-
-ul a:hover {
-  color: var(--hover-color); /* Couleur au survol */
+.menu-left a:hover,
+.menu-right a:hover {
+  color: var(--secondary-color); /* Change de couleur au survol */
 }
 
 /* =========================
-   Responsive Styles
+   Menu Hamburger (Mobile)
+========================= */
+.menu-hamburger {
+  display: none;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+/* =========================
+   Ajustement Responsive
 ========================= */
 @media (width <= 768px) {
-  /* Masque les menus classiques sur petits écrans */
-  .header-menu {
-    display: none;
+  .header-container {
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* Affiche le menu hamburger */
-  .menu-ham {
-    display: flex;
-    justify-content: flex-end;
-    width: auto;
-    padding: 0 15px;
-  }
-}
-
-@media (width >= 769px) {
-  /* Cache le menu hamburger sur grands écrans */
-  .menu-ham {
-    display: none;
+  .header-logo img {
+    max-height: 40px; /* 🔽 Réduction de la taille du logo sur mobile */
+    max-width: 150px;
   }
 
-  /* Affiche les menus classiques */
-  .header-menu {
-    display: flex;
+  .menu-left, .menu-right {
+    display: none; /* Cache les menus normaux sur mobile */
+  }
+
+  .menu-hamburger {
+    display: block; /* Affiche l'icône du menu */
+  }
+
+  /* ✅ Cacher le menu hamburger en mode grand écran */
+  @media (width > 768px) {
+    .menu-ham-container {
+      display: none !important;
+    }
   }
 }

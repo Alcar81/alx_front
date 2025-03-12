@@ -1,4 +1,4 @@
-// 📌 src/components/partiels/Menu/MenuHam.tsx
+// src/components/partiels/Menu/MenuHam.tsx
 import React, { useState, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,16 +12,12 @@ const MenuHam: React.FC = () => {
   const { mode, toggleColorMode } = useContext(ThemeContext);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // 🔹 Ouvrir/fermer le menu
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prevState) => !prevState);
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
   };
 
-  // 🔹 Fermer le menu seulement si la souris quitte TOUTE la zone du menu
-  const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (menuRef.current && !menuRef.current.contains(event.relatedTarget as Node)) {
-      setIsDropdownOpen(false);
-    }
+  const handleMouseLeave = () => {
+    setIsDropdownOpen(false);
   };
 
   const handleOpenAuthModal = (type: "signIn" | "signUp") => {
@@ -30,15 +26,18 @@ const MenuHam: React.FC = () => {
   };
 
   return (
-    <div className="menu-ham-container" ref={menuRef}>
-      {/* 📌 Icône Hamburger à droite */}
-      <div className="menu-ham-icon" onClick={toggleDropdown}>
+    <div
+      className="menu-ham-container"
+      ref={menuRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="menu-ham-icon">
         <MenuIcon />
       </div>
 
-      {/* 📌 Dropdown Menu */}
       {isDropdownOpen && (
-        <div className="menu-ham-dropdown" onMouseLeave={handleMouseLeave}>
+        <div className="menu-ham-dropdown">
           <ul>
             <li className="dropdown">
               <AccountCircleIcon />
