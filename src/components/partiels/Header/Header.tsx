@@ -1,20 +1,15 @@
 // src/components/partiels/Header/Header.tsx
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/images/logos/logo-desktop.png";
 import MenuRight from "../Menu/MenuRight";
 import MenuLeft from "../Menu/MenuLeft";
 import MenuHam from "../Menu/MenuHam"; // ✅ Gestion unique du menu hamburger
+import useIsMobile from "../../../hooks/useIsMobile"; // 🔥 Import du hook
 import "./Header.css";
 
 const Header: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const isMobile = useIsMobile(); // ✅ Utilisation du hook
 
   return (
     <header className="header">

@@ -16,7 +16,9 @@
    flex-grow: 1;
    margin-top: 1vh !important; /* 🔥 Ajustement global */
    padding: 20px;
+   padding-top: 0; /* ✅ Ajoute un espace sous le header */
  }
+
  
  /* 📌 Conteneur du contenu centré */
  .content-container {
@@ -34,8 +36,8 @@
  
  @media (width <= 768px) {
    .main {
-     margin-top: 115vh !important; /* 🔥 Ajustement pour éviter le chevauchement */
-     min-height: 115vh !important; 
+     margin-top: 120vh !important; /* 🔥 Ajustement pour éviter le chevauchement */
+     min-height: 120vh !important; 
      display: flex;
      flex-direction: column;
      justify-content: center;

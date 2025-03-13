@@ -1,4 +1,3 @@
-// src/components/partiels/Menu/MenuRight.tsx
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -10,11 +9,6 @@ const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { mode, toggleColorMode } = useContext(ThemeContext);
-  
-  const handleOpenAuthModal = (type: "signIn" | "signUp") => {
-    const event = new CustomEvent("openAuthModal", { detail: { type } });
-    window.dispatchEvent(event);
-  };
 
   return (
     <div id="menu-right" className="light">
@@ -53,16 +47,6 @@ const MenuRight: React.FC = () => {
             <ul className="dropdown-menu account-dropdown" onMouseLeave={() => setShowAccountMenu(false)}>
               <li><Link to="/Inscription">Inscription</Link></li>
               <li><Link to="/Connexion">Connexion</Link></li>
-              <li>
-                <span onClick={() => handleOpenAuthModal("signUp")} className="popup-link">
-                  Inscription (Popup)
-                </span>
-              </li>
-              <li>
-                <span onClick={() => handleOpenAuthModal("signIn")} className="popup-link">
-                  Connexion (Popup)
-                </span>
-              </li>
               <li><span onClick={toggleColorMode}>{mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}</span></li>
             </ul>
           )}

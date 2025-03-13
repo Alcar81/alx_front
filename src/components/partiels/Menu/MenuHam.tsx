@@ -20,11 +20,6 @@ const MenuHam: React.FC = () => {
     setIsDropdownOpen(false);
   };
 
-  const handleOpenAuthModal = (type: "signIn" | "signUp") => {
-    const event = new CustomEvent("openAuthModal", { detail: { type } });
-    window.dispatchEvent(event);
-  };
-
   return (
     <div
       className="menu-ham-container"
@@ -49,17 +44,9 @@ const MenuHam: React.FC = () => {
             <li className="dropdown">
               <Link to="/Inscription">Inscription</Link>
             </li>
-            <li className="dropdown">
-              <span onClick={() => handleOpenAuthModal("signUp")} className="popup-link">
-                Inscription (Popup)
-              </span>
-            </li>
-            <li className="dropdown">
-              <span onClick={() => handleOpenAuthModal("signIn")} className="popup-link">
-                Connexion (Popup)
-              </span>
-            </li>
+            
             <li className="divider"></li>
+            
             <li className="dropdown">
               <Link to="/home">Accueil</Link>
             </li>

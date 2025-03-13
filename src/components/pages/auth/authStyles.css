@@ -1,0 +1,80 @@
+/* =========================
+   📌 Styles du authStyles
+========================= */
+
+/* Conteneur principal pour la page d'authentification */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 1rem;
+  background: radial-gradient(ellipse at 50% 50%, hsl(210deg 100% 97%), hsl(0deg 0% 100%));
+}
+
+/* Carte d'authentification */
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgb(0 0 0 / 10%);
+  text-align: center;
+}
+
+/* En-tête aligné : Logo à gauche, X à droite */
+
+
+.close-header {
+  display: flex; 
+  justify-content: flex-end;
+  margin-top: -20px;
+  padding-top: 10px;
+}
+
+.logo-header {
+  align-items: center;
+  padding-top: 10px;
+}
+
+/* Espacement entre chaque section */
+.auth-content {
+  margin-top: 20px; /* Ajuste l'espace entre les sections */
+}
+
+/* Image du logo */
+.auth-logo {
+  height: 40px;
+  object-fit: contain;
+}
+
+/* Bouton de fermeture (X) */
+.auth-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Formulaire d'authentification */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Espacement des sections */
+.auth-section {
+  padding-top: 10px;
+}
+
+/* Bouton de connexion avec Google */
+.auth-google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: bold;
+}
