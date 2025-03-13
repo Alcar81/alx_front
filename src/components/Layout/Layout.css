@@ -36,8 +36,8 @@
  
  @media (width <= 768px) {
    .main {
-     margin-top: 120vh !important; /* 🔥 Ajustement pour éviter le chevauchement */
-     min-height: 120vh !important; 
+     margin-top: 130vh !important; /* 🔥 Ajustement pour éviter le chevauchement */
+     min-height: 130vh !important; 
      display: flex;
      flex-direction: column;
      justify-content: center;

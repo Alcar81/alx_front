@@ -4,12 +4,16 @@
 
 /* Conteneur principal pour la page d'authentification */
 .auth-container {
+  min-height: 100vh; /* ✅ Permet au container de prendre toute la hauteur */
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
   padding: 1rem;
+  justify-content: center;
   background: radial-gradient(ellipse at 50% 50%, hsl(210deg 100% 97%), hsl(0deg 0% 100%));
+  position: fixed; /* ✅ Force le modal à rester bien centré */
+    top: 0; /* ✅ Évite tout décalage */
+    left: 0;
+    width: 100%;
 }
 
 /* Carte d'authentification */
@@ -35,7 +39,8 @@
 }
 
 .logo-header {
-  align-items: center;
+  display: flex; 
+  justify-content: center;
   padding-top: 10px;
 }
 
@@ -77,4 +82,43 @@
   justify-content: center;
   gap: 8px;
   font-weight: bold;
+}
+
+/* =========================
+   📌 Ajustements Responsive pour authStyles
+========================= */
+
+@media (width <= 768px) {
+  .auth-container {
+    min-height: 100vh; /* ✅ Permet au container de prendre toute la hauteur */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: radial-gradient(ellipse at 50% 50%, hsl(210deg 100% 97%), hsl(0deg 0% 100%));
+    position: fixed; /* ✅ Force le modal à rester bien centré */
+    top: 0; /* ✅ Évite tout décalage */
+    left: 0;
+    width: 100%;
+  }
+
+  /* Carte d'authentification */
+  .auth-card {
+    width: 90%;
+    max-width: 400px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 10%);
+  }
+
+  .close-header  {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: -30px;
+    padding-top: 10px;    
+  }
+
+  .auth-logo {
+    height: 25px; /* ✅ Réduit la taille du logo pour les petits écrans */
+}
+
 }
