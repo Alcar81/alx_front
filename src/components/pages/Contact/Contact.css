@@ -1,4 +1,6 @@
-/* Contact.css */
+/* =========================
+   📌 Styles généraux de Contact
+========================= */
 
 .contact-page {
     font-family: Arial, sans-serif;
@@ -8,6 +10,10 @@
     color: #333;
   }
   
+  /* =========================
+   📌 Section d'Accueil (Header)
+========================= */
+
   .contact-header {
     margin-bottom: 40px;
   }
@@ -124,3 +130,11 @@
   .social-icons .social-icon:hover {
     background-color: #0056b3;
   }
+
+  @media (width <= 768px) {
+    .contact-page {
+        margin-top: 100px;
+        padding: 10px;
+    }
+
+}

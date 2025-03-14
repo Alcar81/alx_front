@@ -48,13 +48,13 @@ const MenuHam: React.FC = () => {
             <li className="divider"></li>
             
             <li className="dropdown">
-              <Link to="/home">Accueil</Link>
+              <Link to="/Accueil">Accueil</Link>
             </li>
             <li className="dropdown">
-              <Link to="/about">À propos</Link>
+              <Link to="/À-propos">À propos</Link>
             </li>
             <li className="dropdown">
-              <Link to="/contact">Nous joindre</Link>
+              <Link to="/Contact">Nous joindre</Link>
             </li>
             <li className="dropdown">
               <SearchIcon />

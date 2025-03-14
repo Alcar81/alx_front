@@ -34,13 +34,15 @@
     📌 Ajustements Responsive du Layout
  ========================= */
  
- @media (width <= 768px) {
-   .main {
-     margin-top: 130vh !important; /* 🔥 Ajustement pour éviter le chevauchement */
-     min-height: 130vh !important; 
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-   }
+@media (width <= 768px) {
+  .main { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed; /* ✅ Force le modal à rester bien centré */
+    top: 0; /* ✅ Évite tout décalage */
+    left: 0;
+    width: 100%;
+  }
  }
  

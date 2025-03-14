@@ -115,17 +115,15 @@
 ========================= */
 
 @media (width <= 768px) {
-    .home {
-    min-height: 100vh; /* ✅ Assure une hauteur pleine mais sans décalage */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    .home-page {
+        margin-top: 100px;
+        padding: 10px;
     }
 
     .home-header {
-        max-width: 100%;
-        padding: 30px 20px;
-        margin: 0 auto 30px; /* ✅ Ajustement cohérent avec grand écran */
+    max-width: 100%;
+    padding: 30px 20px;
+    margin: 0 auto 30px; /* ✅ Ajustement cohérent avec grand écran */
     }
 
     .home-header h1 {
