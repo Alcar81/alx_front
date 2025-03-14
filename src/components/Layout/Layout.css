@@ -8,7 +8,8 @@
    min-height: 100vh;
    width: 100vw;
    background-color: var(--primary-back-color);
-   overflow-x: hidden;
+   top: 0; /* ✅ Évite tout décalage */
+   left: 0;
  }
  
  /* ✅ Décalage pour ne pas que le contenu soit sous le header */
@@ -42,7 +43,8 @@
     position: fixed; /* ✅ Force le modal à rester bien centré */
     top: 0; /* ✅ Évite tout décalage */
     left: 0;
-    width: 100%;
+    width: 100vw;
+    min-height: 100vh;
   }
  }
  
