@@ -4,10 +4,10 @@
 
 .header {
   display: flex;
-  justify-content: center; /* Centre le contenu */
-  align-items: center; /* ✅ Alignement mieux équilibré */
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 80px; /* ✅ Hauteur réduite pour plus d'harmonie */
+  height: 80px;
   background-color: var(--primary-back-color);
   box-shadow: var(--box-shadow);
   position: fixed;
@@ -20,96 +20,19 @@
 /* ✅ Conteneur du Header */
 .header-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* ✅ Centre tout */
   align-items: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* =========================
-   📌 Logo Ajusté
-========================= */
-.header-logo {
+/* ✅ Conteneur du Menu */
+.menu-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1; /* ✅ Assure un bon centrage */
-}
-
-.header-logo img {
-  max-height: 35px; /* ✅ Ajustement proportionné */
-  max-width: 120px;
-  object-fit: contain;
-}
-
-/* =========================
-   📌 Menus Desktop
-========================= */
-.menu-left,
-.menu-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.menu-left {
-  justify-content: flex-start;
-  flex: 1;
-}
-
-.menu-right {
-  justify-content: flex-end;
-  flex: 1;
-}
-
-/* ✅ Styles des liens */
-.menu-left a,
-.menu-right a {
-  text-decoration: none;
-  color: var(--primary-text-color);
-  font-weight: bold;
-  font-size: 16px;
-  transition: color 0.3s ease;
-}
-
-.menu-left a:hover,
-.menu-right a:hover {
-  color: var(--secondary-color);
-}
-
-/* =========================
-   📌 Menu Hamburger (Mobile)
-========================= */
-.menu-hamburger {
-  display: none; /* ✅ Caché par défaut */
-  font-size: 25px;
-  cursor: pointer;
-}
-
-/* =========================
-   📌 Responsive (Mobile)
-========================= */
-@media (width <= 768px) {
-  .header {
-    height: 70px; /* ✅ Ajustement hauteur mobile */
-    padding: 0 15px; /* ✅ Réduction du padding */
-  }
-
-  .header-container {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .header-logo img {
-    max-height: 30px;
-    max-width: 100px;
-  }
-
-  .menu-left, .menu-right {
-    display: none; /* ✅ Cache les menus en mobile */
-  }
-
-  .menu-hamburger {
-    display: block; /* ✅ Affiche le menu burger */
-  }
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
 }

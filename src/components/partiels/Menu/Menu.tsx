@@ -1,27 +1,34 @@
+// src/components/partiels/Menu/Menu.tsx
 import React from "react";
-import MenuLeft from "./MenuLeft";
-import MenuRight from "./MenuRight";
 import { Link } from "react-router-dom";
-import logo from "../../../assets/images/logos/Logo_ALX_XL_v3.png";
+import logo from "../../../assets/images/logos/logo-desktop.png";
+import MenuRight from "./MenuRight";
+import MenuLeft from "./MenuLeft";
+import MenuHam from "./MenuHam"; 
+import useIsMobile from "../../../hooks/useIsMobile"; 
 import "./Menu.css";
 
 const Menu: React.FC = () => {
+  const isMobile = useIsMobile();
   return (
-    <div className="header-container">
+    <nav className="menu">  {/* ✅ Remplace menu-container par menu */}
       <div className="menu-left">
-        <MenuLeft />
+        {!isMobile && <MenuLeft />}
       </div>
-
-      <div className="header-logo">
+      
+      <div className="menu-center">
         <Link to="/">
-          <img src={logo} alt="Logo" />
+          <img src={logo} alt="Logo" className="menu-logo-img" />
         </Link>
       </div>
-
+      
       <div className="menu-right">
-        <MenuRight />
+        {!isMobile && <MenuRight />}
       </div>
-    </div>
+
+      {/* ✅ Menu hamburger en mobile */}
+      {isMobile && <MenuHam />}
+    </nav>
   );
 };
 

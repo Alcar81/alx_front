@@ -14,7 +14,7 @@ const MenuRight: React.FC = () => {
     <div id="menu-right" className="light">
       <div className="container-right">
         <nav className="menu-items">
-          <ul>
+          <ul className="menu-list">
             <li>
               <Link to="/À-propos">À propos</Link>
             </li>

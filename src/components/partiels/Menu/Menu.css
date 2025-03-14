@@ -1,105 +1,77 @@
 /* =========================
-   Styles Généraux du Menu
+   📌 Styles du Menu
 ========================= */
 
-.container {
+.menu {
   display: flex;
-  justify-content: space-between; /* Alignement gauche, centre, droite */
+  justify-content: space-between; /* ✅ Assure un alignement correct */
   align-items: center;
-  flex-wrap: nowrap;
   width: 100%;
-  font-size: 1.5rem;
-  padding: 10px 20px;
-  position: relative;
+  max-width: 1200px;
+  margin-bottom: -40px;
 }
 
-/* Menu gauche */
-.container-left {
+
+/* =========================
+   📌 Alignement des éléments
+========================= */
+
+
+.menu-center {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  margin-left: 180px;
+}
+
+.container-right {
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 20px;
 }
 
-/* Menu central (logo) */
-.container-center {
+.menu-list {
+  display: flex;
+  gap: 20px;
+}
+
+/* =========================
+   📌 Style des liens
+========================= */
+.menu-left a,
+.menu-right a {
+  text-decoration: none;
+  color: var(--primary-text-color);
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.menu-left a:hover,
+.menu-right a:hover {
+  color: var(--secondary-color);
+}
+
+/* =========================
+   📌 Logo
+========================= */
+.menu-logo {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
 }
 
-/* Menu droit */
-.container-right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-  flex: 1;
+.menu-logo img {
+  max-height: 35px;
+  max-width: 120px;
+  object-fit: contain;
 }
 
 /* =========================
-   Menu Gauche (MenuLeft)
-========================= */
-
-.menu-left {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Liste des éléments dans MenuLeft */
-.menu-left ul {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.menu-left li {
-  display: flex;
-  align-items: center;
-}
-
-/* =========================
-   Menu Droit (MenuRight)
-========================= */
-
-.menu-right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Liste des éléments dans MenuRight */
-.menu-items {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.menu-items ul {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.menu-items li {
-  display: flex;
-  align-items: center;
-}
-
-/* =========================
-   Icônes (Recherche, Compte)
+   📌 Icônes (Recherche, Compte)
 ========================= */
 
 .menu-search,
@@ -109,14 +81,21 @@
   cursor: pointer;
 }
 
-/* =========================
-   Zone de Recherche (s'affiche sous le header)
-========================= */
+/* ✅ Ajuste la taille des icônes */
+.menu-search svg,
+.menu-account svg {
+  width: 24px;
+  height: 24px;
+}
 
+/* =========================
+   📌 Zone de Recherche
+========================= */
 .search-box {
   position: absolute;
-  top: 100%; /* Juste sous le header */
-  right: 0;
+  right: 50px;
+  top: 100%;
+  width: 200px;
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
   padding: 5px;
@@ -134,19 +113,18 @@
 }
 
 /* =========================
-   Dropdown du Compte (sous le header)
+   📌 Dropdown du Compte
 ========================= */
-
 .account-dropdown {
   position: absolute;
-  top: 100%; /* Juste sous le header */
+  top: 100%;
   right: 0;
+  width: 200px;
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
   padding: 10px;
   box-shadow: var(--box-shadow);
   z-index: 1000;
-  list-style: none;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -179,7 +157,7 @@
 }
 
 /* =========================
-   Menu Hamburger (Mobile)
+   📌 Menu Hamburger (Mobile)
 ========================= */
 
 /* ✅ Caché en mode grand écran */
@@ -197,139 +175,65 @@
     right: 20px;
     z-index: 1000;
   }
-}
-
-/* Icône du menu hamburger */
-.menu-ham-icon {
-  cursor: pointer;
-  font-size: 24px;
-  color: var(--text-color);
-  transition: color 0.3s ease;
-}
-
-/* Dropdown du menu hamburger */
-.menu-ham-dropdown {
-  position: absolute;
-  top: 40px;
-  right: 10px;
-  background-color: var(--primary-back-color);
-  box-shadow: var(--box-shadow);
-  border-radius: 5px;
-  padding: 10px;
-  width: 220px;
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.menu-ham-container:hover .menu-ham-dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.menu-ham-dropdown ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.menu-ham-dropdown ul li {
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-}
-
-.menu-ham-dropdown ul li a,
-.menu-ham-dropdown ul li span.popup-link {
-  text-decoration: none;
-  color: var(--text-color);
-  font-size: 1rem;
-  transition: color 0.3s ease;
-  cursor: pointer;
-}
-
-.menu-ham-dropdown ul li a:hover,
-.menu-ham-dropdown ul li span.popup-link:hover {
-  color: var(--secondary-color);
-}
-
-/* =========================
-   Ajustement du Logo
-========================= */
-
-.header-logo {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end; /* Alignement bas */
-  height: 100px; /* Hauteur ajustée */
-}
-
-.header-logo-img {
-  max-height: 140px;
-  width: auto;
-  object-fit: contain;
-  margin-bottom: -10px; /* Descend légèrement le logo */
-}
-
-/* Ajustement pour mobile */
-@media (width <= 768px) {
-  .header-logo {
-    height: 90px;
-  }
-
-  .header-logo-img {
-    max-height: 110px;
-    margin-bottom: -5px;
-  }
-}
-
-/* =========================
-   Ajustements Responsive
-========================= */
-
-@media (width <= 768px) {
-  .header-menu {
-    display: none; /* Masque le menu classique */
-  }
-
-  .menu-ham {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 15px;
-  }
 
   .menu-ham-dropdown {
-    width: 200px;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    background-color: var(--primary-back-color);
+    box-shadow: var(--box-shadow);
+    border-radius: 5px;
     padding: 10px;
-    text-align: left;
+    width: 220px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .menu-ham-container:hover .menu-ham-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 
   .menu-ham-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
   }
 
   .menu-ham-dropdown ul li {
+    padding: 8px 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 4px 0;
-    padding: 5px 10px;
-    width: 100%;
-  }
-}
-
-@media (width >= 769px) {
-  .menu-ham {
-    display: none; /* Cache le menu hamburger */
   }
 
-  .header-menu {
-    display: flex; /* Affiche le menu classique */
+  .menu-ham-dropdown ul li a,
+  .menu-ham-dropdown ul li span.popup-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    cursor: pointer;
   }
+
+  .menu-ham-dropdown ul li a:hover,
+  .menu-ham-dropdown ul li span.popup-link:hover {
+    color: var(--secondary-color);
+  }
+
+  .menu-logo img {
+    max-height: 30px;
+    max-width: 100px;
+    object-fit: contain;
+  }
+
+  .menu-center {
+    margin-left: 0;
+  }
+
 }
