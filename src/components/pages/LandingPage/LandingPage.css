@@ -1,10 +1,19 @@
-/* LandingPage.css */
+/* =========================
+   📌 Styles généraux de Landing
+========================= */
+
 .landing-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;       
+    text-align: center;
+    width: 100%;
+    padding: 20px;      
 }
+
+/* =========================
+   📌 Section d'Accueil (Landing)
+========================= */
 
 .landing-header {    
     background-color: var(--primary-color);
@@ -12,13 +21,84 @@
     padding: 40px 30px;
     border-radius: 8px;
     box-shadow: var(--box-shadow);
+    max-width: 900px;
+    flex-direction: column;
 }
 
 .landing-header h1 {
     font-size: 2.5rem;
 }
 
+/* =========================
+   📌 Section landing-features
+========================= */
+
 .landing-features {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.landing-features h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* ✅ Bouton CTA */
+.cta-button {
+    display: inline-block;
+    margin-top: 0;
+    padding: 8px 20px;
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--secondary-dark);
+}
+
+/* =========================
+   📌 Ajustements Responsive pour Landing
+========================= */
+
+@media (width <= 768px) {
+    .landing-page {
+    min-height: 100vh; /* ✅ Assure une hauteur pleine mais sans décalage */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed; /* ✅ Force le modal à rester bien centré */
+    top: 0; /* ✅ Évite tout décalage */
+    left: 0;
+    width: 100%;
+    }
+
+    .landing-header {
+        max-width: 100%;
+        padding: 30px 20px;
+        margin: 0 auto 30px; /* ✅ Ajustement cohérent avec grand écran */
+    }
+
+    .landing-header h1 {
+        font-size: 2rem;
+    }
+
+    .landing-header p {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    .cta-button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    .landing-features {
+        padding: 30px;
+        max-width: 100%;
+    }
 }
