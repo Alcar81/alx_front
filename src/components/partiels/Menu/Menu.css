@@ -204,12 +204,13 @@
     padding: 0;
     display: flex;
     flex-direction: column;
+    text-align: right; /* ✅ Aligner le texte à droite */
+    padding-right: 15px; /* ✅ Ajoute un petit padding pour éviter qu'il colle au bord */
   }
 
   .menu-ham-dropdown ul li {
     padding: 8px 12px;
     display: flex;
-    align-items: center;
   }
 
   .menu-ham-dropdown ul li a,
@@ -235,5 +236,4 @@
   .menu-center {
     margin-left: 0;
   }
-
 }

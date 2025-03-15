@@ -34,33 +34,33 @@ const MenuHam: React.FC = () => {
       {isDropdownOpen && (
         <div className="menu-ham-dropdown">
           <ul>
-            <li className="dropdown">
+            <li>
               <AccountCircleIcon />
               <Link to="/account">Mon Compte</Link>
             </li>
-            <li className="dropdown">
+            <li>
               <Link to="/Connexion">Connexion</Link>
             </li>
-            <li className="dropdown">
+            <li>
               <Link to="/Inscription">Inscription</Link>
             </li>
             
             <li className="divider"></li>
             
-            <li className="dropdown">
+            <li>
               <Link to="/Accueil">Accueil</Link>
             </li>
-            <li className="dropdown">
+            <li>
               <Link to="/À-propos">À propos</Link>
             </li>
-            <li className="dropdown">
+            <li>
               <Link to="/Contact">Nous joindre</Link>
             </li>
-            <li className="dropdown">
+            <li>
               <SearchIcon />
               <Link to="/search">Rechercher</Link>
             </li>
-            <li className="dropdown">
+            <li>
               <span className="popup-link" onClick={toggleColorMode}>
                 {mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}
               </span>
