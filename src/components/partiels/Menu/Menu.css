@@ -1,22 +1,18 @@
 /* =========================
    📌 Styles du Menu
 ========================= */
-
 .menu {
   display: flex;
-  justify-content: space-between; /* ✅ Assure un alignement correct */
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   max-width: 1200px;
   margin-bottom: -40px;
 }
 
-
 /* =========================
    📌 Alignement des éléments
 ========================= */
-
-
 .menu-center {
   display: flex;
   justify-content: center;
@@ -73,12 +69,12 @@
 /* =========================
    📌 Icônes (Recherche, Compte)
 ========================= */
-
 .menu-search,
 .menu-account {
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: relative; /* ✅ Nécessaire pour le positionnement du menu dropdown */
 }
 
 /* ✅ Ajuste la taille des icônes */
@@ -93,8 +89,9 @@
 ========================= */
 .search-box {
   position: absolute;
-  right: 50px;
-  top: 100%;
+  top: calc(100% + 6px); /* ✅ Place le menu juste sous la ligne grise */
+  right: 380px; /* ✅ Ajustement vers la gauche pour s'aligner avec l'icône */
+  max-width: 200px;
   width: 200px;
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
@@ -113,13 +110,14 @@
 }
 
 /* =========================
-   📌 Dropdown du Compte
+   📌 Dropdown du Compte (Grand Écran)
 ========================= */
 .account-dropdown {
   position: absolute;
-  top: 100%;
-  right: 0;
-  width: 200px;
+  top: calc(100% + 11px); /* ✅ Place le menu juste sous la ligne grise */
+  right: 78px; /* ✅ Ajustement vers la gauche pour s'aligner avec l'icône */
+  text-align: right;
+  min-width: 150px;
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
   padding: 10px;
@@ -127,33 +125,14 @@
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px);
+  transform: translateX(0); /* ✅ Supprime le centrage */
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .menu-account.active .account-dropdown {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
-}
-
-.account-dropdown li {
-  padding: 8px 12px;
-  font-size: 1rem;
-}
-
-.account-dropdown li a,
-.account-dropdown li span {
-  display: block;
-  color: var(--text-color);
-  text-decoration: none;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.account-dropdown li a:hover,
-.account-dropdown li span:hover {
-  color: var(--secondary-color);
+  transform: translateX(50%);
 }
 
 /* =========================
@@ -204,8 +183,8 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    text-align: right; /* ✅ Aligner le texte à droite */
-    padding-right: 15px; /* ✅ Ajoute un petit padding pour éviter qu'il colle au bord */
+    text-align: right;
+    padding-right: 15px;
   }
 
   .menu-ham-dropdown ul li {
