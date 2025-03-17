@@ -1,34 +1,38 @@
-// LandingPage.tsx
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./LandingPage.css";
-import Header from "../../partiels/Header/Header"; // ✅ Import du Header
+import videoIntro from "../../../assets/videos/intro.mp4";
 
 const LandingPage: React.FC = () => {
+  const [videoEnded, setVideoEnded] = useState(false);
+  const navigate = useNavigate();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Redirection automatique après la fin de la vidéo
+  useEffect(() => {
+    if (videoEnded) {
+      setTimeout(() => {
+        navigate("/Accueil"); // 🔄 Redirige après la vidéo
+      }, 1000); // Petit délai pour la transition
+    }
+  }, [videoEnded, navigate]);
+
   return (
-    <>
-      {/* ✅ Intégration du Header */}
-      <Header />
-
-      {/* ✅ Conteneur principal de la page */}
-      <main className="main">
-        <div className="landing-page">
-          <section className="landing-header">
-            <h1>Bienvenue sur notre plateforme</h1>
-            <p>Découvrez nos services innovants et développez vos projets avec nous.</p>
-            <a href="/register" className="cta-button">Inscrivez-vous maintenant</a>
-          </section>
-
-          <section id="features" className="landing-features">
-            <h2>Pourquoi nous choisir ?</h2>
-            <ul>
-              <li>Innovation</li>
-              <li>Expertise</li>
-              <li>Résultats garantis</li>
-            </ul>
-          </section>
-        </div>
-      </main>
-    </>
+    <div className={`landing-container ${videoEnded ? "fade-out" : ""}`}>
+      <video 
+        ref={videoRef}
+        className="landing-video"
+        src={videoIntro}
+        autoPlay 
+        muted
+        onEnded={() => setVideoEnded(true)}
+      />
+      
+      {/* Bouton "Passer" */}
+      <button className="skip-button" onClick={() => navigate("/Accueil")}>
+        Passer ➝
+      </button>
+    </div>
   );
 };
 
