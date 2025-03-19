@@ -18,21 +18,27 @@ const LandingPage: React.FC = () => {
   }, [videoEnded, navigate]);
 
   return (
-    <div className={`landing-container ${videoEnded ? "fade-out" : ""}`}>
-      <video 
-        ref={videoRef}
-        className="landing-video"
-        src={videoIntro}
-        autoPlay 
-        muted
-        onEnded={() => setVideoEnded(true)}
-      />
-      
-      {/* Bouton "Passer" */}
-      <button className="skip-button" onClick={() => navigate("/Accueil")}>
-        Passer ➝
-      </button>
-    </div>
+    <main className="main">
+      <div className={`landing-container ${videoEnded ? "fade-out" : ""}`}>
+        <div className="video-container">
+          <video 
+            ref={videoRef}
+            className="landing-video"
+            src={videoIntro}
+            autoPlay 
+            muted
+            onEnded={() => setVideoEnded(true)}
+          />
+        </div>
+        
+        <div className="skip-button-container">
+          {/* Bouton "Passer" */}
+          <button className="skip-button" onClick={() => navigate("/Accueil")}>
+            Passer ➝
+          </button>
+        </div>
+      </div>
+    </main>
   );
 };
 
