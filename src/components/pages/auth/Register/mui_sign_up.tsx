@@ -1,4 +1,4 @@
-// src/components/pages/auth/Register/mui_sign_up.tsx 
+// 📌 src/components/pages/auth/Register/mui_sign_up.tsx
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -29,51 +29,119 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [nom, setNom] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [motDePasse, setMotDePasse] = React.useState("");
+  const [confirmationMotDePasse, setConfirmationMotDePasse] = React.useState("");
+
+  // États d'erreur
+  const [erreur, setErreur] = React.useState({
+    nom: "",
+    email: "",
+    motDePasse: "",
+    confirmation: ""
+  });
+
+  const validateForm = () => {
+    const nouvellesErreurs = {
+      nom: nom.trim() ? "" : "Le nom est requis.",
+      email: /\S+@\S+\.\S+/.test(email) ? "" : "Adresse email invalide.",
+      motDePasse: motDePasse.length >= 6 ? "" : "Mot de passe trop court.",
+      confirmation:
+        confirmationMotDePasse === motDePasse
+          ? ""
+          : "Les mots de passe ne correspondent pas."
+    };
+
+    setErreur(nouvellesErreurs);
+    return Object.values(nouvellesErreurs).every((v) => v === "");
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ nom, email, motDePasse });
+    if (!validateForm()) return;
+
+    // 🔧 À connecter avec le backend ici
+    console.log({
+      nom,
+      email,
+      motDePasse,
+      confirmationMotDePasse
+    });
   };
 
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <div className="auth-container">
-        <div className="auth-card">         
-          
+        <div className="auth-card">
           <div className="close-header">
-            {/* 🔹 Bouton de fermeture */}
             <CloseButton onClick={() => navigate(-1)} />
           </div>
+
           <div className="logo-header">
-            {/* 📌 Logo aligné à gauche */}
             <img src={SitemarkIcon} alt="Logo AlxMultimedia" className="auth-logo" />
-          </div>            
-          
-          
+          </div>
+
           <div className="auth-content">
-            {/* 📌 Titre */}
             <Typography component="h1" variant="h4">
               Inscription
             </Typography>
           </div>
 
           <div className="auth-content">
-            {/* 📌 Formulaire */}
             <Box component="form" onSubmit={handleSubmit} className="auth-form">
               <FormControl>
                 <FormLabel htmlFor="nom">Nom complet</FormLabel>
-                <TextField id="nom" type="text" fullWidth required value={nom} onChange={(e) => setNom(e.target.value)} />
+                <TextField
+                  id="nom"
+                  type="text"
+                  fullWidth
+                  required
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  error={!!erreur.nom}
+                  helperText={erreur.nom}
+                />
               </FormControl>
 
               <FormControl>
                 <FormLabel htmlFor="email">E-mail</FormLabel>
-                <TextField id="email" type="email" fullWidth required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <TextField
+                  id="email"
+                  type="email"
+                  fullWidth
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  error={!!erreur.email}
+                  helperText={erreur.email}
+                />
               </FormControl>
 
               <FormControl>
                 <FormLabel htmlFor="motDePasse">Mot de passe</FormLabel>
-                <TextField id="motDePasse" type="password" fullWidth required value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} />
+                <TextField
+                  id="motDePasse"
+                  type="password"
+                  fullWidth
+                  required
+                  value={motDePasse}
+                  onChange={(e) => setMotDePasse(e.target.value)}
+                  error={!!erreur.motDePasse}
+                  helperText={erreur.motDePasse}
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel htmlFor="confirmation">Confirmez le mot de passe</FormLabel>
+                <TextField
+                  id="confirmation"
+                  type="password"
+                  fullWidth
+                  required
+                  value={confirmationMotDePasse}
+                  onChange={(e) => setConfirmationMotDePasse(e.target.value)}
+                  error={!!erreur.confirmation}
+                  helperText={erreur.confirmation}
+                />
               </FormControl>
 
               <Button type="submit" fullWidth variant="contained">
@@ -83,19 +151,16 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           </div>
 
           <div className="auth-content">
-            {/* 📌 Séparateur */}
             <Divider>ou</Divider>
           </div>
 
           <div className="auth-content">
-            {/* 📌 Bouton Google */}
             <Button fullWidth variant="outlined" className="google-button" startIcon={<GoogleIcon />}>
               S'inscrire avec Google
             </Button>
           </div>
 
           <div className="auth-content">
-            {/* 📌 Lien vers la connexion */}
             <Typography sx={{ textAlign: "center" }}>
               Vous avez déjà un compte ? <Link href="/connexion">Se connecter</Link>
             </Typography>
