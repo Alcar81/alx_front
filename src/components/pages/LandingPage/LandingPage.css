@@ -1,58 +1,67 @@
 /* =========================
    📌 Styles généraux de Landing
 ========================= */
-
 .landing-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-  }
-  
-  .landing-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Bouton "Passer" */
-  .skip-button {
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
-    padding: 10px 20px;
-    background: rgb(255 255 255 / 80%);
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .skip-button:hover {
-    background: rgb(255 255 255 / 100%);
-  }
-  
-  /* Animation de fondu à la fin de la vidéo */
-  .fade-out {
-    animation: fade-out 1s forwards;
-  }
-  
-  @keyframes fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; visibility: hidden; }
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
 
-/* 📱 Version MOBILE : Vidéo dans un cadre */
+/* 📺 Vidéo en arrière-plan */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.landing-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 🎯 Bouton "Passer" */
+.skip-button-container {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+}
+
+.skip-button {
+  padding: 10px 20px;
+  background: rgb(255 255 255 / 80%);
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.skip-button:hover {
+  background: rgb(255 255 255);
+}
+
+/* 🎬 Animation de fondu pour masquer la vidéo à la fin */
+.fade-out {
+  animation: fade-out 1s forwards;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* 📱 Version MOBILE : Ajustements pour une bonne expérience */
 @media (width <= 768px) {
   .landing-container {
-      position: relative;
+      position: relative; /* Ne couvre plus tout l'écran */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -84,15 +93,6 @@
 
   .skip-button {
       padding: 8px 15px;
-      background: rgb(255 255 255 / 80%);
-      border: none;
-      border-radius: 5px;
       font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-  }
-
-  .skip-button:hover {
-      background: rgb(255 255 255);
   }
 }

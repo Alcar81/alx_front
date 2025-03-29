@@ -2,49 +2,63 @@
    📌 Styles du Layout
 ========================= */
 
-.layout {
-   display: flex;
-   flex-direction: column;
-   min-height: 100vh;
-   width: 100vw;
-   background-color: var(--primary-back-color);
-   top: 0; /* ✅ Évite tout décalage */
-   left: 0;
- }
- 
- /* ✅ Décalage pour ne pas que le contenu soit sous le header */
- .main {
-   flex-grow: 1;
-   margin-top: 1vh !important; /* 🔥 Ajustement global */
-   padding: 20px;
-   padding-top: 0; /* ✅ Ajoute un espace sous le header */
- }
+body, .layout {
+  background-color: white !important; /* ✅ Assure un fond blanc uniforme sur toute la page */
+}
 
- 
- /* 📌 Conteneur du contenu centré */
- .content-container {
-   width: 100%;
-   max-width: 1200px;
-   background-color: var(--primary-back-color);
-   padding: 20px;
-   box-sizing: border-box;
-   margin: 0 auto; /* Centre le contenu */
- }
- 
- /* =========================
-    📌 Ajustements Responsive du Layout
- ========================= */
- 
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  top: 0; /* ✅ Évite tout décalage */
+  left: 0;
+}
+
+/* ✅ Décalage pour ne pas que le contenu soit sous le header */
+.main {
+  flex-grow: 1;
+  margin-top: 20vh !important; /* 🔥 Ajustement global */
+  padding: 20px;
+  padding-top: 0; /* ✅ Ajoute un espace sous le header */
+}
+
+/* 📌 Conteneur du contenu centré */
+.content-container {
+  width: 100%;
+  max-width: 1200px;
+  background-color: transparent !important; /* ✅ Évite que le fond ne change */
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0 auto; /* ✅ Centre le contenu */
+}
+
+/* =========================
+  📌 Ajustements Responsive du Layout
+========================= */
+
 @media (width <= 768px) {
-  .main { 
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: white !important;
+  }
+  
+  body {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    position: fixed; /* ✅ Force le modal à rester bien centré */
-    top: 0; /* ✅ Évite tout décalage */
-    left: 0;
-    width: 100vw;
     min-height: 100vh;
+    min-height: 100dvh;
   }
- }
- 
+
+  .main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100vw;             
+      position: fixed; /* ✅ Force le modal à rester bien centré */
+      top: 0; /* ✅ Évite tout décalage */
+      left: 0;
+  }
+}

@@ -2,6 +2,7 @@
 import React from "react";
 import "./Home.css";
 import Header from "../../partiels/Header/Header"; // ✅ Import du Header
+import Footer from "../../partiels/Footer/Footer"; // ✅ Import du Footer
 
 const Home: React.FC = () => {
   return (
@@ -12,13 +13,13 @@ const Home: React.FC = () => {
       {/* ✅ Conteneur principal de la page */}
       <main className="main">
         <div className="home-page">
-          <section className="home-header">
+          <header className="home-header">
             <h1>Bienvenue chez AlxMultimedia</h1>
             <p>Créations. Visions. Web. Nous façonnons le numérique pour donner vie à vos idées.</p>
             <a href="#services" className="cta-button">
               Découvrir nos services
             </a>
-          </section>
+          </header>
 
           <section id="about" className="home-about">
             <h2>À propos de nous</h2>
@@ -44,7 +45,11 @@ const Home: React.FC = () => {
               </div>
             </div>
           </section>
-        </div>
+
+          <section id="footer" className="home-footer">
+            <Footer />:
+          </section>
+        </div>        
       </main>
     </>
   );

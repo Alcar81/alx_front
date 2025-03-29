@@ -1,8 +1,8 @@
-// About.tsx
+// src/components/pages/About/About.tsx
 import React from "react";
 import "./About.css";
 import Header from "../../partiels/Header/Header"; // ✅ Import du Header
-
+import Footer from "../../partiels/Footer/Footer"; // ✅ Import du Footer
 
 const About: React.FC = () => {
   return (
@@ -17,7 +17,7 @@ const About: React.FC = () => {
             <h1>À propos de nous</h1>
           </header>
 
-          <section className="about-section">
+          <section id="mission" className="about-mission">
             <div className="about-content">
               <h2>Notre mission</h2>
               <p>
@@ -27,7 +27,9 @@ const About: React.FC = () => {
                 qualité qui répondent à vos besoins uniques.
               </p>
             </div>
+          </section> 
 
+          <section id="histoire" className="about-histoire">
             <div className="about-content">
               <h2>Notre histoire</h2>
               <p>
@@ -38,32 +40,31 @@ const About: React.FC = () => {
                 services de pointe.
               </p>
             </div>
+          </section> 
 
-            <div className="about-content">
-              <h2>Nos valeurs</h2>
-              <div className="about-list">
-                <div className="about-item">              
-                  <h3>Innovation</h3>
-                  <p>Nous cherchons constamment à innover.</p>
-                </div>
-                <div className="about-item">
-                  <h3>Qualité</h3>
-                  <p>Nous ne faisons aucun compromis sur la qualité.</p>
-                </div>
-                <div className="about-item">
-                  <h3>Transparence</h3>
-                  <p>Nous croyons en une communication ouverte.</p>
-                </div>
-                <div className="about-item">
-                  <h3>Engagement</h3>
-                  <p>Votre succès est notre priorité.</p>
-                </div>  
+          <section id="valeurs" className="about-valeurs">
+            <h2>Nos valeurs</h2>
+            <div className="about-list">
+              <div className="about-item">              
+                <h3>Innovation</h3>
+                <p>Nous cherchons constamment à innover.</p>
+              </div>
+              <div className="about-item">
+                <h3>Qualité</h3>
+                <p>Nous ne faisons aucun compromis sur la qualité.</p>
+              </div>
+              <div className="about-item">
+                <h3>Transparence</h3>
+                <p>Nous croyons en une communication ouverte.</p>
+              </div>
+              <div className="about-item">
+                <h3>Engagement</h3>
+                <p>Votre succès est notre priorité.</p>
               </div>  
-            </div>
+            </div>  
+          </section>         
 
-          </section>
-
-          <section className="about-team">
+          <section id="team" className="about-team">
             <h2>Rencontrez notre équipe</h2>
             <div className="team-container">
               <div className="team-member">
@@ -94,6 +95,10 @@ const About: React.FC = () => {
                 <p>Développeur Web</p>
               </div>
             </div>
+          </section>
+
+          <section id="footer" className="home-footer">
+            <Footer />:
           </section>
         </div>
       </main>

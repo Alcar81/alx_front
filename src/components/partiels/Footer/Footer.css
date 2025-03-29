@@ -1,7 +1,6 @@
-/* Footer.css */
-.main-footer{
-  background-color: var(--primary-back-color); /* Couleur de fond du Footer */
-}
+/* =========================
+   📌 Styles du Footer
+========================= */
 
 .footer {
   background-color: var(--primary-color);
@@ -9,33 +8,32 @@
   padding: 20px 0;
   text-align: center;
   font-family: Arial, sans-serif;
-  position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
   flex-shrink: 0; /* Empêche le footer de rétrécir */
-  border-radius: 8px; /* Si nécessaire, ajoute un contour arrondi. */
-  box-shadow: var(--box-shadow); /* Ajoute une ombre si besoin. */
+  border-radius: 8px; /* Si nécessaire, ajoute un contour arrondi */
 }
 
+/* 🛠 Conteneur principal du footer */
 .footer-container {
   display: flex;
   flex-wrap: wrap; /* Autorise le passage à la ligne sur petits écrans */
-  justify-content: space-between;  
+  justify-content: space-between;
   margin: 0 auto;
   max-width: 1200px;
   gap: 20px;
   padding: 10px 20px;
 }
 
+/* 📌 Sections internes */
 .footer-container > div {
-  align-items: center; /* Centre chaque section */
-  text-align: center; /* Texte centré */
+  align-items: center;
+  text-align: center;
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 250px;
 }
 
+/* 📌 Titres */
 .about h4, .contact h4, .link h4 {
   font-size: 18px;
   margin-bottom: 10px;
@@ -43,29 +41,26 @@
   text-transform: uppercase;
 }
 
+/* 📌 Contenu des sections */
 .about p, .contact ul, .link ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.contact ul, .link ul {
-  gap: 8px; /* Ajoute de l'espacement entre les éléments */
-}
-
-/* Contactez-nous */
+/* 📨 Contactez-nous */
 .contact ul {
   display: flex;
-  flex-direction: column; /* Aligne les éléments verticalement */
-  align-items: center; /* Aligne les éléments à gauche */
-  gap: 5px; /* Espacement entre les éléments */
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
 
 .contact ul li {
   color: var(--light-color);
   display: flex;
-  align-items: center; /* Aligne les icônes et le texte verticalement */
-  gap: 8px; /* Ajoute de l'espace entre l'icône et le texte */
+  align-items: center;
+  gap: 8px;
 }
 
 .contact ul li a {
@@ -78,26 +73,26 @@
   color: #1abc9c;
 }
 
-/* Liens rapides */
+/* 🔗 Liens rapides */
 .link ul {
   display: flex;
-  flex-direction: column; /* Aligne les liens verticalement */
-  align-items: center; /* Aligne les liens à gauche */
+  flex-direction: column;
+  align-items: center;
   gap: 5px;
 }
 
 .link ul li a {
   text-decoration: none;
   color: var(--light-color);
-  transition: color 0.3s ease;  
-  font-size: 1rem; /* Taille standard */
+  transition: color 0.3s ease;
+  font-size: 1rem;
 }
 
 .link ul li a:hover {
   color: #1abc9c;
 }
 
-/* Bas du footer */
+/* 📌 Bas du footer */
 .footer-bottom {
   margin-top: 20px;
   font-size: 14px;
@@ -110,18 +105,26 @@
   margin: 0;
 }
 
-/* Media queries pour petits écrans */
+/* =========================
+ 📱 Version MOBILE : Ajustements pour une bonne disposition
+========================= */
 @media (width <= 768px) {
   .footer-container {
-    flex-direction: column; /* Empile les sections verticalement */
-    text-align: center; /* Centre le texte sur petits écrans */
+      flex-direction: column; /* Empile les sections verticalement */
+      text-align: center;
   }
 
   .footer-container > div {
-    align-items: center; /* Centre chaque section */
+      align-items: center;
   }
 
   .contact ul, .link ul {
-    align-items: center; /* Centre les éléments */
+      align-items: center;
   }
 }
+
+/* =========================
+ 🚀 Correction du positionnement général
+========================= */
+
+
