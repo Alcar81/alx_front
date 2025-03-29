@@ -12,19 +12,21 @@ const NotFound: React.FC = () => {
   };
 
   return (
-    <div className="not-found">
-      <div className="not-found-content">
-        <h1 className="not-found-title">404</h1>
-        <h2 className="not-found-subtitle">Oups! Page non trouvée</h2>
-        <p className="not-found-message">
-          La page que vous recherchez n'existe pas ou a été déplacée. <br />
-          Veuillez vérifier l'URL ou revenir à la page d'accueil. (NF)
-        </p>
-        <button className="not-found-button" onClick={handleGoHome}>
-          Retour à l'accueil
-        </button>
+    <main className="main">
+      <div className="not-found-page">
+        <header className="not-found-header">
+          <h1>404</h1>
+          <h2>Oups! Page non trouvée</h2>
+          <p>
+            La page que vous recherchez n'existe pas ou a été déplacée. <br />
+            Veuillez vérifier l'URL ou revenir à la page d'accueil. (NF)
+          </p>
+          <button className="not-found-button" onClick={() => navigate("/Accueil")}>
+            Retour à l'accueil
+          </button>
+        </header>
       </div>
-    </div>
+   </main> 
   );
 };
 

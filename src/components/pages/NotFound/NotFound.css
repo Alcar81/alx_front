@@ -1,57 +1,90 @@
-/* src/components/pages/notfound/NotFound.css */
-.not-found {
-    display: flex;
-    justify-content: center;
-    align-items: center;     
-    font-family: Arial, sans-serif;
-    color: #333;
-    gap: 40px;
-    padding: 20px;
-    margin-top: 300px;
-    background-color: var(--light-color);
-    margin-bottom: 20px;
-  }
-  
-  .not-found-content {
-    text-align: center;
-    max-width: 600px;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
-    border-radius: 10px;
-  }
-  
-  .not-found-title {
-    font-size: 6rem;
-    font-weight: bold;
-    color: #ff6f61;
-    margin-bottom: 20px;
-  }
-  
-  .not-found-subtitle {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .not-found-message {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    line-height: 1.6;
-  }
-  
-  .not-found-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #fff;
-    background-color: #ff6f61;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .not-found-button:hover {
-    background-color: #e65b50;
-  }
-  
+/* =========================
+   📌 Configuration de base
+========================= */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: white; /* Fond propre */
+}
+
+/* =========================
+   📌 Conteneur principal
+========================= */
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;       /* ✅ Utilise 100% de la hauteur de la fenêtre */
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+}
+
+/* =========================
+   📌 Contenu Not Found
+========================= */
+.not-found-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* =========================
+   📌 Section du message
+========================= */
+.not-found-header {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  padding: 40px 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  max-width: 900px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.not-found-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.not-found-header h2 {
+  margin-top: 10px;
+  font-size: 1.6rem;
+}
+
+.not-found-header p {
+  font-size: 1.2rem;
+  margin: 15px 0;
+}
+
+/* ✅ Bouton de retour */
+.not-found-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 24px;
+  background-color: var(--secondary-color);
+  color: var(--light-color);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.not-found-button:hover {
+  background-color: var(--secondary-dark);
+}
