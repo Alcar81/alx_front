@@ -25,13 +25,15 @@ const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
-  const [nom, setNom] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [motDePasse, setMotDePasse] = React.useState("");
   const [confirmationMotDePasse, setConfirmationMotDePasse] = React.useState("");
 
   const [erreur, setErreur] = React.useState({
-    nom: "",
+    firstName: "",
+    lastName: "",
     email: "",
     motDePasse: "",
     confirmation: "",
@@ -41,7 +43,8 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
 
   const validateForm = () => {
     const nouvellesErreurs = {
-      nom: nom.trim() ? "" : "Le nom est requis.",
+      firstName: firstName.trim() ? "" : "Le prénom est requis.",
+      lastName: lastName.trim() ? "" : "Le nom est requis.",
       email: /\S+@\S+\.\S+/.test(email) ? "" : "Adresse email invalide.",
       motDePasse: motDePasse.length >= 6 ? "" : "Mot de passe trop court.",
       confirmation:
@@ -61,7 +64,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nom, email, motDePasse }),
+        body: JSON.stringify({ firstName, lastName, email, password: motDePasse }),
       });
 
       const data = await response.json();
@@ -100,16 +103,30 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           <div className="auth-content">
             <Box component="form" onSubmit={handleSubmit} className="auth-form">
               <FormControl>
-                <FormLabel htmlFor="nom">Nom complet</FormLabel>
+                <FormLabel htmlFor="firstName">Prénom</FormLabel>
                 <TextField
-                  id="nom"
+                  id="firstName"
                   type="text"
                   fullWidth
                   required
-                  value={nom}
-                  onChange={(e) => setNom(e.target.value)}
-                  error={!!erreur.nom}
-                  helperText={erreur.nom}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  error={!!erreur.firstName}
+                  helperText={erreur.firstName}
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel htmlFor="lastName">Nom</FormLabel>
+                <TextField
+                  id="lastName"
+                  type="text"
+                  fullWidth
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  error={!!erreur.lastName}
+                  helperText={erreur.lastName}
                 />
               </FormControl>
 
@@ -130,7 +147,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               <FormControl>
                 <FormLabel htmlFor="motDePasse">Mot de passe</FormLabel>
                 <TextField
-                  id="motDePasse"
+                  id="motDePasses"
                   type="password"
                   fullWidth
                   required
