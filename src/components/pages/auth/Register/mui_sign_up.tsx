@@ -17,7 +17,6 @@ import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
 import "../authStyles.css";
 
-// 🔹 Bouton de fermeture (X)
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
     <CloseIcon />
@@ -31,13 +30,14 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [motDePasse, setMotDePasse] = React.useState("");
   const [confirmationMotDePasse, setConfirmationMotDePasse] = React.useState("");
 
-  // États d'erreur
   const [erreur, setErreur] = React.useState({
     nom: "",
     email: "",
     motDePasse: "",
-    confirmation: ""
+    confirmation: "",
   });
+
+  const [message, setMessage] = React.useState("");
 
   const validateForm = () => {
     const nouvellesErreurs = {
@@ -45,26 +45,37 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       email: /\S+@\S+\.\S+/.test(email) ? "" : "Adresse email invalide.",
       motDePasse: motDePasse.length >= 6 ? "" : "Mot de passe trop court.",
       confirmation:
-        confirmationMotDePasse === motDePasse
-          ? ""
-          : "Les mots de passe ne correspondent pas."
+        confirmationMotDePasse === motDePasse ? "" : "Les mots de passe ne correspondent pas.",
     };
 
     setErreur(nouvellesErreurs);
     return Object.values(nouvellesErreurs).every((v) => v === "");
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setMessage("");
     if (!validateForm()) return;
 
-    // 🔧 À connecter avec le backend ici
-    console.log({
-      nom,
-      email,
-      motDePasse,
-      confirmationMotDePasse
-    });
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nom, email, motDePasse }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message || "Une erreur est survenue.");
+      } else {
+        setMessage("✅ Inscription réussie ! Redirection...");
+        setTimeout(() => navigate("/Connexion"), 2000);
+      }
+    } catch (error) {
+      console.error("Erreur d'inscription :", error);
+      setMessage("❌ Erreur lors de la connexion au serveur.");
+    }
   };
 
   return (
@@ -144,7 +155,13 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                 />
               </FormControl>
 
-              <Button type="submit" fullWidth variant="contained">
+              {message && (
+                <Typography sx={{ color: message.includes("✅") ? "green" : "red", mt: 2 }}>
+                  {message}
+                </Typography>
+              )}
+
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
                 S'inscrire
               </Button>
             </Box>

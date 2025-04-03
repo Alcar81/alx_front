@@ -3,7 +3,7 @@
 ========================= */
 
 body, .layout {
-  background-color: white !important; /* ✅ Assure un fond blanc uniforme sur toute la page */
+  background-color: white !important;
 }
 
 .layout {
@@ -11,54 +11,36 @@ body, .layout {
   flex-direction: column;
   min-height: 100vh;
   width: 100vw;
-  top: 0; /* ✅ Évite tout décalage */
-  left: 0;
 }
 
-/* ✅ Décalage pour ne pas que le contenu soit sous le header */
-.main {
-  flex-grow: 1;
-  margin-top: 20vh !important; /* 🔥 Ajustement global */
-  padding: 20px;
-  padding-top: 0; /* ✅ Ajoute un espace sous le header */
-}
-
-/* 📌 Conteneur du contenu centré */
+/* 📌 Conteneur centré */
 .content-container {
   width: 100%;
   max-width: 1200px;
-  background-color: transparent !important; /* ✅ Évite que le fond ne change */
+  background-color: transparent !important;
   padding: 20px;
   box-sizing: border-box;
-  margin: 0 auto; /* ✅ Centre le contenu */
+  margin: 0 auto;
 }
 
-/* =========================
-  📌 Ajustements Responsive du Layout
-========================= */
+/* 📌 Comportement générique du main */
+.main {
+  flex-grow: 1;
+  padding: 20px;
+  padding-top: 0; /* Laisse la page gérer le padding si nécessaire */
+}
+
+/* 📌 Cas avec header fixe */
+.page-with-header {
+  padding-top: 520px;
+}
 
 @media (width <= 768px) {
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: white !important;
+  .page-with-header {
+    padding-top: 1260px;
   }
-  
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    min-height: 100dvh;
-  }
+}
 
-  .main {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      width: 100vw;             
-      position: fixed; /* ✅ Force le modal à rester bien centré */
-      top: 0; /* ✅ Évite tout décalage */
-      left: 0;
-  }
+.page-no-header {
+  padding-top: 0 !important;
 }
