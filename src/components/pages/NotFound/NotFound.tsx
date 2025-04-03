@@ -1,4 +1,4 @@
-// src/components/pages/notfound/NotFound.tsx
+// 📌 src/components/pages/NotFound/NotFound.tsx
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +7,9 @@ import "./NotFound.css";
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
+  // ✅ Fonction claire et réutilisable
   const handleGoHome = () => {
-    navigate("/");
+    navigate("/Accueil");
   };
 
   return (
@@ -19,14 +20,14 @@ const NotFound: React.FC = () => {
           <h2>Oups! Page non trouvée</h2>
           <p>
             La page que vous recherchez n'existe pas ou a été déplacée. <br />
-            Veuillez vérifier l'URL ou revenir à la page d'accueil. (NF)
+            Veuillez vérifier l'URL ou revenir à la page d'accueil.
           </p>
-          <button className="not-found-button" onClick={() => navigate("/Accueil")}>
+          <button className="not-found-button" onClick={handleGoHome}>
             Retour à l'accueil
           </button>
         </header>
       </div>
-   </main> 
+    </main>
   );
 };
 
