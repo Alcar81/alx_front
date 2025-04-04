@@ -1,25 +1,17 @@
 // 📌 src/components/pages/auth/Login/mui_sign_in.tsx
-import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Divider from "@mui/material/Divider";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
+import React from "react";
+import {
+  Box, Button, CssBaseline, Divider, FormControl,
+  FormLabel, TextField, Typography, IconButton, Link
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import "../authStyles.css";
+import { useAuth } from "../../../../hooks/useAuth";
+import "../../../auth/authStyles.css";
 
-// 🔹 Bouton de fermeture (X)
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
     <CloseIcon />
@@ -28,72 +20,58 @@ const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ email, password });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Erreur de connexion.");
+
+      login({ email: data.email, token: data.token });
+      navigate("/");
+    } catch (err: any) {
+      setMessage(`❌ ${err.message}`);
+    }
   };
 
   return (
     <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
+      <CssBaseline />
       <div className="auth-container">
         <div className="auth-card">
-          {/* 🔹 En-tête avec logo et bouton de fermeture */}          
-          <div className="close-header">
-            <CloseButton onClick={() => navigate(-1)} />
-          </div>
+          <div className="close-header"><CloseButton onClick={() => navigate(-1)} /></div>
           <div className="logo-header">
             <img src={SitemarkIcon} alt="Logo AlxMultimedia" className="auth-logo" />
-          </div>        
-          
-
-          <div className="auth-content">
-            {/* 📌 Titre */}
-            <Typography component="h1" variant="h4" className="auth-section">
-              Connexion
-            </Typography>
           </div>
-
-
-          {/* 📌 Formulaire */}
           <div className="auth-content">
+            <Typography variant="h4">Connexion</Typography>
             <Box component="form" onSubmit={handleSubmit} className="auth-form">
-              <FormControl>
-                <FormLabel htmlFor="email">E-mail</FormLabel>
-                <TextField id="email" type="email" fullWidth required value={email} onChange={(e) => setEmail(e.target.value)} />
-              </FormControl>
+              <FormControl><FormLabel>Email</FormLabel><TextField value={email} onChange={e => setEmail(e.target.value)} /></FormControl>
+              <FormControl><FormLabel>Mot de passe</FormLabel><TextField type="password" value={password} onChange={e => setPassword(e.target.value)} /></FormControl>
 
-              <FormControl>
-                <FormLabel htmlFor="password">Mot de passe</FormLabel>
-                <TextField id="password" type="password" fullWidth required value={password} onChange={(e) => setPassword(e.target.value)} />
-              </FormControl>
+              {message && <Typography sx={{ mt: 2, color: "red" }}>{message}</Typography>}
 
-              <FormControlLabel control={<Checkbox />} label="Se souvenir de moi" />
-              <Button type="submit" fullWidth variant="contained">
-                Connexion
-              </Button>
-
-              <Link href="/forgot-password">Mot de passe oublié ?</Link>
+              <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Connexion</Button>
             </Box>
           </div>
 
+          <div className="auth-content"><Divider>ou</Divider></div>
           <div className="auth-content">
-            {/* 📌 Séparateur */}
-            <Divider>ou</Divider>
+            <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>Connexion avec Google</Button>
           </div>
-
           <div className="auth-content">
-            {/* 📌 Bouton Google */}
-            <Button fullWidth variant="outlined" className="auth-google-btn" startIcon={<GoogleIcon />}>
-              Connexion avec Google
-            </Button>
-          </div>
-          
-          <div className="auth-content">
-            <Typography>
+            <Typography sx={{ textAlign: "center" }}>
               Pas encore de compte ? <Link href="/register">Inscription</Link>
             </Typography>
           </div>
