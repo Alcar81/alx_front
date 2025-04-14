@@ -297,19 +297,19 @@ jobs:
 
             echo "[INFO] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
             PORT_OK=0
-            for i in {1..30}; do
+            for i in {1..60}; do
               if docker exec "$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
                 echo "[SUCCESS] ✅ Port $BACKEND_PORT est maintenant ouvert."
                 PORT_OK=1
                 break
               else
-                echo "[WAITING] Tentative $i/30... Port pas encore ouvert"
+                echo "[WAITING] Tentative $i/60... Port pas encore ouvert"
                 sleep 1
               fi
             done
 
             if [ "$PORT_OK" -eq 0 ]; then
-              echo "[ERROR] ❌ Port $BACKEND_PORT non disponible après 30 secondes." >&2
+              echo "[ERROR] ❌ Port $BACKEND_PORT non disponible après 60 secondes." >&2
               exit 1
             fi
 
