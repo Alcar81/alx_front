@@ -1,3 +1,4 @@
+// src/index.tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -5,6 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
+import { UserProvider } from "./contexts/UserContext";
 
 // 🔄 Détection de l'environnement
 const isDev = process.env.REACT_APP_ENV === "dev";
@@ -38,7 +40,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <CacheProvider value={cache}>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </CacheProvider>
   </React.StrictMode>
 );
