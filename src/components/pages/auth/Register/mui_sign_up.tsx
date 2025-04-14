@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import "../../../auth/authStyles.css";
+import { post } from "../../../../utils/requests";
+import "../../auth/authStyles.css";
 
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
@@ -35,17 +36,15 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     }
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, password: motDePasse }),
+      await post("/register", {
+        firstName,
+        lastName,
+        email,
+        password: motDePasse,
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Erreur lors de l'inscription.");
-
       setMessage("✅ Inscription réussie !");
-      setTimeout(() => navigate("/Connexion"), 2000);
+      setTimeout(() => navigate("/Connexion"), 10000);
     } catch (err: any) {
       setMessage(`❌ ${err.message}`);
     }

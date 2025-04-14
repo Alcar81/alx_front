@@ -9,8 +9,9 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
+import { post } from "../../../../utils/requests";
 import { useAuth } from "../../../../hooks/useAuth";
-import "../../../auth/authStyles.css";
+import "../../auth/authStyles.css";
 
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
@@ -29,15 +30,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Erreur de connexion.");
-
+      const data = await post("/login", { email, password });
       login({ email: data.email, token: data.token });
       navigate("/");
     } catch (err: any) {
