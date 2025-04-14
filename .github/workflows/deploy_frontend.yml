@@ -271,18 +271,18 @@ jobs:
         
               echo "[INFO - 14] 🔄 Redémarrage du backend : $CONTAINER_BACKEND_NAME"
         
-              if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
+              if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
                 docker restart "$CONTAINER_BACKEND_NAME"
                 echo "[SUCCESS - 14] ✅ Conteneur redémarré : $CONTAINER_BACKEND_NAME"
         
                 echo "[INFO - 14] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
         
-                for i in \$(seq 1 60); do
+                for i in $(seq 1 60); do
                   if docker exec "$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
-                    echo "[SUCCESS] ✅ Port $BACKEND_PORT détecté (tentative \$i)"
+                    echo "[SUCCESS] ✅ Port $BACKEND_PORT détecté (tentative $i)"
                     break
                   else
-                    echo "[WAITING] Tentative \$i/60... Port non disponible"
+                    echo "[WAITING] Tentative $i/60... Port non disponible"
                     sleep 2
                   fi
                 done
