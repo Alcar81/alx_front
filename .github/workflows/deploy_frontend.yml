@@ -259,37 +259,30 @@ jobs:
       - name: 14 - Restart Backend After Frontend Deployment
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            ENVIRONMENT=${{ vars.ENV }}
             CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
-      
-            echo "🔄 Vérification et redémarrage du backend pour l'environnement : \$ENVIRONMENT"
-            echo "🧐 Conteneur ciblé : \$CONTAINER_BACKEND_NAME"
-      
-            # Vérifie si le conteneur existe
-            if docker ps -a --format '{{.Names}}' | grep -wq "\$CONTAINER_BACKEND_NAME"; then
-              echo "✅ Conteneur trouvé. Tentative de redémarrage propre..."
-      
-              # Stop le conteneur et attend qu'il soit arrêté
-              docker stop "\$CONTAINER_BACKEND_NAME"
-              ATTEMPT=0
-              while docker ps --format '{{.Names}}' | grep -wq "\$CONTAINER_BACKEND_NAME"; do
-                echo "⏳ Attente de l'arrêt complet... (\$ATTEMPT)"
+            BACKEND_PORT=7001
+
+            echo "[INFO - 14] 🔄 Redémarrage du conteneur backend : \$CONTAINER_BACKEND_NAME"
+            if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
+              docker restart "\$CONTAINER_BACKEND_NAME"
+              echo "[SUCCESS] ✅ Conteneur backend redémarré."
+
+              echo "[INFO] ⏳ Attente de la disponibilité de l'endpoint /health..."
+              for i in {1..60}; do
+                STATUS_CODE=\$(docker exec "\$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:\$BACKEND_PORT/health || true)
+                if [ "\$STATUS_CODE" = "200" ]; then
+                  echo "[SUCCESS] ✅ Endpoint /health est disponible (HTTP 200) après \$i secondes."
+                  exit 0
+                fi
+                echo "[WAITING] Tentative \$i/60... (status actuel: \$STATUS_CODE)"
                 sleep 1
-                ATTEMPT=\$((ATTEMPT + 1))
-                [ \$ATTEMPT -gt 10 ] && echo "❌ Impossible d'arrêter le conteneur." && exit 1
               done
-      
-              # Redémarrage
-              echo "🚀 Démarrage du conteneur..."
-              docker start "\$CONTAINER_BACKEND_NAME"
-      
-              # Vérifie que le conteneur est bien up
-              sleep 2
-              docker ps -a --filter "name=\$CONTAINER_BACKEND_NAME"
-      
-              echo "✅ Backend redémarré avec succès à : \$(date)"
+
+              echo "[ERROR] ❌ Le backend n'a pas répondu correctement à /health après 60 secondes."
+              docker logs "\$CONTAINER_BACKEND_NAME" | tail -n 40
+              exit 1
             else
-              echo "⚠️ Aucun conteneur nommé \$CONTAINER_BACKEND_NAME trouvé."
+              echo "[ERROR] ❌ Conteneur \$CONTAINER_BACKEND_NAME introuvable."
               exit 1
             fi
           EOF
