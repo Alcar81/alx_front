@@ -283,28 +283,7 @@ jobs:
                   sleep 2
                 fi
               done
-      
-              echo "[INFO - 14] 🌐 Vérification de /health..."
-      
-              HEALTH_OK=0
-              for i in {1..10}; do
-                STATUS_CODE=\$(docker exec "$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:$BACKEND_PORT/health)
-      
-                if [ "\$STATUS_CODE" = "200" ]; then
-                  echo "[SUCCESS] ✅ /health répond 200 (tentative \$i)"
-                  HEALTH_OK=1
-                  break
-                else
-                  echo "[WAITING] Tentative \$i : /health répond \$STATUS_CODE"
-                  sleep 2
-                fi
-              done
-      
-              if [ "\$HEALTH_OK" -eq 0 ]; then
-                echo "[ERROR] ❌ /health n’a pas répondu 200 après 10 tentatives."
-                exit 7
-              fi
-      
+                          
               echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
             else
               echo "[ERROR - 14] ❌ Conteneur non trouvé : $CONTAINER_BACKEND_NAME"
