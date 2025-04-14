@@ -258,41 +258,48 @@ jobs:
 
       - name: 14 - Restart Backend After Frontend Deployment
         run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
-            BACKEND_PORT=7001
+          CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
+          BACKEND_PORT=${{ env.BACKEND_PORT }}
       
-            echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
-            if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
-              docker restart "\$CONTAINER_BACKEND_NAME"
-              echo "[SUCCESS - 14] ✅ Backend redémarré avec succès."
+          echo "🔁 Connexion SSH pour redémarrage du backend et healthcheck..."
+      
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash << EOF
+            set -e
+      
+            echo "[INFO - 14] 🔄 Redémarrage du backend : $CONTAINER_BACKEND_NAME"
+      
+            if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
+              docker restart "$CONTAINER_BACKEND_NAME"
+              echo "[SUCCESS - 14] ✅ Conteneur redémarré : $CONTAINER_BACKEND_NAME"
+      
+              echo "[INFO - 14] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
+      
+              for i in {1..60}; do
+                if docker exec "$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
+                  echo "[SUCCESS] ✅ Port $BACKEND_PORT détecté (tentative \$i)"
+                  break
+                else
+                  echo "[WAITING] Tentative \$i/60... Port non disponible"
+                  sleep 2
+                fi
+              done
+      
+              echo "[INFO - 14] 🌐 Vérification de /health..."
+              for i in {1..10}; do
+                STATUS_CODE=\$(docker exec "$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:$BACKEND_PORT/health)
+      
+                if [ "\$STATUS_CODE" = "200" ]; then
+                  echo "[SUCCESS] ✅ /health répond 200"
+                  break
+                else
+                  echo "[WAITING] Tentative \$i : /health répond \$STATUS_CODE"
+                  sleep 2
+                fi
+              done
+      
+              echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
             else
-              echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
+              echo "[ERROR - 14] ❌ Conteneur non trouvé : $CONTAINER_BACKEND_NAME"
               exit 1
             fi
-      
-            echo "[INFO - 14.1] ⏳ Attente que le port \$BACKEND_PORT soit ouvert..."
-      
-            for i in {1..60}; do
-              if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
-                echo "[SUCCESS - 14.1] ✅ Port \$BACKEND_PORT est ouvert"
-                break
-              else
-                echo "[WAITING] Tentative \$i/60... Port pas encore ouvert"
-                sleep 1
-              fi
-            done
-      
-            # Vérification bloquante de /health
-            echo "[INFO - 14.2] 🔍 Vérification de l'endpoint /health..."
-            for i in {1..10}; do
-              STATUS_CODE=\$(docker exec "\$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:\$BACKEND_PORT/health)
-              if [ "\$STATUS_CODE" = "200" ]; then
-                echo "[SUCCESS - 14.2] ✅ /health est prêt (HTTP 200)"
-                break
-              else
-                echo "[WAITING] Tentative \$i/10... HTTP \$STATUS_CODE"
-                sleep 2
-              fi
-            done
           EOF
