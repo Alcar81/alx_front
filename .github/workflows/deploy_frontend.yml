@@ -287,29 +287,29 @@ jobs:
             CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
             BACKEND_PORT=7001
 
-            echo "[INFO] 🔍 Vérification de l'état du conteneur backend ($CONTAINER_BACKEND_NAME)..."
+            echo "[INFO - 14.1] 🔍 Vérification de l'état du conteneur backend ($CONTAINER_BACKEND_NAME)..."
             if ! docker ps --filter "name=$CONTAINER_BACKEND_NAME" --filter "status=running" | grep -w "$CONTAINER_BACKEND_NAME"; then
               echo "[ERROR] ❌ Le conteneur backend n'est pas actif après redémarrage."
               docker logs "$CONTAINER_BACKEND_NAME" | tail -n 40
               exit 1
             fi
-            echo "[SUCCESS] ✅ Le conteneur backend est actif."
+            echo "[SUCCESS - 14.1] ✅ Le conteneur backend est actif."
 
             echo "[INFO] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
             PORT_OK=0
-            for i in {1..60}; do
+            for i in {1..120}; do
               if docker exec "$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
                 echo "[SUCCESS] ✅ Port $BACKEND_PORT est maintenant ouvert."
                 PORT_OK=1
                 break
               else
-                echo "[WAITING] Tentative $i/60... Port pas encore ouvert"
+                echo "[WAITING] Tentative $i/120... Port pas encore ouvert"
                 sleep 1
               fi
             done
 
             if [ "$PORT_OK" -eq 0 ]; then
-              echo "[ERROR] ❌ Port $BACKEND_PORT non disponible après 60 secondes." >&2
+              echo "[ERROR] ❌ Port $BACKEND_PORT non disponible après 120 secondes." >&2
               exit 1
             fi
 
