@@ -264,35 +264,35 @@ jobs:
           echo "🔁 Connexion SSH pour redémarrage du backend et healthcheck..."
       
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<'EOF'
-            set -e
-      
-            CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
-            BACKEND_PORT=${{ env.BACKEND_PORT }}
-      
-            echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
-      
-            if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
-              docker restart "\$CONTAINER_BACKEND_NAME"
-              echo "[SUCCESS - 14] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
-      
-              echo "[INFO - 14] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
-      
-              for i in \$(seq 1 60); do
-                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
-                  echo "[SUCCESS] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
-                  break
-                else
-                  echo "[WAITING] Tentative \$i/60... Port non disponible"
-                  sleep 2
-                fi
-              done
-      
-              echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
-              echo "[INFO - 14] 📦 État du conteneur backend après redémarrage :"
-              docker ps -a --filter "name=\$CONTAINER_BACKEND_NAME"
-            else
-              echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
-              exit 1
-            fi
+              set -e
+        
+              CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
+              BACKEND_PORT=${{ env.BACKEND_PORT }}
+        
+              echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
+        
+              if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
+                docker restart "\$CONTAINER_BACKEND_NAME"
+                echo "[SUCCESS - 14] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
+        
+                echo "[INFO - 14] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
+        
+                for i in \$(seq 1 60); do
+                  if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
+                    echo "[SUCCESS] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
+                    break
+                  else
+                    echo "[WAITING] Tentative \$i/60... Port non disponible"
+                    sleep 2
+                  fi
+                done
+        
+                echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
+                echo "[INFO - 14] 📦 État du conteneur backend après redémarrage :"
+                docker ps -a --filter "name=\$CONTAINER_BACKEND_NAME"
+              else
+                echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
+                exit 1
+              fi
           EOF
         
