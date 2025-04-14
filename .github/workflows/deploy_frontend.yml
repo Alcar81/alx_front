@@ -280,4 +280,35 @@ jobs:
               echo "⚠️ Aucun conteneur nommé $CONTAINER_BACKEND_NAME trouvé. Vérifiez si le backend est bien déployé."
             fi
           EOF
-        
+      
+      - name: 14.1 - Vérification post-redémarrage du backend
+        run: |
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
+            CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
+            BACKEND_PORT=7001
+
+            echo "[INFO] 🔍 Vérification de l'état du conteneur backend ($CONTAINER_BACKEND_NAME)..."
+            if ! docker ps --filter "name=$CONTAINER_BACKEND_NAME" --filter "status=running" | grep -w "$CONTAINER_BACKEND_NAME"; then
+              echo "[ERROR] ❌ Le conteneur backend n'est pas actif après redémarrage."
+              docker logs "$CONTAINER_BACKEND_NAME" | tail -n 40
+              exit 1
+            fi
+            echo "[SUCCESS] ✅ Le conteneur backend est actif."
+
+            echo "[INFO] 🌐 Vérification de l'endpoint /health..."
+            if docker exec "$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:$BACKEND_PORT/health | grep -q "200"; then
+              echo "[SUCCESS] ✅ Endpoint /health répond correctement."
+            else
+              echo "[ERROR] ❌ Endpoint /health inaccessible." >&2
+              docker exec "$CONTAINER_BACKEND_NAME" curl -i http://localhost:$BACKEND_PORT/health || true
+              exit 1
+            fi
+
+            echo "[INFO] 🔐 Vérification de /api/me (non authentifié)..."
+            RESPONSE=$(docker exec "$CONTAINER_BACKEND_NAME" curl -s -X GET http://localhost:$BACKEND_PORT/api/me)
+            if echo "$RESPONSE" | grep -qi "unauthorized\|jwt\|token"; then
+              echo "[SUCCESS] ✅ La route /api/me est bien protégée (réponse attendue sans token)."
+            else
+              echo "[WARNING] ⚠️ Réponse inattendue de /api/me : $RESPONSE"
+            fi
+          EOF
