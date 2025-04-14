@@ -259,58 +259,37 @@ jobs:
       - name: 14 - Restart Backend After Frontend Deployment
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            
             ENVIRONMENT=${{ vars.ENV }}
             CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
-          
-            sleep 60
-            echo "🔄 Vérification et redémarrage du backend pour l'environnement :" $ENVIRONMENT
-            echo "🧐 Vérification du conteneur backend :" $CONTAINER_BACKEND_NAME
-            echo "🖥 Liste des conteneurs existants :"
-            docker ps -a --format '{{.Names}}'
       
-            # Vérifier si le conteneur existe avant de tenter un restart
-            if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
-              echo "✅ Conteneur $CONTAINER_BACKEND_NAME trouvé, tentative de redémarrage..."
-              docker stop "$CONTAINER_BACKEND_NAME" && docker start "$CONTAINER_BACKEND_NAME"
-              echo "🟢 Statut du conteneur après redémarrage :"
-              docker ps -a --filter "name=$CONTAINER_BACKEND_NAME"
-              echo "✅ Backend redémarré avec succès."
-              
+            echo "🔄 Vérification et redémarrage du backend pour l'environnement : \$ENVIRONMENT"
+            echo "🧐 Conteneur ciblé : \$CONTAINER_BACKEND_NAME"
+      
+            # Vérifie si le conteneur existe
+            if docker ps -a --format '{{.Names}}' | grep -wq "\$CONTAINER_BACKEND_NAME"; then
+              echo "✅ Conteneur trouvé. Tentative de redémarrage propre..."
+      
+              # Stop le conteneur et attend qu'il soit arrêté
+              docker stop "\$CONTAINER_BACKEND_NAME"
+              ATTEMPT=0
+              while docker ps --format '{{.Names}}' | grep -wq "\$CONTAINER_BACKEND_NAME"; do
+                echo "⏳ Attente de l'arrêt complet... (\$ATTEMPT)"
+                sleep 1
+                ATTEMPT=\$((ATTEMPT + 1))
+                [ \$ATTEMPT -gt 10 ] && echo "❌ Impossible d'arrêter le conteneur." && exit 1
+              done
+      
+              # Redémarrage
+              echo "🚀 Démarrage du conteneur..."
+              docker start "\$CONTAINER_BACKEND_NAME"
+      
+              # Vérifie que le conteneur est bien up
+              sleep 2
+              docker ps -a --filter "name=\$CONTAINER_BACKEND_NAME"
+      
+              echo "✅ Backend redémarré avec succès à : \$(date)"
             else
-              echo "⚠️ Aucun conteneur nommé $CONTAINER_BACKEND_NAME trouvé. Vérifiez si le backend est bien déployé."
-            fi
-          EOF
-      
-      - name: 14.1 - Vérification post-redémarrage du backend
-        run: |
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << 'EOF'
-            CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
-            BACKEND_PORT=7001
-
-            echo "[INFO - 14.1] 🔍 Vérification de l'état du conteneur backend (\$CONTAINER_BACKEND_NAME)..."
-            docker ps --filter "name=\$CONTAINER_BACKEND_NAME"
-
-            echo "[INFO] ⏳ Attente de la disponibilité de l'endpoint /health..."
-
-            PORT_OK=0
-            i=1
-            while [ \$i -le 60 ]; do
-              STATUS_CODE=\`docker exec "\$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:\$BACKEND_PORT/health\`
-
-              if [ "\$STATUS_CODE" = "200" ]; then
-                echo "[SUCCESS] ✅ L'endpoint /health répond avec le code 200 (OK)"
-                PORT_OK=1
-                break
-              else
-                echo "[WAITING] Tentative \$i/60... /health renvoie : \$STATUS_CODE"
-                sleep 2
-              fi
-              i=\$((i+1))
-            done
-
-            if [ "\$PORT_OK" -eq 0 ]; then
-              echo "[ERROR] ❌ L'endpoint /health n’est pas disponible après 60 tentatives." >&2
+              echo "⚠️ Aucun conteneur nommé \$CONTAINER_BACKEND_NAME trouvé."
               exit 1
             fi
           EOF
