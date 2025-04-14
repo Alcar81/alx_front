@@ -285,6 +285,9 @@ jobs:
               done
                           
               echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
+
+              echo "[INFO - 14] 📦 État du conteneur backend après redémarrage :"
+              docker ps -a --filter "name=$CONTAINER_BACKEND_NAME"
             else
               echo "[ERROR - 14] ❌ Conteneur non trouvé : $CONTAINER_BACKEND_NAME"
               exit 1
