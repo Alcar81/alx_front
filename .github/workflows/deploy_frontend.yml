@@ -293,8 +293,9 @@ jobs:
             echo "[INFO] ⏳ Attente de la disponibilité de l'endpoint /health..."
 
             PORT_OK=0
-            for i in {1..60}; do
-              STATUS_CODE=\$(docker exec "\$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:\$BACKEND_PORT/health)
+            i=1
+            while [ \$i -le 60 ]; do
+              STATUS_CODE=\`docker exec "\$CONTAINER_BACKEND_NAME" curl -s -o /dev/null -w "%{http_code}" http://localhost:\$BACKEND_PORT/health\`
 
               if [ "\$STATUS_CODE" = "200" ]; then
                 echo "[SUCCESS] ✅ L'endpoint /health répond avec le code 200 (OK)"
@@ -304,6 +305,7 @@ jobs:
                 echo "[WAITING] Tentative \$i/60... /health renvoie : \$STATUS_CODE"
                 sleep 2
               fi
+              i=\$((i+1))
             done
 
             if [ "\$PORT_OK" -eq 0 ]; then
