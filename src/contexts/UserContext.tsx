@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface User {
+  firstName: string;
+  lastName: string;
   email: string;
   token: string;
 }
@@ -16,8 +18,13 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      console.error("❌ Erreur de parsing localStorage : ", e);
+      return null;
+    }
   });
 
   const login = (userData: User) => {

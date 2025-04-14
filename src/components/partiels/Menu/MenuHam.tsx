@@ -1,23 +1,26 @@
-// src/components/partiels/Menu/MenuHam.tsx
+// 📌 src/components/partiels/Menu/MenuHam.tsx
 import React, { useState, useContext, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Menu.css";
 import { ThemeContext } from "../../../theme/ThemeContext";
+import { useUserContext } from "../../../contexts/UserContext";
 
 const MenuHam: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { mode, toggleColorMode } = useContext(ThemeContext);
+  const { user, logout } = useUserContext();
+  const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnter = () => {
-    setIsDropdownOpen(true);
-  };
+  const handleMouseEnter = () => setIsDropdownOpen(true);
+  const handleMouseLeave = () => setIsDropdownOpen(false);
 
-  const handleMouseLeave = () => {
-    setIsDropdownOpen(false);
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // ou Connexion
   };
 
   return (
@@ -36,26 +39,29 @@ const MenuHam: React.FC = () => {
           <ul>
             <li>
               <AccountCircleIcon />
-              <Link to="/account">Mon Compte</Link>
+              {user ? (
+                <span>Bonjour {user.firstName}</span>
+              ) : (
+                <Link to="/account">Mon Compte</Link>
+              )}
             </li>
-            <li>
-              <Link to="/Connexion">Connexion</Link>
-            </li>
-            <li>
-              <Link to="/Inscription">Inscription</Link>
-            </li>
-            
+
+            {!user && (
+              <>
+                <li><Link to="/Connexion">Connexion</Link></li>
+                <li><Link to="/Inscription">Inscription</Link></li>
+              </>
+            )}
+
+            {user && (
+              <li><span className="popup-link" onClick={handleLogout}>Déconnexion</span></li>
+            )}
+
             <li className="divider"></li>
-            
-            <li>
-              <Link to="/Accueil">Accueil</Link>
-            </li>
-            <li>
-              <Link to="/À-propos">À propos</Link>
-            </li>
-            <li>
-              <Link to="/Contact">Nous joindre</Link>
-            </li>
+
+            <li><Link to="/Accueil">Accueil</Link></li>
+            <li><Link to="/À-propos">À propos</Link></li>
+            <li><Link to="/Contact">Nous joindre</Link></li>
             <li>
               <SearchIcon />
               <Link to="/search">Rechercher</Link>

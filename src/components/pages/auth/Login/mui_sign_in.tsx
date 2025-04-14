@@ -31,8 +31,13 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     try {
       const data = await post("/login", { email, password });
-      login({ email: data.email, token: data.token });
-      navigate("/");
+      login({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        token: data.token,
+      });
+      navigate("/Accueil");
     } catch (err: any) {
       setMessage(`❌ ${err.message}`);
     }

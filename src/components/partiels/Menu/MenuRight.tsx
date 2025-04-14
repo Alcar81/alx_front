@@ -4,11 +4,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Menu.css";
 import { ThemeContext } from "../../../theme/ThemeContext";
+import { useUserContext } from "../../../contexts/UserContext";
 
 const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { mode, toggleColorMode } = useContext(ThemeContext);
+  const { user, logout } = useUserContext();
 
   return (
     <div id="menu-right" className="light">
@@ -45,8 +47,17 @@ const MenuRight: React.FC = () => {
           <AccountCircleIcon style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }} />
           {showAccountMenu && (
             <ul className="dropdown-menu account-dropdown" onMouseLeave={() => setShowAccountMenu(false)}>
-              <li><Link to="/Inscription">Inscription</Link></li>
-              <li><Link to="/Connexion">Connexion</Link></li>
+              {user ? (
+                <>
+                  <li><strong>{user.email}</strong></li> {/* ou prénom si dispo */}
+                  <li><span onClick={logout}>Déconnexion</span></li>
+                </>
+              ) : (
+                <>
+                  <li><Link to="/Inscription">Inscription</Link></li>
+                  <li><Link to="/Connexion">Connexion</Link></li>
+                </>
+              )}
               <li><span onClick={toggleColorMode}>{mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}</span></li>
             </ul>
           )}
