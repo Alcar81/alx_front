@@ -263,6 +263,7 @@ jobs:
             ENVIRONMENT=${{ vars.ENV }}
             CONTAINER_BACKEND_NAME="back_node_${{ vars.ENV }}"
           
+            sleep 60
             echo "🔄 Vérification et redémarrage du backend pour l'environnement :" $ENVIRONMENT
             echo "🧐 Vérification du conteneur backend :" $CONTAINER_BACKEND_NAME
             echo "🖥 Liste des conteneurs existants :"
