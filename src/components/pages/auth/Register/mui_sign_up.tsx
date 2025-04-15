@@ -1,4 +1,3 @@
-// 📌 src/components/pages/auth/Register/mui_sign_up.tsx
 import React from "react";
 import {
   Box, Button, CssBaseline, Divider, FormControl,
@@ -33,6 +32,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     if (loading) return;
 
     setMessage("");
+
     if (motDePasse !== confirmationMotDePasse) {
       setMessage("❌ Les mots de passe ne correspondent pas.");
       return;
@@ -41,7 +41,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     setLoading(true);
 
     try {
-      const response = await post("/register", {
+      await post("/register", {
         firstName,
         lastName,
         email,
@@ -49,7 +49,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       });
 
       setMessage("✅ Inscription réussie !");
-      setTimeout(() => navigate("/Connexion"), 10000);
+      setTimeout(() => navigate("/Connexion"), 10000); // 10s pour tests
     } catch (err: any) {
       setMessage(`❌ ${err.message || "Erreur lors de l'inscription."}`);
     } finally {
@@ -76,7 +76,9 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               <FormControl><FormLabel>Confirmer</FormLabel><TextField type="password" value={confirmationMotDePasse} onChange={e => setConfirmationMotDePasse(e.target.value)} required /></FormControl>
 
               {message && (
-                <Typography sx={{ mt: 2, color: message.includes("✅") ? "green" : "red" }}>{message}</Typography>
+                <Typography sx={{ mt: 2, color: message.includes("✅") ? "green" : "red" }}>
+                  {message}
+                </Typography>
               )}
 
               <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }} disabled={loading}>
