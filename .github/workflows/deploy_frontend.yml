@@ -267,6 +267,7 @@ jobs:
               set -e
         
               CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
+              CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
               BACKEND_PORT=${{ env.BACKEND_PORT }}
         
               echo "[INFO - 14] 🔄 Redémarrage du backend : $CONTAINER_BACKEND_NAME"
@@ -290,6 +291,7 @@ jobs:
                 echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
                 echo "[INFO - 14] 📦 État du conteneur backend après redémarrage :"
                 docker ps -a --filter "name=$CONTAINER_BACKEND_NAME"
+                docker ps -a --filter "name=$CONTAINER_POSTGRES_NAME"
               else
                 echo "[ERROR - 14] ❌ Conteneur non trouvé : $CONTAINER_BACKEND_NAME"
                 exit 1
