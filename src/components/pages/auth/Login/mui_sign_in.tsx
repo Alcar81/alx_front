@@ -1,5 +1,4 @@
 // 📌 src/components/pages/auth/Login/mui_sign_in.tsx
-
 import React from "react";
 import {
   Box, Button, CssBaseline, Divider, FormControl,
@@ -47,7 +46,19 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
       navigate("/Accueil");
     } catch (err: any) {
-      setMessage(`❌ ${err.message || "Erreur lors de la connexion."}`);
+      const errMsg = (err?.message || "").toLowerCase();
+
+      if (errMsg.includes("unauthorized") || errMsg.includes("incorrect")) {
+        setMessage("❌ Email ou mot de passe incorrect.");
+      } else if (errMsg.includes("not found")) {
+        setMessage("❌ Utilisateur non trouvé.");
+      } else if (errMsg.includes("le serveur a retourné")) {
+        setMessage("❌ Réponse invalide du serveur.");
+      } else if (errMsg.includes("réseau")) {
+        setMessage("❌ Erreur réseau. Vérifiez votre connexion.");
+      } else {
+        setMessage(`❌ ${err.message || "Erreur inconnue lors de la connexion."}`);
+      }
     } finally {
       setLoading(false);
     }

@@ -10,15 +10,25 @@ export async function post(endpoint: string, body: any) {
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const contentType = response.headers.get("content-type");
 
     if (!response.ok) {
-      throw new Error(data.message || "Erreur lors de la requête.");
+      if (contentType?.includes("application/json")) {
+        const data = await response.json();
+        throw new Error(data.message || "Erreur lors de la requête.");
+      } else {
+        throw new Error("Le serveur a retourné une réponse inattendue.");
+      }
     }
 
-    return data;
+    if (contentType?.includes("application/json")) {
+      return await response.json();
+    } else {
+      throw new Error("Le serveur a retourné un format invalide.");
+    }
   } catch (error: any) {
     console.error("❌ Requête échouée :", error);
-    throw error;
+    throw new Error(error.message || "Erreur réseau ou serveur.");
   }
 }
+

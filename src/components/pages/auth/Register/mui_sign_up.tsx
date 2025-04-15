@@ -26,17 +26,22 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [motDePasse, setMotDePasse] = React.useState("");
   const [confirmationMotDePasse, setConfirmationMotDePasse] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
 
+    setMessage("");
     if (motDePasse !== confirmationMotDePasse) {
       setMessage("❌ Les mots de passe ne correspondent pas.");
       return;
     }
 
+    setLoading(true);
+
     try {
-      await post("/register", {
+      const response = await post("/register", {
         firstName,
         lastName,
         email,
@@ -46,7 +51,9 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       setMessage("✅ Inscription réussie !");
       setTimeout(() => navigate("/Connexion"), 10000);
     } catch (err: any) {
-      setMessage(`❌ ${err.message}`);
+      setMessage(`❌ ${err.message || "Erreur lors de l'inscription."}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,15 +69,19 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           <div className="auth-content">
             <Typography variant="h4">Inscription</Typography>
             <Box component="form" onSubmit={handleSubmit} className="auth-form">
-              <FormControl><FormLabel>Prénom</FormLabel><TextField value={firstName} onChange={e => setFirstName(e.target.value)} /></FormControl>
-              <FormControl><FormLabel>Nom</FormLabel><TextField value={lastName} onChange={e => setLastName(e.target.value)} /></FormControl>
-              <FormControl><FormLabel>Email</FormLabel><TextField type="email" value={email} onChange={e => setEmail(e.target.value)} /></FormControl>
-              <FormControl><FormLabel>Mot de passe</FormLabel><TextField type="password" value={motDePasse} onChange={e => setMotDePasse(e.target.value)} /></FormControl>
-              <FormControl><FormLabel>Confirmer</FormLabel><TextField type="password" value={confirmationMotDePasse} onChange={e => setConfirmationMotDePasse(e.target.value)} /></FormControl>
+              <FormControl><FormLabel>Prénom</FormLabel><TextField value={firstName} onChange={e => setFirstName(e.target.value)} required /></FormControl>
+              <FormControl><FormLabel>Nom</FormLabel><TextField value={lastName} onChange={e => setLastName(e.target.value)} required /></FormControl>
+              <FormControl><FormLabel>Email</FormLabel><TextField type="email" value={email} onChange={e => setEmail(e.target.value)} required /></FormControl>
+              <FormControl><FormLabel>Mot de passe</FormLabel><TextField type="password" value={motDePasse} onChange={e => setMotDePasse(e.target.value)} required /></FormControl>
+              <FormControl><FormLabel>Confirmer</FormLabel><TextField type="password" value={confirmationMotDePasse} onChange={e => setConfirmationMotDePasse(e.target.value)} required /></FormControl>
 
-              {message && <Typography sx={{ mt: 2, color: message.includes("✅") ? "green" : "red" }}>{message}</Typography>}
+              {message && (
+                <Typography sx={{ mt: 2, color: message.includes("✅") ? "green" : "red" }}>{message}</Typography>
+              )}
 
-              <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>S'inscrire</Button>
+              <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }} disabled={loading}>
+                {loading ? "Création..." : "S'inscrire"}
+              </Button>
             </Box>
           </div>
 
