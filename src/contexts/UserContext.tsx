@@ -35,6 +35,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    window.location.href = "/Accueil"; // 👈 Redirige vers Connexion après logout
   };
 
   return (

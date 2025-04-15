@@ -1,3 +1,4 @@
+// src/components/partiels/Menu/MenuRight.tsx
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,17 +13,23 @@ const MenuRight: React.FC = () => {
   const { mode, toggleColorMode } = useContext(ThemeContext);
   const { user, logout } = useUserContext();
 
+  const handleLogout = () => {
+    try {
+      logout(); // Nettoyage context + localStorage
+      window.location.href = "/Accueil"; // Redirection brute (sécurisée)
+    } catch (error) {
+      console.error("❌ Erreur lors de la déconnexion :", error);
+      alert("Une erreur est survenue lors de la déconnexion.");
+    }
+  };
+
   return (
     <div id="menu-right" className="light">
       <div className="container-right">
         <nav className="menu-items">
           <ul className="menu-list">
-            <li>
-              <Link to="/À-propos">À propos</Link>
-            </li>
-            <li>
-              <Link to="/Contact">Nous joindre</Link>
-            </li>
+            <li><Link to="/À-propos">À propos</Link></li>
+            <li><Link to="/Contact">Nous joindre</Link></li>
           </ul>
         </nav>
 
@@ -31,14 +38,13 @@ const MenuRight: React.FC = () => {
           <SearchIcon style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }} />
         </div>
 
-        {/* Zone de recherche */}
         {showSearch && (
           <div className="search-box" onMouseLeave={() => setShowSearch(false)}>
             <input type="text" placeholder="Rechercher..." className="search-input" />
           </div>
         )}
 
-        {/* Icône du compte */}
+        {/* Icône compte */}
         <div
           id="account-icon"
           className={`menu-account ${showAccountMenu ? "active" : ""}`}
@@ -49,8 +55,8 @@ const MenuRight: React.FC = () => {
             <ul className="dropdown-menu account-dropdown" onMouseLeave={() => setShowAccountMenu(false)}>
               {user ? (
                 <>
-                  <li><strong>{user.email}</strong></li> {/* ou prénom si dispo */}
-                  <li><span onClick={logout}>Déconnexion</span></li>
+                  <li><strong>{user.firstName}</strong></li>
+                  <li><span onClick={handleLogout}>Déconnexion</span></li>
                 </>
               ) : (
                 <>
@@ -58,7 +64,11 @@ const MenuRight: React.FC = () => {
                   <li><Link to="/Connexion">Connexion</Link></li>
                 </>
               )}
-              <li><span onClick={toggleColorMode}>{mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}</span></li>
+              <li>
+                <span onClick={toggleColorMode}>
+                  {mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}
+                </span>
+              </li>
             </ul>
           )}
         </div>

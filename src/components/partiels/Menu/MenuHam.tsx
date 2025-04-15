@@ -1,6 +1,6 @@
 // 📌 src/components/partiels/Menu/MenuHam.tsx
 import React, { useState, useContext, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,15 +12,19 @@ const MenuHam: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { mode, toggleColorMode } = useContext(ThemeContext);
   const { user, logout } = useUserContext();
-  const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = () => setIsDropdownOpen(true);
   const handleMouseLeave = () => setIsDropdownOpen(false);
 
   const handleLogout = () => {
-    logout();
-    navigate("/"); // ou Connexion
+    try {
+      logout(); // Nettoie le contexte et localStorage
+      window.location.href = "/Accueil"; // Redirection directe
+    } catch (error) {
+      console.error("❌ Erreur lors de la déconnexion :", error);
+      alert("Une erreur est survenue lors de la déconnexion.");
+    }
   };
 
   return (
@@ -54,7 +58,9 @@ const MenuHam: React.FC = () => {
             )}
 
             {user && (
-              <li><span className="popup-link" onClick={handleLogout}>Déconnexion</span></li>
+              <li>
+                <span className="popup-link" onClick={handleLogout}>Déconnexion</span>
+              </li>
             )}
 
             <li className="divider"></li>
