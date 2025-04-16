@@ -285,12 +285,12 @@ jobs:
                   break
                 else
                   echo "[WAITING] Tentative \$i/60... Port non disponible"
-                  sleep 2
+                  sleep 10
                 fi
               done
 
               echo "[INFO - 14] 💤 Pause de stabilisation après détection du port..."
-              sleep 6  # ←⏱ ici on augmente le délai pour que le backend soit vraiment prêt
+              sleep 30  # ←⏱ ici on augmente le délai pour que le backend soit vraiment prêt
 
               echo "[INFO - 14] 🧪 Exécution de testComplet.js..."
               if docker exec "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js; then
