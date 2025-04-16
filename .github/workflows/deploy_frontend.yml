@@ -259,46 +259,49 @@ jobs:
       - name: 14 - Redémarrer le backend après le déploiement du Frontend
         run: |
           CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
+          CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
           BACKEND_PORT=${{ env.BACKEND_PORT }}
-
+      
           echo "🔁 Connexion SSH pour redémarrage du backend et vérification post-déploiement..."
-
+      
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<EOF
             set -e
-
-            CONTAINER_BACKEND_NAME="${CONTAINER_BACKEND_NAME}"
-            CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
-            BACKEND_PORT="${BACKEND_PORT}"
-
+      
             echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
-
+      
             if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
               docker restart "\$CONTAINER_BACKEND_NAME"
               echo "[SUCCESS - 14] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
-
+      
               echo "[INFO - 14] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
-
+      
               for i in \$(seq 1 60); do
-                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
-                  echo "[SUCCESS] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
+                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
+                  echo "[SUCCESS] ✅ Port $BACKEND_PORT détecté (tentative \$i)"
                   break
                 else
                   echo "[WAITING] Tentative \$i/60... Port non disponible"
                   sleep 2
                 fi
               done
-
-              echo "[INFO - 14] 🧪 Exécution du testComplet.js..."
+      
+              echo "[INFO - 14] 💤 Pause de stabilisation après détection du port..."
+              sleep 2
+      
+              echo "[INFO - 14] 🧪 Exécution de testComplet.js..."
               if docker exec "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js; then
                 echo "[SUCCESS - 14] ✅ Tous les tests post-déploiement ont réussi 🎉"
               else
                 echo "[ERROR - 14] ❌ Le testComplet.js a échoué !" >&2
                 exit 1
               fi
-
+      
             else
               echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
               exit 1
             fi
+            echo "✅ Déploiement terminé avec succès !"
           EOF
+
+            
         
