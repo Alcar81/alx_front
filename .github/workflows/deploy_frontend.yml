@@ -256,7 +256,7 @@ jobs:
                 logrotate -d "\$LOGROTATE_CONF"
           EOF
 
-      - name: 14 - Restart Backend After Frontend Deployment
+      - name: 14 - Redémarrer le Backend après le déploiement du Frontend
         run: |
           CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
           BACKEND_PORT=${{ env.BACKEND_PORT }}
@@ -264,37 +264,70 @@ jobs:
           echo "🔁 Connexion SSH pour redémarrage du backend et healthcheck..."
       
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<'EOF'
-              set -e
-        
-              CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
-              CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
-              BACKEND_PORT=${{ env.BACKEND_PORT }}
-        
-              echo "[INFO - 14] 🔄 Redémarrage du backend : $CONTAINER_BACKEND_NAME"
-        
-              if docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_BACKEND_NAME"; then
-                docker restart "$CONTAINER_BACKEND_NAME"
-                echo "[SUCCESS - 14] ✅ Conteneur redémarré : $CONTAINER_BACKEND_NAME"
-        
-                echo "[INFO - 14] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
-        
-                for i in $(seq 1 60); do
-                  if docker exec "$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
-                    echo "[SUCCESS] ✅ Port $BACKEND_PORT détecté (tentative $i)"
-                    break
+            set -e
+      
+            CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
+            CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
+            BACKEND_PORT=${{ env.BACKEND_PORT }}
+      
+            echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
+      
+            if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
+              docker restart "\$CONTAINER_BACKEND_NAME"
+              echo "[SUCCESS - 14] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
+      
+              echo "[INFO - 14] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
+      
+              for i in $(seq 1 60); do
+                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
+                  echo "[SUCCESS] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
+                  break
+                else
+                  echo "[WAITING] Tentative \$i/60... Port non disponible"
+                  sleep 2
+                fi
+              done
+      
+              echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
+              echo "[INFO - 14] 📦 État du conteneur backend après redémarrage :"
+              docker ps -a --filter "name=\$CONTAINER_BACKEND_NAME"
+              docker ps -a --filter "name=\$CONTAINER_POSTGRES_NAME"
+      
+              echo "[INFO - 14] 🧪 Exécution des tests automatisés dans le conteneur..."
+      
+              TEST_SCRIPTS=("testHealth.js" "testRegister.js" "testLogin.js")
+              COUNT=1
+              TOTAL=\${#TEST_SCRIPTS[@]}
+              FAILURES=0
+      
+              for SCRIPT in "\${TEST_SCRIPTS[@]}"; do
+                echo ""
+                echo "🔍 Test \$COUNT/\$TOTAL : \$SCRIPT"
+                if docker exec "\$CONTAINER_BACKEND_NAME" test -f "/app/tests/\$SCRIPT"; then
+                  if docker exec "\$CONTAINER_BACKEND_NAME" node "/app/tests/\$SCRIPT"; then
+                    echo "[SUCCESS] ✅ \$SCRIPT a réussi"
                   else
-                    echo "[WAITING] Tentative $i/60... Port non disponible"
-                    sleep 2
+                    echo "[WARNING] ⚠️ \$SCRIPT a échoué ou retourné une erreur"
+                    FAILURES=\$((FAILURES + 1))
                   fi
-                done
-        
-                echo "[SUCCESS] 🚀 Backend prêt après redémarrage."
-                echo "[INFO - 14] 📦 État du conteneur backend après redémarrage :"
-                docker ps -a --filter "name=$CONTAINER_BACKEND_NAME"
-                docker ps -a --filter "name=$CONTAINER_POSTGRES_NAME"
+                else
+                  echo "[SKIP] ⏩ \$SCRIPT introuvable, test ignoré"
+                fi
+                COUNT=\$((COUNT + 1))
+              done
+      
+              echo ""
+              echo "[INFO - 14] 🔚 Résumé des tests exécutés :"
+              if [ "\$FAILURES" -eq 0 ]; then
+                echo "[SUMMARY] ✅ Tous les tests ont passé avec succès."
               else
-                echo "[ERROR - 14] ❌ Conteneur non trouvé : $CONTAINER_BACKEND_NAME"
-                exit 1
+                echo "[SUMMARY] ⚠️ \$FAILURES test(s) ont échoué."
               fi
+      
+            else
+              echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
+              exit 1
+            fi     
+        
           EOF
         
