@@ -278,20 +278,20 @@ jobs:
               echo "[SUCCESS - 14] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
       
               echo "[INFO - 14] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
-      
+
               for i in \$(seq 1 60); do
-                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
-                  echo "[SUCCESS] ✅ Port $BACKEND_PORT détecté (tentative \$i)"
+                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
+                  echo "[SUCCESS] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
                   break
                 else
                   echo "[WAITING] Tentative \$i/60... Port non disponible"
                   sleep 2
                 fi
               done
-      
+
               echo "[INFO - 14] 💤 Pause de stabilisation après détection du port..."
-              sleep 2
-      
+              sleep 6  # ←⏱ ici on augmente le délai pour que le backend soit vraiment prêt
+
               echo "[INFO - 14] 🧪 Exécution de testComplet.js..."
               if docker exec "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js; then
                 echo "[SUCCESS - 14] ✅ Tous les tests post-déploiement ont réussi 🎉"
