@@ -267,6 +267,10 @@ jobs:
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<EOF
             set -e
       
+            CONTAINER_BACKEND_NAME="${CONTAINER_BACKEND_NAME}"
+            CONTAINER_POSTGRES_NAME="${CONTAINER_POSTGRES_NAME}"
+            BACKEND_PORT="${BACKEND_PORT}"
+
             echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
       
             if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
