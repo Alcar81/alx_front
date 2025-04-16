@@ -327,7 +327,6 @@ jobs:
             else
               echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
               exit 1
-            fi     
-        
+            fi        
           EOF
         
