@@ -44,7 +44,7 @@ const MenuHam: React.FC = () => {
             <li>
               <AccountCircleIcon />
               {user ? (
-                <span>Bonjour {user.firstName}</span>
+                <span>{user.firstName}</span>
               ) : (
                 <Link to="/account">Mon Compte</Link>
               )}
