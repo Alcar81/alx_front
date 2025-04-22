@@ -1,4 +1,3 @@
-// src/components/partiels/Menu/MenuRight.tsx
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,8 +14,8 @@ const MenuRight: React.FC = () => {
 
   const handleLogout = () => {
     try {
-      logout(); // Nettoyage context + localStorage
-      window.location.href = "/Accueil"; // Redirection brute (sécurisée)
+      logout();
+      window.location.href = "/Accueil";
     } catch (error) {
       console.error("❌ Erreur lors de la déconnexion :", error);
       alert("Une erreur est survenue lors de la déconnexion.");
@@ -33,18 +32,17 @@ const MenuRight: React.FC = () => {
           </ul>
         </nav>
 
-        {/* Icône de recherche */}
+        {/* Recherche */}
         <div className="menu-search" onClick={() => setShowSearch(!showSearch)}>
           <SearchIcon style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }} />
         </div>
-
         {showSearch && (
           <div className="search-box" onMouseLeave={() => setShowSearch(false)}>
             <input type="text" placeholder="Rechercher..." className="search-input" />
           </div>
         )}
 
-        {/* Icône compte */}
+        {/* Compte */}
         <div
           id="account-icon"
           className={`menu-account ${showAccountMenu ? "active" : ""}`}
@@ -56,6 +54,9 @@ const MenuRight: React.FC = () => {
               {user ? (
                 <>
                   <li><strong>{user.firstName}</strong></li>
+                  {user.role === "ADMIN" && (
+                    <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+                  )}
                   <li><span onClick={handleLogout}>Déconnexion</span></li>
                 </>
               ) : (

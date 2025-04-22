@@ -85,7 +85,7 @@
 }
 
 /* Assure un bon alignement vertical des icônes de visibilité */
-.muiinputadornment-root {
+.MuiInputAdornment-root { /* stylelint-disable-line selector-class-pattern */
   margin-right: 8px;
 }
 
@@ -126,7 +126,7 @@
     height: 25px; /* ✅ Réduit la taille du logo pour les petits écrans */
   }
 
-  .auth-form .muiformcontrol-root {
+  .auth-form .MuiInputAdornment-root { /* stylelint-disable-line selector-class-pattern */
     margin-bottom: 0.5rem;
   }
 

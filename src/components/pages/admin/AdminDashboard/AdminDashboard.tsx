@@ -1,6 +1,8 @@
+// 📌 src/components/pages/admin/AdminDashboard/AdminDashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import { getAllUsers, deleteUserById } from "../../../../utils/requests";
+import "./AdminDashboard.css";
 
 interface User {
   id: string;
@@ -19,35 +21,35 @@ const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (!token) return; // ✅ Ajout important pour TypeScript
-  
+      if (!token) return;
+
       setLoading(true);
       setError("");
-  
-      const response = await getAllUsers(token); // ✅ Type now guaranteed
-  
+
+      const response = await getAllUsers(token);
+
       if (response?.success) {
         setUsers(response.users);
       } else {
         setError("❌ Impossible de récupérer les utilisateurs.");
       }
-  
+
       setLoading(false);
     };
-  
+
     fetchUsers();
   }, [token]);
 
   const handleDelete = async (id: string) => {
     if (!token) return;
-  
+
     const target = users.find((u) => u.id === id);
     const confirmDelete = window.confirm(
       `🗑️ Supprimer l'utilisateur ${target?.firstName} ${target?.lastName} ?`
     );
     if (!confirmDelete) return;
-  
-    const res = await deleteUserById(id, token); // ✅ Type validé ici
+
+    const res = await deleteUserById(id, token);
     if (res?.success) {
       setUsers((prev) => prev.filter((u) => u.id !== id));
     } else {
@@ -71,7 +73,7 @@ const AdminDashboard: React.FC = () => {
       ) : users.length === 0 ? (
         <p>Aucun utilisateur à afficher.</p>
       ) : (
-        <table>
+        <table className="admin-dashboard">
           <thead>
             <tr>
               <th>Prénom</th>

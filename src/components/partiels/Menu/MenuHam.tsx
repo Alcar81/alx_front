@@ -19,8 +19,8 @@ const MenuHam: React.FC = () => {
 
   const handleLogout = () => {
     try {
-      logout(); // Nettoie le contexte et localStorage
-      window.location.href = "/Accueil"; // Redirection directe
+      logout();
+      window.location.href = "/Accueil";
     } catch (error) {
       console.error("❌ Erreur lors de la déconnexion :", error);
       alert("Une erreur est survenue lors de la déconnexion.");
@@ -57,9 +57,15 @@ const MenuHam: React.FC = () => {
               </>
             )}
 
+            {user && user.role === "ADMIN" && (
+              <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+            )}
+
             {user && (
               <li>
-                <span className="popup-link" onClick={handleLogout}>Déconnexion</span>
+                <span className="popup-link" onClick={handleLogout}>
+                  Déconnexion
+                </span>
               </li>
             )}
 
