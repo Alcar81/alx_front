@@ -1,10 +1,12 @@
-// 📌 src/components/pages/auth/Login/mui_sign_in.tsx
+// 📁 src/components/pages/auth/Login/mui_sign_in.tsx
 import React from "react";
 import {
   Box, Button, CssBaseline, Divider, FormControl,
-  FormLabel, TextField, Typography, IconButton, Link
+  FormLabel, TextField, Typography, IconButton, Link, InputAdornment
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
@@ -26,6 +28,9 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [password, setPassword] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,14 +40,22 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setMessage("");
 
     try {
-      const data = await post("/login", { email, password });
-
-      login({
-        firstName: data.firstName || "",
-        lastName: data.lastName || "",
-        email: data.email,
-        token: data.token,
+      const data = await post("/login", {
+        email: email.toLowerCase().trim(),
+        password,
       });
+
+      login(
+        {
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          email: data.email,
+          id: data.id || "", // facultatif, mais mieux si présent
+          role: data.role || "user",
+          createdAt: data.createdAt || new Date().toISOString(),
+        },
+        data.token
+      );
 
       navigate("/Accueil");
     } catch (err: any) {
@@ -94,10 +107,19 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               <FormControl>
                 <FormLabel>Mot de passe</FormLabel>
                 <TextField
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={togglePasswordVisibility} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </FormControl>
 

@@ -1,9 +1,13 @@
+// src/components/pages/auth/Register/mui_sign_up.tsx
+// 📁 src/components/pages/auth/Register/mui_sign_up.tsx
 import React from "react";
 import {
   Box, Button, CssBaseline, Divider, FormControl,
-  FormLabel, TextField, Typography, IconButton, Link
+  FormLabel, TextField, Typography, IconButton, Link, InputAdornment
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
@@ -26,6 +30,9 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   const [confirmationMotDePasse, setConfirmationMotDePasse] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,12 +51,12 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       await post("/register", {
         firstName,
         lastName,
-        email,
+        email: email.toLowerCase().trim(),
         password: motDePasse,
       });
 
       setMessage("✅ Inscription réussie !");
-      setTimeout(() => navigate("/Connexion"), 10000); // 10s pour tests
+      setTimeout(() => navigate("/Connexion"), 10000); // ⏱️ 10s pour lecture
     } catch (err: any) {
       setMessage(`❌ ${err.message || "Erreur lors de l'inscription."}`);
     } finally {
@@ -66,14 +73,54 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           <div className="logo-header">
             <img src={SitemarkIcon} alt="Logo AlxMultimedia" className="auth-logo" />
           </div>
+
           <div className="auth-content">
             <Typography variant="h4">Inscription</Typography>
             <Box component="form" onSubmit={handleSubmit} className="auth-form">
-              <FormControl><FormLabel>Prénom</FormLabel><TextField value={firstName} onChange={e => setFirstName(e.target.value)} required /></FormControl>
-              <FormControl><FormLabel>Nom</FormLabel><TextField value={lastName} onChange={e => setLastName(e.target.value)} required /></FormControl>
-              <FormControl><FormLabel>Email</FormLabel><TextField type="email" value={email} onChange={e => setEmail(e.target.value)} required /></FormControl>
-              <FormControl><FormLabel>Mot de passe</FormLabel><TextField type="password" value={motDePasse} onChange={e => setMotDePasse(e.target.value)} required /></FormControl>
-              <FormControl><FormLabel>Confirmer</FormLabel><TextField type="password" value={confirmationMotDePasse} onChange={e => setConfirmationMotDePasse(e.target.value)} required /></FormControl>
+              <FormControl>
+                <FormLabel>Prénom</FormLabel>
+                <TextField value={firstName} onChange={e => setFirstName(e.target.value)} required />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Nom</FormLabel>
+                <TextField value={lastName} onChange={e => setLastName(e.target.value)} required />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Email</FormLabel>
+                <TextField
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Mot de passe</FormLabel>
+                <TextField
+                  type={showPassword ? "text" : "password"}
+                  value={motDePasse}
+                  onChange={e => setMotDePasse(e.target.value)}
+                  required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={togglePasswordVisibility} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Confirmer</FormLabel>
+                <TextField
+                  type={showPassword ? "text" : "password"}
+                  value={confirmationMotDePasse}
+                  onChange={e => setConfirmationMotDePasse(e.target.value)}
+                  required
+                />
+              </FormControl>
 
               {message && (
                 <Typography sx={{ mt: 2, color: message.includes("✅") ? "green" : "red" }}>
@@ -101,3 +148,4 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     </AppTheme>
   );
 }
+

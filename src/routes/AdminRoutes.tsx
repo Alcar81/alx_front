@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import RequireAuth from "../components/pages/auth/RequireAuth"; // ✅ À ajouter
 
-import Dashboard from "../components/pages/admin/Dashbord/Dashbord";
+import Dashboard from "../components/pages/admin/AdminDashboard/AdminDashboard";
 import Settings from "../components/pages/admin/Settings/Settings";
 import AdminNotFound from "../components/pages/admin/AdminNotFound/AdminNotFound";
 

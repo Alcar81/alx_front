@@ -32,3 +32,37 @@ export async function post(endpoint: string, body: any) {
   }
 }
 
+export const getAllUsers = async (token: string) => {
+  try {
+    const res = await fetch("/api/admin/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "X-Test-Request": "true",
+      },
+    });
+    if (!res.ok) throw new Error("Échec récupération utilisateurs");
+    const data = await res.json();
+    return { success: true, users: data };
+  } catch (err) {
+    console.error(err);
+    return { success: false };
+  }
+};
+
+export const deleteUserById = async (id: string, token: string) => {
+  try {
+    const res = await fetch(`/api/admin/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) throw new Error("Échec suppression utilisateur");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false };
+  }
+};
+
+

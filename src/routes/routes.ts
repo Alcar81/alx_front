@@ -6,7 +6,7 @@ import Contact from "../components/pages/Contact/Contact";
 import Login from "../components/pages/auth/Login/mui_sign_in";
 import Register from "../components/pages/auth/Register/mui_sign_up";
 
-import Dashboard from "../components/pages/admin/Dashbord/Dashbord";
+import Dashboard from "../components/pages/admin/AdminDashboard/AdminDashboard";
 import Settings from "../components/pages/admin/Settings/Settings";
 
 import NotFound from "../components/pages/NotFound/NotFound";

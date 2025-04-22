@@ -84,6 +84,11 @@
   font-weight: bold;
 }
 
+/* Assure un bon alignement vertical des icônes de visibilité */
+.muiinputadornment-root {
+  margin-right: 8px;
+}
+
 /* =========================
    📌 Ajustements Responsive pour authStyles
 ========================= */
@@ -119,6 +124,10 @@
 
   .auth-logo {
     height: 25px; /* ✅ Réduit la taille du logo pour les petits écrans */
-}
+  }
+
+  .auth-form .muiformcontrol-root {
+    margin-bottom: 0.5rem;
+  }
 
 }
