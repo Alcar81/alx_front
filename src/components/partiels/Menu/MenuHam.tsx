@@ -57,20 +57,20 @@ const MenuHam: React.FC = () => {
               </>
             )}
 
-            {user && user.role === "ADMIN" && (
-              <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
-            )}
+            
+              
+          
 
             {user && (
               <li>
                 <span className="popup-link" onClick={handleLogout}>
                   Déconnexion
                 </span>
-              </li>
+              </li>              
             )}
-
+            <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
             <li className="divider"></li>
-
+            
             <li><Link to="/Accueil">Accueil</Link></li>
             <li><Link to="/À-propos">À propos</Link></li>
             <li><Link to="/Contact">Nous joindre</Link></li>

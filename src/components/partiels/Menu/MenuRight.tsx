@@ -52,11 +52,8 @@ const MenuRight: React.FC = () => {
           {showAccountMenu && (
             <ul className="dropdown-menu account-dropdown" onMouseLeave={() => setShowAccountMenu(false)}>
               {user ? (
-                <>
-                  <li><strong>{user.firstName}</strong></li>
-                  {user.role === "ADMIN" && (
-                    <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
-                  )}
+                <>                  
+                  <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>                  
                   <li><span onClick={handleLogout}>Déconnexion</span></li>
                 </>
               ) : (

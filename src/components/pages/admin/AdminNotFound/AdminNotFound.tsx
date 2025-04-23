@@ -7,7 +7,7 @@ const AdminNotFound: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate("/");
+    navigate("/Accueil");
   };
 
   return (
