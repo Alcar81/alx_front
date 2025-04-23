@@ -4,7 +4,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import {
   getAllUsers,
   deleteUserById,
-  updateUserById,
+  updateUser,
 } from "../../../../utils/requests";
 import "./AdminDashboard.css";
 
@@ -23,9 +23,9 @@ const AdminDashboard: React.FC = () => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<keyof User>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -34,14 +34,12 @@ const AdminDashboard: React.FC = () => {
       setError("");
 
       const response = await getAllUsers(token);
-
       if (response?.success) {
         setUsers(response.users);
         setFilteredUsers(response.users);
       } else {
         setError("❌ Impossible de récupérer les utilisateurs.");
       }
-
       setLoading(false);
     };
 
@@ -50,45 +48,39 @@ const AdminDashboard: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     if (!token) return;
+
     const target = users.find((u) => u.id === id);
     const confirmDelete = window.confirm(
-      `🗑️ Supprimer ${target?.firstName} ${target?.lastName} ?`
+      `🗑️ Supprimer l'utilisateur ${target?.firstName} ${target?.lastName} ?`
     );
     if (!confirmDelete) return;
 
     const res = await deleteUserById(id, token);
     if (res?.success) {
-      setUsers((prev) => prev.filter((u) => u.id !== id));
-      setFilteredUsers((prev) => prev.filter((u) => u.id !== id));
+      const updated = users.filter((u) => u.id !== id);
+      setUsers(updated);
+      setFilteredUsers(updated);
     } else {
       alert("❌ Échec de la suppression.");
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, id: string, key: keyof User) => {
+    setFilteredUsers((prev) =>
+      prev.map((user) =>
+        user.id === id ? { ...user, [key]: e.target.value } : user
+      )
+    );
+  };
+
   const handleUpdate = async (u: User) => {
     if (!token) return;
+    const confirmed = window.confirm(`📝 Appliquer les modifications à ${u.firstName} ${u.lastName} ?`);
+    if (!confirmed) return;
 
-    const newFirstName = prompt("Prénom :", u.firstName);
-    const newLastName = prompt("Nom :", u.lastName);
-    const newEmail = prompt("Email :", u.email);
-    const newRole = prompt("Rôle :", u.role);
-
-    if (!newFirstName || !newLastName || !newEmail || !newRole) return;
-
-    const updated = await updateUserById(u.id, {
-      firstName: newFirstName,
-      lastName: newLastName,
-      email: newEmail.toLowerCase(),
-      role: newRole.toUpperCase(),
-    }, token);
-
-    if (updated?.success) {
-      setUsers((prev) =>
-        prev.map((usr) => (usr.id === u.id ? { ...usr, ...updated.user } : usr))
-      );
-      setFilteredUsers((prev) =>
-        prev.map((usr) => (usr.id === u.id ? { ...usr, ...updated.user } : usr))
-      );
+    const response = await updateUser(u.id, u, token);
+    if (response?.success) {
+      alert("✅ Mise à jour réussie !");
     } else {
       alert("❌ Échec de la mise à jour.");
     }
@@ -98,31 +90,38 @@ const AdminDashboard: React.FC = () => {
     const newOrder = sortKey === key && sortOrder === "asc" ? "desc" : "asc";
     setSortKey(key);
     setSortOrder(newOrder);
+
     const sorted = [...filteredUsers].sort((a, b) => {
-      const valA = a[key].toString().toLowerCase();
-      const valB = b[key].toString().toLowerCase();
+      const aVal = a[key]?.toString().toLowerCase();
+      const bVal = b[key]?.toString().toLowerCase();
       return newOrder === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+        ? aVal.localeCompare(bVal)
+        : bVal.localeCompare(aVal);
     });
+
     setFilteredUsers(sorted);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    const filtered = users.filter((u) =>
-      [u.firstName, u.lastName, u.email, u.role].some((f) =>
-        f.toLowerCase().includes(term)
+    setFilteredUsers(
+      users.filter(
+        (u) =>
+          u.firstName.toLowerCase().includes(term) ||
+          u.lastName.toLowerCase().includes(term) ||
+          u.email.toLowerCase().includes(term) ||
+          u.role.toLowerCase().includes(term)
       )
     );
-    setFilteredUsers(filtered);
   };
 
-  if (!user) return <div>🔐 Accès réservé aux utilisateurs connectés.</div>;
+  if (!user || user.role.toUpperCase() !== "ADMIN") {
+    return <div>🔒 Accès réservé aux administrateurs.</div>;
+  }
 
   return (
-    <div className="admin-dashboard">
+    <div>
       <h1>🛠️ Tableau de bord Admin</h1>
       <p>👋 Bonjour {user.firstName} {user.lastName}</p>
 
@@ -131,11 +130,11 @@ const AdminDashboard: React.FC = () => {
         placeholder="🔍 Rechercher un utilisateur..."
         value={searchTerm}
         onChange={handleSearch}
-        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }}
+        style={{ margin: "1rem 0", padding: "0.5rem", width: "100%" }}
       />
 
       {loading ? (
-        <p>⏳ Chargement...</p>
+        <p>⏳ Chargement des utilisateurs...</p>
       ) : error ? (
         <p style={{ color: "red" }}>{error}</p>
       ) : filteredUsers.length === 0 ? (
@@ -144,24 +143,50 @@ const AdminDashboard: React.FC = () => {
         <table className="admin-dashboard">
           <thead>
             <tr>
-              {["firstName", "lastName", "email", "role", "createdAt"].map((k) => (
-                <th key={k} onClick={() => handleSort(k as keyof User)} style={{ cursor: "pointer" }}>
-                  {k} {sortKey === k && (sortOrder === "asc" ? "▲" : "▼")}
-                </th>
-              ))}
+              <th onClick={() => handleSort("firstName")}>Prénom</th>
+              <th onClick={() => handleSort("lastName")}>Nom</th>
+              <th onClick={() => handleSort("email")}>Email</th>
+              <th onClick={() => handleSort("role")}>Rôle</th>
+              <th onClick={() => handleSort("createdAt")}>Créé le</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredUsers.map((u) => (
               <tr key={u.id}>
-                <td>{u.firstName}</td>
-                <td>{u.lastName}</td>
-                <td>{u.email}</td>
-                <td>{u.role}</td>
+                <td>
+                  <input
+                    type="text"
+                    value={u.firstName}
+                    onChange={(e) => handleChange(e, u.id, "firstName")}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={u.lastName}
+                    onChange={(e) => handleChange(e, u.id, "lastName")}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="email"
+                    value={u.email}
+                    onChange={(e) => handleChange(e, u.id, "email")}
+                  />
+                </td>
+                <td>
+                  <select
+                    value={u.role}
+                    onChange={(e) => handleChange(e, u.id, "role")}
+                  >
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                  </select>
+                </td>
                 <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
                 <td>
-                  <button onClick={() => handleUpdate(u)}>✏️ Modifier</button>
+                  <button onClick={() => handleUpdate(u)}>💾 Modifier</button>
                   <button onClick={() => handleDelete(u.id)}>🗑️ Supprimer</button>
                 </td>
               </tr>
