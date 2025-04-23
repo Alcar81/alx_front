@@ -27,6 +27,9 @@ const MenuHam: React.FC = () => {
     }
   };
 
+  // ✅ Vérifie si l'utilisateur est admin
+  const isAdmin = user?.role === "admin" || user?.role?.includes?.("admin");
+
   return (
     <div
       className="menu-ham-container"
@@ -57,20 +60,20 @@ const MenuHam: React.FC = () => {
               </>
             )}
 
-            
-              
-          
-
             {user && (
-              <li>
-                <span className="popup-link" onClick={handleLogout}>
-                  Déconnexion
-                </span>
-              </li>              
+              <>
+                {isAdmin && (
+                  <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+                )}
+                <li>
+                  <span className="popup-link" onClick={handleLogout}>
+                    Déconnexion
+                  </span>
+                </li>
+              </>
             )}
-            <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+
             <li className="divider"></li>
-            
             <li><Link to="/Accueil">Accueil</Link></li>
             <li><Link to="/À-propos">À propos</Link></li>
             <li><Link to="/Contact">Nous joindre</Link></li>

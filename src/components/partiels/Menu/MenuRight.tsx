@@ -1,3 +1,4 @@
+// src/components/partiels/Menu/MenuRight.tsx
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -21,6 +22,9 @@ const MenuRight: React.FC = () => {
       alert("Une erreur est survenue lors de la déconnexion.");
     }
   };
+
+  // ✅ Vérification si admin
+  const isAdmin = user?.role === "admin" || user?.role?.includes?.("admin");
 
   return (
     <div id="menu-right" className="light">
@@ -52,8 +56,10 @@ const MenuRight: React.FC = () => {
           {showAccountMenu && (
             <ul className="dropdown-menu account-dropdown" onMouseLeave={() => setShowAccountMenu(false)}>
               {user ? (
-                <>                  
-                  <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>                  
+                <>
+                  {isAdmin && (
+                    <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+                  )}
                   <li><span onClick={handleLogout}>Déconnexion</span></li>
                 </>
               ) : (
