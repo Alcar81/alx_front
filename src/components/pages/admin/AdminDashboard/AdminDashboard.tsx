@@ -1,8 +1,11 @@
 // 📌 src/components/pages/admin/AdminDashboard/AdminDashboard.tsx
-// 📁 src/components/pages/admin/AdminDashboard/AdminDashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
-import { getAllUsers, deleteUserById } from "../../../../utils/requests";
+import {
+  getAllUsers,
+  deleteUserById,
+  updateUserById,
+} from "../../../../utils/requests";
 import "./AdminDashboard.css";
 
 interface User {
@@ -20,9 +23,9 @@ const AdminDashboard: React.FC = () => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
-  const [sortBy, setSortBy] = useState<keyof User>("createdAt");
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [sortKey, setSortKey] = useState<keyof User>("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,6 +34,7 @@ const AdminDashboard: React.FC = () => {
       setError("");
 
       const response = await getAllUsers(token);
+
       if (response?.success) {
         setUsers(response.users);
         setFilteredUsers(response.users);
@@ -44,34 +48,8 @@ const AdminDashboard: React.FC = () => {
     fetchUsers();
   }, [token]);
 
-  useEffect(() => {
-    const term = searchTerm.toLowerCase();
-    const filtered = users.filter((u) =>
-      `${u.firstName} ${u.lastName} ${u.email} ${u.role}`.toLowerCase().includes(term)
-    );
-    setFilteredUsers(filtered);
-  }, [searchTerm, users]);
-
-  const handleSort = (field: keyof User) => {
-    const direction = sortBy === field && sortDirection === "asc" ? "desc" : "asc";
-    setSortBy(field);
-    setSortDirection(direction);
-
-    const sorted = [...filteredUsers].sort((a, b) => {
-      const aField = a[field]?.toString().toLowerCase();
-      const bField = b[field]?.toString().toLowerCase();
-
-      if (aField < bField) return direction === "asc" ? -1 : 1;
-      if (aField > bField) return direction === "asc" ? 1 : -1;
-      return 0;
-    });
-
-    setFilteredUsers(sorted);
-  };
-
   const handleDelete = async (id: string) => {
     if (!token) return;
-
     const target = users.find((u) => u.id === id);
     const confirmDelete = window.confirm(
       `🗑️ Supprimer ${target?.firstName} ${target?.lastName} ?`
@@ -80,40 +58,68 @@ const AdminDashboard: React.FC = () => {
 
     const res = await deleteUserById(id, token);
     if (res?.success) {
-      const updated = users.filter((u) => u.id !== id);
-      setUsers(updated);
-      setFilteredUsers(updated);
+      setUsers((prev) => prev.filter((u) => u.id !== id));
+      setFilteredUsers((prev) => prev.filter((u) => u.id !== id));
     } else {
       alert("❌ Échec de la suppression.");
     }
   };
 
-  const handleEdit = (u: User) => {
-    const updatedFirstName = prompt("Prénom :", u.firstName);
-    const updatedLastName = prompt("Nom :", u.lastName);
-    const updatedEmail = prompt("Email :", u.email);
-    const updatedRole = prompt("Rôle :", u.role);
+  const handleUpdate = async (u: User) => {
+    if (!token) return;
 
-    if (!updatedFirstName || !updatedLastName || !updatedEmail || !updatedRole) return;
+    const newFirstName = prompt("Prénom :", u.firstName);
+    const newLastName = prompt("Nom :", u.lastName);
+    const newEmail = prompt("Email :", u.email);
+    const newRole = prompt("Rôle :", u.role);
 
-    // Ici tu pourrais faire une requête API PUT pour mettre à jour côté backend
+    if (!newFirstName || !newLastName || !newEmail || !newRole) return;
 
-    const updatedUser: User = {
-      ...u,
-      firstName: updatedFirstName,
-      lastName: updatedLastName,
-      email: updatedEmail,
-      role: updatedRole,
-    };
+    const updated = await updateUserById(u.id, {
+      firstName: newFirstName,
+      lastName: newLastName,
+      email: newEmail.toLowerCase(),
+      role: newRole.toUpperCase(),
+    }, token);
 
-    const newUsers = users.map((user) => (user.id === u.id ? updatedUser : user));
-    setUsers(newUsers);
-    setFilteredUsers(newUsers);
+    if (updated?.success) {
+      setUsers((prev) =>
+        prev.map((usr) => (usr.id === u.id ? { ...usr, ...updated.user } : usr))
+      );
+      setFilteredUsers((prev) =>
+        prev.map((usr) => (usr.id === u.id ? { ...usr, ...updated.user } : usr))
+      );
+    } else {
+      alert("❌ Échec de la mise à jour.");
+    }
   };
 
-  if (!user) {
-    return <div>🔐 Accès réservé aux utilisateurs connectés.</div>;
-  }
+  const handleSort = (key: keyof User) => {
+    const newOrder = sortKey === key && sortOrder === "asc" ? "desc" : "asc";
+    setSortKey(key);
+    setSortOrder(newOrder);
+    const sorted = [...filteredUsers].sort((a, b) => {
+      const valA = a[key].toString().toLowerCase();
+      const valB = b[key].toString().toLowerCase();
+      return newOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    });
+    setFilteredUsers(sorted);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    const filtered = users.filter((u) =>
+      [u.firstName, u.lastName, u.email, u.role].some((f) =>
+        f.toLowerCase().includes(term)
+      )
+    );
+    setFilteredUsers(filtered);
+  };
+
+  if (!user) return <div>🔐 Accès réservé aux utilisateurs connectés.</div>;
 
   return (
     <div className="admin-dashboard">
@@ -122,10 +128,10 @@ const AdminDashboard: React.FC = () => {
 
       <input
         type="text"
-        placeholder="🔍 Rechercher..."
+        placeholder="🔍 Rechercher un utilisateur..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginTop: "1rem", padding: "0.5rem", width: "100%" }}
+        onChange={handleSearch}
+        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }}
       />
 
       {loading ? (
@@ -138,11 +144,11 @@ const AdminDashboard: React.FC = () => {
         <table className="admin-dashboard">
           <thead>
             <tr>
-              <th onClick={() => handleSort("firstName")}>Prénom</th>
-              <th onClick={() => handleSort("lastName")}>Nom</th>
-              <th onClick={() => handleSort("email")}>Email</th>
-              <th onClick={() => handleSort("role")}>Rôle</th>
-              <th onClick={() => handleSort("createdAt")}>Créé le</th>
+              {["firstName", "lastName", "email", "role", "createdAt"].map((k) => (
+                <th key={k} onClick={() => handleSort(k as keyof User)} style={{ cursor: "pointer" }}>
+                  {k} {sortKey === k && (sortOrder === "asc" ? "▲" : "▼")}
+                </th>
+              ))}
               <th>Actions</th>
             </tr>
           </thead>
@@ -155,7 +161,7 @@ const AdminDashboard: React.FC = () => {
                 <td>{u.role}</td>
                 <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
                 <td>
-                  <button onClick={() => handleEdit(u)}>✏️ Modifier</button>
+                  <button onClick={() => handleUpdate(u)}>✏️ Modifier</button>
                   <button onClick={() => handleDelete(u.id)}>🗑️ Supprimer</button>
                 </td>
               </tr>
