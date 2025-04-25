@@ -14,8 +14,8 @@ const AdminRoutes: React.FC = () => {
     <Routes>
       {/* ✅ Toutes les routes ici sont protégées par RequireAuth */}
       <Route element={<RequireAuth roles={["admin"]} fallback={<Unauthorized />} />}>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/settings" element={<Settings />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
 
       <Route path="/403" element={<Forbidden403 />} />

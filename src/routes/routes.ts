@@ -1,3 +1,4 @@
+// routes.ts
 import LandingPage from "../components/pages/LandingPage/LandingPage";
 import Home from "../components/pages/Home/Home";
 import About from "../components/pages/About/About";
@@ -24,7 +25,7 @@ const routes = {
     
   ],
   adminRoutes: [
-    { path: "/admin", component: Dashboard },
+    { path: "/admin/dashboard", component: Dashboard },
     { path: "/admin/settings", component: Settings },    
     { path: "*", component: AdminNotFound }, // Catch-all spécifique à l'admin
   ],
