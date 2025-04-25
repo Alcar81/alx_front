@@ -58,7 +58,7 @@ const MenuRight: React.FC = () => {
               {user ? (
                 <>
                   {isAdmin && (
-                    <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+                    <li><Link to="/admin">Admin Dashboard</Link></li>
                   )}
                   <li><span onClick={handleLogout}>Déconnexion</span></li>
                 </>

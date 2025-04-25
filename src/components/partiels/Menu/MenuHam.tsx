@@ -63,7 +63,7 @@ const MenuHam: React.FC = () => {
             {user && (
               <>
                 {isAdmin && (
-                  <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>
+                  <li><Link to="/admin">Admin Dashboard</Link></li>
                 )}
                 <li>
                   <span className="popup-link" onClick={handleLogout}>
