@@ -1,0 +1,41 @@
+/* 📁 src/components/pages/admin/CardAdmin.css */
+
+.card-admin {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 280px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.card-admin:hover {
+  transform: translateY(-4px);
+}
+
+.card-admin h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-admin p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.card-admin button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+.card-admin button:hover {
+  background-color: #0056b3;
+}
