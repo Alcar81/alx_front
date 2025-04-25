@@ -1,19 +1,18 @@
-// 📌 src/contexts/UserContext.tsx
-// 📌 src/contexts/UserContext.tsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+// 📁 src/contexts/UserContext.tsx
+import React, { createContext, useState, useEffect } from "react";
 
-// 🔐 Interface pour l'utilisateur
+// 🔐 Interface pour un utilisateur
 export interface User {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  role: string;
+  roles: string[]; // 🔄 Maintenant un tableau de rôles
   createdAt: string;
 }
 
-// ✅ Interface complète pour le contexte
-interface AuthContextType {
+// ✅ Interface du contexte d'authentification
+export interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (userData: User, token: string) => void;
@@ -21,10 +20,10 @@ interface AuthContextType {
   isLoggedIn: boolean;
 }
 
-// 🧠 Création du contexte
-const UserContext = createContext<AuthContextType | undefined>(undefined);
+// 📦 Création du contexte
+export const UserContext = createContext<AuthContextType | undefined>(undefined);
 
-// 📦 Provider global
+// ✅ Provider global
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -55,7 +54,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/Accueil";
+    window.location.href = "/Accueil"; // ou useNavigate si tu veux une redirection contrôlée
   };
 
   const isLoggedIn = !!user && !!token;
@@ -65,13 +64,4 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </UserContext.Provider>
   );
-};
-
-// 🔁 Hook pour accéder au contexte
-export const useUserContext = (): AuthContextType => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUserContext doit être utilisé dans UserProvider");
-  }
-  return context;
 };

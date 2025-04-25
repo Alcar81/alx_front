@@ -50,8 +50,8 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           firstName: data.firstName || "",
           lastName: data.lastName || "",
           email: data.email,
-          id: data.id || "", // facultatif, mais mieux si présent
-          role: data.role || "user",
+          id: data.id || "",
+          roles: data.roles || [],
           createdAt: data.createdAt || new Date().toISOString(),
         },
         data.token
