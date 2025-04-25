@@ -1,0 +1,39 @@
+.user-manager-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.user-manager-search {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 1rem 0;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.user-table th {
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+.user-table input,
+.user-table select {
+  width: 100%;
+  padding: 0.25rem;
+  box-sizing: border-box;
+}
+
+.error-text {
+  color: red;
+}
