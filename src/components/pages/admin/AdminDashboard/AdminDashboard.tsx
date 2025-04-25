@@ -1,7 +1,6 @@
 // 📁 src/components/pages/admin/AdminDashboard/AdminDashboard.tsx
 import React from "react";
 import { useAuth } from "../../../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
 import CardAdmin from "../../admin/CardAdmin";
