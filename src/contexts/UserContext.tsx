@@ -1,5 +1,5 @@
 // 📁 src/contexts/UserContext.tsx
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 
 // 🔐 Interface pour un utilisateur
 export interface User {
@@ -64,4 +64,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </UserContext.Provider>
   );
+};
+
+// ✅ Hook exporté correctement
+export const useUserContext = (): AuthContextType => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext doit être utilisé dans UserProvider");
+  }
+  return context;
 };
