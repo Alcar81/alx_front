@@ -17,7 +17,7 @@ const AdminRoutes: React.FC = () => {
       <Route element={<RequireAuth roles={["admin"]} fallback={<Unauthorized />} />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="/admin/users" element={<UserManager />} />
+        <Route path="users" element={<UserManager />} />
       </Route>
 
       <Route path="/403" element={<Forbidden403 />} />
