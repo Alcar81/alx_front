@@ -4,6 +4,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
+import CardAdmin from "../../admin/CardAdmin";
 import "./AdminDashboard.css";
 
 const AdminDashboard: React.FC = () => {
@@ -21,12 +22,12 @@ const AdminDashboard: React.FC = () => {
           </header>
 
           <div className="admin-cards">
-            <div className="admin-card" onClick={() => navigate("/admin/users")}>
-              <h2>👥 Gestionnaire d'utilisateurs</h2>
-              <p>Voir, modifier et supprimer les comptes utilisateurs.</p>
-              <button className="admin-card-button">Ouvrir</button>
-            </div>
-
+          <CardAdmin
+            icon="👥"
+            title="Gestionnaire d'utilisateurs"
+            description="Voir, modifier et supprimer les comptes utilisateurs."
+            to="/admin/users"
+          />
             {/* Tu pourras ajouter d'autres cartes ici plus tard */}
           </div>
         </div>

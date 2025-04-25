@@ -2,6 +2,9 @@
 
 .admin-dashboard-main {
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .admin-header {
@@ -29,6 +32,10 @@
   box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
   transition: transform 0.2s ease;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .admin-card:hover {
@@ -37,6 +44,7 @@
 
 .admin-card h2 {
   margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 
 .admin-card-button {
@@ -47,8 +55,20 @@
   border: none;
   border-radius: 0.6rem;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .admin-card-button:hover {
   background-color: #0056b3;
+}
+
+@media (width <= 768px) {
+  .admin-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .admin-card {
+    width: 90%;
+  }
 }
