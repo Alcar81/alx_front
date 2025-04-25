@@ -9,7 +9,6 @@ import "./AdminDashboard.css";
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <>
