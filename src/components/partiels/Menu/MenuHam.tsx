@@ -62,9 +62,9 @@ const MenuHam: React.FC = () => {
 
             {user && (
               <>
-                {isAdmin && (
+                {isAdmin && 
                   <li><Link to="/admin/dashboard">Admin</Link></li>
-                )}
+                }
                 <li>
                   <span className="popup-link" onClick={handleLogout}>
                     Déconnexion

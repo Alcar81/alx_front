@@ -6,5 +6,5 @@ import useRoles from "../hooks/useRoles";
 export const ProtectedRoute = ({ children, roles }: { children: JSX.Element, roles: string[] }) => {
   const { hasAnyRole } = useRoles();
 
-  return hasAnyRole(...roles) ? children : <Navigate to="/unauthorized" replace />;
+  return hasAnyRole(...roles) ? children : <Navigate to="/Unauthorized" replace />;
 };
