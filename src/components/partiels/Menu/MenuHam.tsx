@@ -28,7 +28,7 @@ const MenuHam: React.FC = () => {
   };
 
   // ✅ Vérifie si l'utilisateur est admin
-  const isAdmin = user?.role === "admin" || user?.role?.includes?.("admin");
+  const isAdmin = user?.roles?.some((r) => r.toLowerCase() === "admin");
 
   return (
     <div

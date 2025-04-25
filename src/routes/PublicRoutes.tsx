@@ -1,4 +1,4 @@
-// src/routes/PublicRoutes.tsx
+// 📁 src/routes/PublicRoutes.tsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
@@ -22,10 +22,8 @@ const PublicRoutes: React.FC = () => {
       <Route path="/Connexion" element={<Login />} />      
       <Route path="/Inscription" element={<Register />} />     
       <Route path="*" element={<NotFound />} />
-      
     </Routes>
   );
 };
-
 
 export default PublicRoutes;

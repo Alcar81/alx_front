@@ -24,7 +24,7 @@ const MenuRight: React.FC = () => {
   };
 
   // ✅ Vérification si admin
-  const isAdmin = user?.role === "admin" || user?.role?.includes?.("admin");
+  const isAdmin = user?.roles?.some((r) => r.toLowerCase() === "admin");
 
   return (
     <div id="menu-right" className="light">

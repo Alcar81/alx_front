@@ -1,21 +1,23 @@
-// 📁 src/components/auth/RequireAuth.tsx
-
+// 📁 src/components/pages/auth/RequireAuth.tsx
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 
-const RequireAuth: React.FC = () => {
-  const { isLoggedIn, user } = useAuth();
+interface RequireAuthProps {
+  roles?: string[]; // 👈 optionnel
+  fallback?: React.ReactElement;
+}
 
-  if (!isLoggedIn) {
-    return <Navigate to="/connexion" replace />;
-  }
+const RequireAuth: React.FC<RequireAuthProps> = ({ roles, fallback = <Navigate to="/Connexion" />, }) => {
+  const { user, isLoggedIn } = useAuth();
 
-  if (!user || user.role.toUpperCase() !== "ADMIN") {
-    return <Navigate to="/403" replace />; // 🔒 Redirection vers une page non autorisée (à créer)
-  }
+  const hasAccess = () => {
+    if (!isLoggedIn) return false;
+    if (!roles) return true;
+    return user?.roles?.some((role: string) => roles.includes(role.toLowerCase()));
+  };
 
-  return <Outlet />;
+  return hasAccess() ? <Outlet /> : fallback;
 };
 
 export default RequireAuth;
