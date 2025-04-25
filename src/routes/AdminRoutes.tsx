@@ -23,3 +23,5 @@ const AdminRoutes: React.FC = () => {
     </Routes>
   );
 };
+
+export default AdminRoutes;
