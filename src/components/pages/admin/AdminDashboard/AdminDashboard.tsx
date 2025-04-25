@@ -1,4 +1,4 @@
-// 📌 src/components/pages/admin/AdminDashboard/AdminDashboard.tsx
+// 📁 src/components/pages/admin/AdminDashboard/AdminDashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import {
@@ -7,6 +7,7 @@ import {
   updateUser,
 } from "../../../../utils/requests";
 import "./AdminDashboard.css";
+import AdminOnly from "../../auth/AdminOnly";
 
 interface User {
   id: string;
@@ -116,85 +117,83 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  if (!user || user.role.toUpperCase() !== "ADMIN") {
-    return <div>🔒 Accès réservé aux administrateurs.</div>;
-  }
-
   return (
-    <div>
-      <h1>🛠️ Tableau de bord Admin</h1>
-      <p>👋 Bonjour {user.firstName} {user.lastName}</p>
+    <AdminOnly>
+      <div>
+        <h1>🛠️ Tableau de bord Admin</h1>
+        <p>👋 Bonjour {user?.firstName} {user?.lastName}</p>
 
-      <input
-        type="text"
-        placeholder="🔍 Rechercher un utilisateur..."
-        value={searchTerm}
-        onChange={handleSearch}
-        style={{ margin: "1rem 0", padding: "0.5rem", width: "100%" }}
-      />
+        <input
+          type="text"
+          placeholder="🔍 Rechercher un utilisateur..."
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{ margin: "1rem 0", padding: "0.5rem", width: "100%" }}
+        />
 
-      {loading ? (
-        <p>⏳ Chargement des utilisateurs...</p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : filteredUsers.length === 0 ? (
-        <p>Aucun utilisateur trouvé.</p>
-      ) : (
-        <table className="admin-dashboard">
-          <thead>
-            <tr>
-              <th onClick={() => handleSort("firstName")}>Prénom</th>
-              <th onClick={() => handleSort("lastName")}>Nom</th>
-              <th onClick={() => handleSort("email")}>Email</th>
-              <th onClick={() => handleSort("role")}>Rôle</th>
-              <th onClick={() => handleSort("createdAt")}>Créé le</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((u) => (
-              <tr key={u.id}>
-                <td>
-                  <input
-                    type="text"
-                    value={u.firstName}
-                    onChange={(e) => handleChange(e, u.id, "firstName")}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={u.lastName}
-                    onChange={(e) => handleChange(e, u.id, "lastName")}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="email"
-                    value={u.email}
-                    onChange={(e) => handleChange(e, u.id, "email")}
-                  />
-                </td>
-                <td>
-                  <select
-                    value={u.role}
-                    onChange={(e) => handleChange(e, u.id, "role")}
-                  >
-                    <option value="USER">USER</option>
-                    <option value="ADMIN">ADMIN</option>
-                  </select>
-                </td>
-                <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
-                <td>
-                  <button onClick={() => handleUpdate(u)}>💾 Modifier</button>
-                  <button onClick={() => handleDelete(u.id)}>🗑️ Supprimer</button>
-                </td>
+        {loading ? (
+          <p>⏳ Chargement des utilisateurs...</p>
+        ) : error ? (
+          <p style={{ color: "red" }}>{error}</p>
+        ) : filteredUsers.length === 0 ? (
+          <p>Aucun utilisateur trouvé.</p>
+        ) : (
+          <table className="admin-dashboard">
+            <thead>
+              <tr>
+                <th onClick={() => handleSort("firstName")}>Prénom</th>
+                <th onClick={() => handleSort("lastName")}>Nom</th>
+                <th onClick={() => handleSort("email")}>Email</th>
+                <th onClick={() => handleSort("role")}>Rôle</th>
+                <th onClick={() => handleSort("createdAt")}>Créé le</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+            </thead>
+            <tbody>
+              {filteredUsers.map((u) => (
+                <tr key={u.id}>
+                  <td>
+                    <input
+                      type="text"
+                      value={u.firstName}
+                      onChange={(e) => handleChange(e, u.id, "firstName")}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={u.lastName}
+                      onChange={(e) => handleChange(e, u.id, "lastName")}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="email"
+                      value={u.email}
+                      onChange={(e) => handleChange(e, u.id, "email")}
+                    />
+                  </td>
+                  <td>
+                    <select
+                      value={u.role}
+                      onChange={(e) => handleChange(e, u.id, "role")}
+                    >
+                      <option value="USER">USER</option>
+                      <option value="ADMIN">ADMIN</option>
+                    </select>
+                  </td>
+                  <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
+                  <td>
+                    <button onClick={() => handleUpdate(u)}>💾 Modifier</button>
+                    <button onClick={() => handleDelete(u.id)}>🗑️ Supprimer</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </AdminOnly>
   );
 };
 
