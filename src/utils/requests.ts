@@ -32,11 +32,11 @@ export async function post(endpoint: string, body: any) {
   }
 }
 
-// ✅ GET tous les utilisateurs ou filtrés par nom/email/rôle
+// ✅ GET tous les utilisateurs
 export const getAllUsers = async (token: string, filters = {}) => {
   try {
     const params = new URLSearchParams(filters as any).toString();
-    const res = await fetch(`/api/admin/users?${params}`, {
+    const res = await fetch(`${API_URL}/admin/users?${params}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "X-Test-Request": "true",
@@ -51,17 +51,23 @@ export const getAllUsers = async (token: string, filters = {}) => {
   }
 };
 
-// ✅ PATCH utilisateur
+// ✅ PATCH utilisateur (✅ envoie maintenant les rôles comme tableau)
 export const updateUser = async (id: string, updates: any, token: string) => {
   try {
-    const res = await fetch(`/api/admin/users/${id}`, {
+    const payload = {
+      ...updates,
+      roles: updates.roles || [], // ✅ on s'assure que roles est toujours un tableau
+    };
+
+    const res = await fetch(`${API_URL}/admin/users/${id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updates),
+      body: JSON.stringify(payload),
     });
+
     if (!res.ok) throw new Error("Échec de la mise à jour de l'utilisateur");
     return { success: true };
   } catch (err) {
@@ -73,7 +79,7 @@ export const updateUser = async (id: string, updates: any, token: string) => {
 // ✅ DELETE utilisateur
 export const deleteUserById = async (id: string, token: string) => {
   try {
-    const res = await fetch(`/api/admin/users/${id}`, {
+    const res = await fetch(`${API_URL}/admin/users/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -87,14 +93,14 @@ export const deleteUserById = async (id: string, token: string) => {
   }
 };
 
-// ✅ Export CSV local (frontend only)
+// ✅ Export CSV local
 export const exportUsersToCSV = (users: any[]) => {
-  const csvHeader = ["Prénom", "Nom", "Email", "Rôle", "Créé le"];
+  const csvHeader = ["Prénom", "Nom", "Email", "Rôles", "Créé le"];
   const csvRows = users.map(u => [
     u.firstName,
     u.lastName,
     u.email,
-    u.role,
+    (u.roles || []).join(", "), // ✅ multiple rôles affichés
     new Date(u.createdAt).toLocaleDateString("fr-CA"),
   ]);
   const csvContent = [csvHeader, ...csvRows]

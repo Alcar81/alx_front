@@ -1,13 +1,10 @@
-// 📌 src/components/pages/admin/UserManager/UserManager.tsx
+// 📁 src/components/pages/admin/UserManager/UserManager.tsx
+
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
-import {
-  getAllUsers,
-  deleteUserById,
-  updateUser,
-} from "../../../../utils/requests";
+import { getAllUsers, deleteUserById, updateUser } from "../../../../utils/requests";
 import "./UserManager.css";
 
 interface User {
@@ -15,9 +12,11 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
-  role: string;
+  roles: string[]; // ✅ tableau de rôles
   createdAt: string;
 }
+
+const AVAILABLE_ROLES = ["USER", "ADMIN"]; // ✅ Centralisé pour ajouter facilement plus tard
 
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
@@ -51,7 +50,9 @@ const UserManager: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (!token) return;
     const target = users.find((u) => u.id === id);
-    const confirmDelete = window.confirm(`🗑️ Supprimer ${target?.firstName} ${target?.lastName} ?`);
+    if (!target) return;
+
+    const confirmDelete = window.confirm(`🗑️ Supprimer ${target.firstName} ${target.lastName} ?`);
     if (!confirmDelete) return;
 
     const res = await deleteUserById(id, token);
@@ -64,15 +65,23 @@ const UserManager: React.FC = () => {
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    id: string,
-    key: keyof User
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, id: string, key: keyof User) => {
+    const value = e.target.value;
     setFilteredUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, [key]: e.target.value } : user
-      )
+      prev.map((user) => (user.id === id ? { ...user, [key]: value } : user))
+    );
+  };
+
+  const handleRoleToggle = (e: React.ChangeEvent<HTMLInputElement>, id: string, role: string) => {
+    setFilteredUsers((prev) =>
+      prev.map((user) => {
+        if (user.id !== id) return user;
+        const hasRole = user.roles.includes(role);
+        const newRoles = hasRole
+          ? user.roles.filter((r) => r !== role)
+          : [...user.roles, role];
+        return { ...user, roles: newRoles };
+      })
     );
   };
 
@@ -95,11 +104,9 @@ const UserManager: React.FC = () => {
     setSortOrder(newOrder);
 
     const sorted = [...filteredUsers].sort((a, b) => {
-      const aVal = a[key]?.toString().toLowerCase();
-      const bVal = b[key]?.toString().toLowerCase();
-      return newOrder === "asc"
-        ? aVal.localeCompare(bVal)
-        : bVal.localeCompare(aVal);
+      const aVal = a[key]?.toString().toLowerCase() || "";
+      const bVal = b[key]?.toString().toLowerCase() || "";
+      return newOrder === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
     });
 
     setFilteredUsers(sorted);
@@ -109,12 +116,11 @@ const UserManager: React.FC = () => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
     setFilteredUsers(
-      users.filter(
-        (u) =>
-          u.firstName.toLowerCase().includes(term) ||
-          u.lastName.toLowerCase().includes(term) ||
-          u.email.toLowerCase().includes(term) ||
-          u.role.toLowerCase().includes(term)
+      users.filter((u) =>
+        u.firstName.toLowerCase().includes(term) ||
+        u.lastName.toLowerCase().includes(term) ||
+        u.email.toLowerCase().includes(term) ||
+        u.roles.some((r) => r.toLowerCase().includes(term))
       )
     );
   };
@@ -146,7 +152,7 @@ const UserManager: React.FC = () => {
                   <th onClick={() => handleSort("firstName")}>Prénom</th>
                   <th onClick={() => handleSort("lastName")}>Nom</th>
                   <th onClick={() => handleSort("email")}>Email</th>
-                  <th onClick={() => handleSort("role")}>Rôle</th>
+                  <th>Rôles</th>
                   <th onClick={() => handleSort("createdAt")}>Date</th>
                   <th>Actions</th>
                 </tr>
@@ -154,14 +160,22 @@ const UserManager: React.FC = () => {
               <tbody>
                 {filteredUsers.map((u) => (
                   <tr key={u.id}>
-                    <td><input value={u.firstName} onChange={(e) => handleChange(e, u.id, "firstName")} /></td>
-                    <td><input value={u.lastName} onChange={(e) => handleChange(e, u.id, "lastName")} /></td>
-                    <td><input value={u.email} onChange={(e) => handleChange(e, u.id, "email")} /></td>
+                    <td><input value={u.firstName} onChange={(e) => handleInputChange(e, u.id, "firstName")} /></td>
+                    <td><input value={u.lastName} onChange={(e) => handleInputChange(e, u.id, "lastName")} /></td>
+                    <td><input value={u.email} onChange={(e) => handleInputChange(e, u.id, "email")} /></td>
                     <td>
-                      <select value={u.role} onChange={(e) => handleChange(e, u.id, "role")}>
-                        <option value="USER">USER</option>
-                        <option value="ADMIN">ADMIN</option>
-                      </select>
+                      <div className="checkbox-group">
+                        {AVAILABLE_ROLES.map((roleOption) => (
+                          <label key={roleOption} className="checkbox-label">
+                            <input
+                              type="checkbox"
+                              checked={u.roles.includes(roleOption)}
+                              onChange={(e) => handleRoleToggle(e, u.id, roleOption)}
+                            />
+                            {roleOption}
+                          </label>
+                        ))}
+                      </div>
                     </td>
                     <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
                     <td>
