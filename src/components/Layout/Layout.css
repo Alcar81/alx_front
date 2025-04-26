@@ -35,6 +35,10 @@ body, .layout {
   padding-top: 520px;
 }
 
+.footer {
+  margin-top: 20px;
+}
+
 @media (width <= 768px) {
   .page-with-header {
     padding-top: 1260px;
