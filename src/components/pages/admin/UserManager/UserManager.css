@@ -1,8 +1,41 @@
-.user-manager-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: auto;
+/* =========================
+   📌 Styles généraux de UsagerManager
+========================= */
+
+.user-manager-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
 }
+
+/* =========================
+     📌 Section d'Accueil
+  ========================= */
+
+  .user-manager-header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto 30px;
+  }
+
+  .user-manager-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .user-manager-header p {
+    font-size: 1.2rem;
+    margin: 15px 0;
+  }
 
 .user-manager-search {
   width: 100%;
@@ -59,8 +92,18 @@
 
 /* Responsive ajusté */
 @media (width <= 768px) {
-  .user-manager-container {
-    padding: 1rem;
+  .user-manager-header {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+
+  .user-manager-header h1 {
+    font-size: 2rem;
+  }
+
+  .user-manager-header p {
+    font-size: 1rem;
+    padding: 10px 0;
   }
 
   .user-manager-search {

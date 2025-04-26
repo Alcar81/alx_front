@@ -12,9 +12,10 @@ const AdminDashboard: React.FC = () => {
   return (
     <>
       <Header />
-      <main className="main page-with-header admin-dashboard-main">
+      
+      <main className="main page-with-header">
         <div className="admin-dashboard-page">
-          <header className="admin-header">
+          <header className="admin-dashboard-header">
             <h1>🛠️ <span className="highlight">Tableau de bord Admin</span></h1>
             <p>👋 Bonjour {user?.firstName} {user?.lastName}</p>
           </header>

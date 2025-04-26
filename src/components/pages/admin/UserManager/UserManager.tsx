@@ -128,10 +128,12 @@ const UserManager: React.FC = () => {
   return (
     <>
       <Header />
-      <main className="page-with-header">
-        <div className="user-manager-container">
-          <h1>👥 Gestionnaire d’utilisateurs</h1>
-          <p>Bonjour {user?.firstName} {user?.lastName}</p>
+      <main className="main page-with-header">
+        <div className="user-manager-page">
+          <header className="user-manager-header">
+            <h1>👥 Gestionnaire d’utilisateurs</h1>
+            <p>Bonjour {user?.firstName} {user?.lastName}</p>
+          </header>  
 
           <input
             type="text"
