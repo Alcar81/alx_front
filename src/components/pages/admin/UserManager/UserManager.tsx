@@ -194,11 +194,11 @@ const UserManager: React.FC = () => {
               </table>
              )}
           </section>
+          <section id="footer" className="home-footer">
+            <Footer />
+          </section>
         </div>
-      </main>
-      <section id="footer" className="home-footer">
-        <Footer />
-      </section>
+      </main>      
     </>
   );
 };
