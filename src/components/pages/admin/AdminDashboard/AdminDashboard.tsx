@@ -33,7 +33,9 @@ const AdminDashboard: React.FC = () => {
           </section>
         </div>
       </main>
-      <Footer />
+      <section id="footer" className="home-footer">
+        <Footer />
+      </section>
     </>
   );
 };
