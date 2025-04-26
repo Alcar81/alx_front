@@ -128,6 +128,7 @@ const UserManager: React.FC = () => {
   return (
     <>
       <Header />
+
       <main className="main page-with-header">
         <div className="user-manager-page">
           <header className="user-manager-header">
@@ -135,60 +136,64 @@ const UserManager: React.FC = () => {
             <p>Bonjour {user?.firstName} {user?.lastName}</p>
           </header>  
 
-          <input
-            type="text"
-            placeholder="🔍 Rechercher..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="user-manager-search"
-          />
+          <section id="search" className="user-manager-search">
+            <input
+              type="text"
+              placeholder="🔍 Rechercher..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="user-manager-search"
+            />
+          </section>
 
-          {loading ? (
-            <p>⏳ Chargement...</p>
-          ) : error ? (
-            <p className="error-text">{error}</p>
-          ) : (
-            <table className="user-table">
-              <thead>
-                <tr>
-                  <th onClick={() => handleSort("firstName")}>Prénom</th>
-                  <th onClick={() => handleSort("lastName")}>Nom</th>
-                  <th onClick={() => handleSort("email")}>Email</th>
-                  <th>Rôles</th>
-                  <th onClick={() => handleSort("createdAt")}>Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((u) => (
-                  <tr key={u.id}>
-                    <td><input value={u.firstName} onChange={(e) => handleInputChange(e, u.id, "firstName")} /></td>
-                    <td><input value={u.lastName} onChange={(e) => handleInputChange(e, u.id, "lastName")} /></td>
-                    <td><input value={u.email} onChange={(e) => handleInputChange(e, u.id, "email")} /></td>
-                    <td>
-                      <div className="checkbox-group">
-                        {AVAILABLE_ROLES.map((roleOption) => (
-                          <label key={roleOption} className="checkbox-label">
-                            <input
-                              type="checkbox"
-                              checked={u.roles.includes(roleOption)}
-                              onChange={(e) => handleRoleToggle(e, u.id, roleOption)}
-                            />
-                            {roleOption}
-                          </label>
-                        ))}
-                      </div>
-                    </td>
-                    <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
-                    <td>
-                      <button onClick={() => handleUpdate(u)}>💾</button>
-                      <button onClick={() => handleDelete(u.id)}>🗑️</button>
-                    </td>
+          <section id="table" className="user-manager-table">
+            {loading ? (
+              <p>⏳ Chargement...</p>
+            ) : error ? (
+              <p className="error-text">{error}</p>
+            ) : (
+              <table className="user-table">
+                <thead>
+                  <tr>
+                    <th onClick={() => handleSort("firstName")}>Prénom</th>
+                    <th onClick={() => handleSort("lastName")}>Nom</th>
+                    <th onClick={() => handleSort("email")}>Email</th>
+                    <th>Rôles</th>
+                    <th onClick={() => handleSort("createdAt")}>Date</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody>
+                  {filteredUsers.map((u) => (
+                    <tr key={u.id}>
+                      <td><input value={u.firstName} onChange={(e) => handleInputChange(e, u.id, "firstName")} /></td>
+                      <td><input value={u.lastName} onChange={(e) => handleInputChange(e, u.id, "lastName")} /></td>
+                      <td><input value={u.email} onChange={(e) => handleInputChange(e, u.id, "email")} /></td>
+                      <td>
+                        <div className="checkbox-group">
+                          {AVAILABLE_ROLES.map((roleOption) => (
+                            <label key={roleOption} className="checkbox-label">
+                              <input
+                                type="checkbox"
+                                checked={u.roles.includes(roleOption)}
+                                onChange={(e) => handleRoleToggle(e, u.id, roleOption)}
+                              />
+                              {roleOption}
+                            </label>
+                          ))}
+                        </div>
+                      </td>
+                      <td>{new Date(u.createdAt).toLocaleDateString("fr-CA")}</td>
+                      <td>
+                        <button onClick={() => handleUpdate(u)}>💾</button>
+                        <button onClick={() => handleDelete(u.id)}>🗑️</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+             )}
+          </section>
         </div>
       </main>
       <Footer />

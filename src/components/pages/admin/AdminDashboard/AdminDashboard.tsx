@@ -20,15 +20,17 @@ const AdminDashboard: React.FC = () => {
             <p>👋 Bonjour {user?.firstName} {user?.lastName}</p>
           </header>
 
-          <div className="admin-cards">
-          <CardAdmin
-            icon="👥"
-            title="Gestionnaire d'utilisateurs"
-            description="Voir, modifier et supprimer les comptes utilisateurs."
-            to="/admin/users"
-          />
-            {/* Tu pourras ajouter d'autres cartes ici plus tard */}
-          </div>
+          <section id="cards" className="admin-dashboard-cards">
+            <div className="admin-cards">
+            <CardAdmin
+              icon="👥"
+              title="Gestionnaire d'utilisateurs"
+              description="Voir, modifier et supprimer les comptes utilisateurs."
+              to="/admin/users"
+            />
+              {/* Tu pourras ajouter d'autres cartes ici plus tard */}
+            </div>
+          </section>
         </div>
       </main>
       <Footer />
