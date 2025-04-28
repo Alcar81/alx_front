@@ -2,7 +2,7 @@
 
 import { render, screen } from "@testing-library/react";
 import { configSchema } from "@/config/configSchema"; // ✅ validation Zod ici
-import mockConfigs, { MockConfig } from "./__tests__/mockConfigs";
+import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
 if (process.env.NODE_ENV === "test") {
   require("dotenv").config();

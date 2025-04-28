@@ -1,6 +1,4 @@
-// 📁 src/__tests__/mockConfigs.ts
-
-// 📁 src/__tests__/mockConfigs.ts
+// 📁 src/mocks/mockConfigs.ts
 
 // ✅ Définir le type MockConfig pour mieux typer les objets
 export interface MockConfig {
