@@ -1,19 +1,18 @@
-// 📁 jest.config.ts
-
+// 📁 src/jest.config.ts
 import type { Config } from "@jest/types";
 
 const config: Config.InitialOptions = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.jest.json" // 👈 ici !!
+    }
+  },
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
-  },
-  setupFilesAfterEnv: [
-    "<rootDir>/src/setupTests.ts" // 🛠️ Ton vrai fichier de setup ici
-  ],
+  setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"]
 };
 
 export default config;
