@@ -6,7 +6,7 @@ const config: Config.InitialOptions = {
   testEnvironment: "jsdom",
   globals: {
     "ts-jest": {
-      tsconfig: "tsconfig.jest.json"  // 🔥 Spécifie ici d'utiliser le bon tsconfig
+      tsconfig: "tsconfig.jest.json"  // 🔥 Spécifie ici ton tsconfig pour les tests
     }
   },
   moduleNameMapper: {
