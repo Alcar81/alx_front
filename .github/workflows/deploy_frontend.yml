@@ -54,6 +54,15 @@ jobs:
       # Étape 4 - Install dependencies     
       - name: 4 - Install dependencies
         run: npm install
+      
+      - name: 4.1 - Vérification de jsdom
+        run: |
+          if ! npm ls jsdom >/dev/null 2>&1; then
+            echo "🔵 jsdom manquant, installation en cours..."
+            npm install --save-dev jsdom
+          else
+            echo "✅ jsdom déjà installé."
+          fi
 
       # Étape 5 - Exécuter les tests   
       - name: 5 - Exécuter les tests
