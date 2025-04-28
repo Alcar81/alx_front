@@ -1,16 +1,16 @@
 // 📁 src/setupTests.ts
 
-// ✅ Ajoute toutes les assertions personnalisées comme toBeInTheDocument, toHaveAttribute, etc.
+// ✅ Setup pour les assertions personnalisées
 import "@testing-library/jest-dom";
 
-// ✅ (Optionnel) Mock des variables d'environnement pour les tests qui attendent un config valide
-process.env.REACT_APP_API_URL = process.env.REACT_APP_API_URL || "https://localhost/api";
-process.env.REACT_APP_FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL || "https://localhost:3000";
+// ✅ Mock de l'environnement d'exécution
+process.env.REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:7001/api";
+process.env.REACT_APP_FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
 process.env.REACT_APP_WEBSITE_NAME = process.env.REACT_APP_WEBSITE_NAME || "TestApp";
 process.env.REACT_APP_MAINTENANCE_MODE = process.env.REACT_APP_MAINTENANCE_MODE || "false";
 process.env.REACT_APP_ENABLE_DEBUG = process.env.REACT_APP_ENABLE_DEBUG || "false";
 
-// ✅ (Optionnel) Évite que des erreurs non-catchées fassent planter tout le test
+// (optionnel) Pour capter des erreurs non catchées
 process.on("unhandledRejection", (reason, promise) => {
   console.error("⚠️ Unhandled Rejection during tests:", reason);
 });
