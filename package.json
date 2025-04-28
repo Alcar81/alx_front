@@ -23,13 +23,15 @@
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zod": "^3.24.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "test": "REACT_APP_API_URL=http://localhost:7001/api REACT_APP_FRONTEND_URL=http://localhost:3000 REACT_APP_WEBSITE_NAME=TestApp react-scripts test",
+    "test:config": "ts-node src/__tests__/testConfigReal.ts",
     "lint:css": "stylelint '**/*.css' --fix"
   },
   "eslintConfig": {
@@ -52,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/dotenv": "^6.1.1",
     "@types/react-router-dom": "^5.3.3",
     "prettier": "^3.4.1",
     "stylelint": "^16.10.0",
