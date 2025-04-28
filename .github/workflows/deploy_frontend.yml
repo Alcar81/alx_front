@@ -63,7 +63,16 @@ jobs:
           else
             echo "✅ jsdom déjà installé."
           fi
-
+      
+      - name: 4.2 - Correction jest-environment-jsdom
+        run: |
+          if ! npm ls jest-environment-jsdom >/dev/null 2>&1; then
+            echo "🔵 jest-environment-jsdom manquant, installation en cours..."
+            npm install --save-dev jest-environment-jsdom@28.1.3
+          else
+            echo "✅ jest-environment-jsdom déjà installé."
+          fi
+    
       # Étape 5 - Exécuter les tests   
       - name: 5 - Exécuter les tests
         env:
