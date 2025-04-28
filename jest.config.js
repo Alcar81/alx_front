@@ -1,9 +1,9 @@
-export default {
+module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   globals: {
     "ts-jest": {
-      tsconfig: "tsconfig.jest.json"  // 🔥 ICI, indique qu'on utilise tsconfig.jest.json
+      tsconfig: "tsconfig.jest.json"
     }
   },
   moduleNameMapper: {
