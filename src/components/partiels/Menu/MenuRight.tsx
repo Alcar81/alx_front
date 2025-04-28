@@ -1,30 +1,13 @@
-// src/components/partiels/Menu/MenuRight.tsx
-import React, { useState, useContext } from "react";
+// 📁 src/components/partiels/Menu/MenuRight.tsx
+
+import React from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Menu.css";
-import { ThemeContext } from "../../../theme/ThemeContext";
-import { useUserContext } from "../../../contexts/UserContext";
+import AccountMenu from "./AccountMenu"; // 🔥 nouveau import
 
 const MenuRight: React.FC = () => {
-  const [showSearch, setShowSearch] = useState(false);
-  const [showAccountMenu, setShowAccountMenu] = useState(false);
-  const { mode, toggleColorMode } = useContext(ThemeContext);
-  const { user, logout } = useUserContext();
-
-  const handleLogout = () => {
-    try {
-      logout();
-      window.location.href = "/Accueil";
-    } catch (error) {
-      console.error("❌ Erreur lors de la déconnexion :", error);
-      alert("Une erreur est survenue lors de la déconnexion.");
-    }
-  };
-
-  // ✅ Vérification si admin
-  const isAdmin = user?.roles?.some((r) => r.toLowerCase() === "admin");
+  const [showSearch, setShowSearch] = React.useState(false);
 
   return (
     <div id="menu-right" className="light">
@@ -36,7 +19,6 @@ const MenuRight: React.FC = () => {
           </ul>
         </nav>
 
-        {/* Recherche */}
         <div className="menu-search" onClick={() => setShowSearch(!showSearch)}>
           <SearchIcon style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }} />
         </div>
@@ -46,36 +28,8 @@ const MenuRight: React.FC = () => {
           </div>
         )}
 
-        {/* Compte */}
-        <div
-          id="account-icon"
-          className={`menu-account ${showAccountMenu ? "active" : ""}`}
-          onClick={() => setShowAccountMenu(!showAccountMenu)}
-        >
-          <AccountCircleIcon style={{ fontSize: "25px", color: "#007bff", cursor: "pointer" }} />
-          {showAccountMenu && (
-            <ul className="dropdown-menu account-dropdown" onMouseLeave={() => setShowAccountMenu(false)}>
-              {user ? (
-                <>
-                  {isAdmin && 
-                    <li><Link to="/admin/dashboard">Admin</Link></li>
-                  }
-                  <li><span onClick={handleLogout}>Déconnexion</span></li>
-                </>
-              ) : (
-                <>
-                  <li><Link to="/Inscription">Inscription</Link></li>
-                  <li><Link to="/Connexion">Connexion</Link></li>
-                </>
-              )}
-              <li>
-                <span onClick={toggleColorMode}>
-                  {mode === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}
-                </span>
-              </li>
-            </ul>
-          )}
-        </div>
+        {/* Compte utilisateur */}
+        <AccountMenu mode="right" />
       </div>
     </div>
   );

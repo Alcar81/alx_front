@@ -74,10 +74,9 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  position: relative; /* ✅ Nécessaire pour le positionnement du menu dropdown */
+  position: relative;
 }
 
-/* ✅ Ajuste la taille des icônes */
 .menu-search svg,
 .menu-account svg {
   width: 24px;
@@ -89,8 +88,8 @@
 ========================= */
 .search-box {
   position: absolute;
-  top: calc(100% + 6px); /* ✅ Place le menu juste sous la ligne grise */
-  right: 380px; /* ✅ Ajustement vers la gauche pour s'aligner avec l'icône */
+  top: calc(100% + 6px);
+  right: 380px;
   max-width: 200px;
   width: 200px;
   background-color: var(--primary-back-color);
@@ -110,41 +109,80 @@
 }
 
 /* =========================
-   📌 Dropdown du Compte (Grand Écran)
+   📌 Account Menu - Grand écran
 ========================= */
+#account-menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.account-menu-right {
+  margin-left: 10px;
+}
+
+.account-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--primary-text-color);
+}
+
 .account-dropdown {
   position: absolute;
-  top: calc(100% + 11px); /* ✅ Place le menu juste sous la ligne grise */
-  right: 78px; /* ✅ Ajustement vers la gauche pour s'aligner avec l'icône */
-  text-align: right;
-  min-width: 150px;
+  top: calc(100% + 8px);
+  right: 0;
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
-  padding: 10px;
   box-shadow: var(--box-shadow);
+  border-radius: 5px;
+  padding: 8px;
+  min-width: 150px;
+  text-align: right;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transform: translateX(0); /* ✅ Supprime le centrage */
+  transform: translateY(-5px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .menu-account.active .account-dropdown {
   opacity: 1;
   visibility: visible;
-  transform: translateX(50%);
+  transform: translateY(0);
+}
+
+.account-dropdown li {
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+.account-dropdown li:last-child {
+  margin-bottom: 0;
+}
+
+.account-dropdown li a,
+.account-dropdown li span {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.account-dropdown li a:hover,
+.account-dropdown li span:hover {
+  color: var(--secondary-color);
 }
 
 /* =========================
    📌 Menu Hamburger (Mobile)
 ========================= */
-
-/* ✅ Caché en mode grand écran */
 .menu-ham-container {
   display: none;
 }
 
-/* ✅ Affiché uniquement en mobile */
+/* ✅ Spécial Mobile */
 @media (width <= 768px) {
   .menu-ham-container {
     display: flex !important;
@@ -190,6 +228,8 @@
   .menu-ham-dropdown ul li {
     padding: 8px 12px;
     display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .menu-ham-dropdown ul li a,
@@ -214,5 +254,17 @@
 
   .menu-center {
     margin-left: 0;
+  }
+
+  /* ✅ Affichage Prénom sur mobile */
+  .account-menu-ham {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .account-menu-ham .account-name {
+    font-weight: bold;
+    font-size: 1rem;
   }
 }
