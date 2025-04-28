@@ -44,7 +44,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test": "REACT_APP_API_URL=http://localhost:7001/api REACT_APP_FRONTEND_URL=http://localhost:3000 REACT_APP_WEBSITE_NAME=TestApp jest --config jest.config.js",
+    "test": "REACT_APP_API_URL=http://localhost:7001/api REACT_APP_FRONTEND_URL=http://localhost:3000 REACT_APP_WEBSITE_NAME=TestApp jest --config jest.config.json",
     "lint:css": "stylelint '**/*.css' --fix"
   },
   "eslintConfig": {
