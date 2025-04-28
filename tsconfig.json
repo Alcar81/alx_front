@@ -1,5 +1,3 @@
-// tsconfig.json est un fichier de configuration TypeScript qui permet de définir les options de compilation du projet.
-
 {
   "compilerOptions": {
     "target": "es6",  // Améliore la compatibilité avec les navigateurs modernes
@@ -24,6 +22,6 @@
       "@/*": ["*"], 
     }
   },
-  "include": ["src", "tsconfig.jest.json", "jest.config.ts"],
+  "include": ["src", "tsconfig.jest.json", "jest.config.js"],
   "exclude": ["node_modules", "dist", "build"] // Exclusion des dossiers inutiles pour TypeScript
 }
