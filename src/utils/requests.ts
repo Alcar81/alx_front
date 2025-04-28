@@ -36,7 +36,7 @@ export async function post(endpoint: string, body: any) {
 export const getAllUsers = async (token: string, filters = {}) => {
   try {
     const params = new URLSearchParams(filters as any).toString();
-    const res = await fetch(`${API_URL}/admin/users?${params}`, {
+    const res = await fetch(`${API_URL}/users?${params}`, {  // <-- Corrigé ici
       headers: {
         Authorization: `Bearer ${token}`,
         "X-Test-Request": "true",
@@ -51,15 +51,15 @@ export const getAllUsers = async (token: string, filters = {}) => {
   }
 };
 
-// ✅ PATCH utilisateur (✅ envoie maintenant les rôles comme tableau)
+// ✅ PATCH utilisateur (avec rôles en tableau)
 export const updateUser = async (id: string, updates: any, token: string) => {
   try {
     const payload = {
       ...updates,
-      roles: updates.roles || [], // ✅ on s'assure que roles est toujours un tableau
+      roles: updates.roles || [],
     };
 
-    const res = await fetch(`${API_URL}/admin/users/${id}`, {
+    const res = await fetch(`${API_URL}/users/${id}`, {  // <-- Corrigé ici
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -76,10 +76,34 @@ export const updateUser = async (id: string, updates: any, token: string) => {
   }
 };
 
+// ✅ PATCH - changer son mot de passe
+export const changePassword = async (
+  id: string,
+  passwordData: { currentPassword: string; newPassword: string },
+  token: string
+) => {
+  try {
+    const res = await fetch(`${API_URL}/users/${id}/password`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(passwordData),
+    });
+
+    if (!res.ok) throw new Error("Échec du changement de mot de passe");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false };
+  }
+};
+
 // ✅ DELETE utilisateur
 export const deleteUserById = async (id: string, token: string) => {
   try {
-    const res = await fetch(`${API_URL}/admin/users/${id}`, {
+    const res = await fetch(`${API_URL}/users/${id}`, {  // <-- Corrigé ici
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,7 +124,7 @@ export const exportUsersToCSV = (users: any[]) => {
     u.firstName,
     u.lastName,
     u.email,
-    (u.roles || []).join(", "), // ✅ multiple rôles affichés
+    (u.roles || []).join(", "),  // 🔥 sécuritaire
     new Date(u.createdAt).toLocaleDateString("fr-CA"),
   ]);
   const csvContent = [csvHeader, ...csvRows]
