@@ -22,6 +22,6 @@
       "@/*": ["*"], 
     }
   },
-  "include": ["src", "tsconfig.jest.json", "jest.config.json"],
+  "include": ["src", "tsconfig.jest.json", "jest.config.js"],
   "exclude": ["node_modules", "dist", "build"] // Exclusion des dossiers inutiles pour TypeScript
 }
