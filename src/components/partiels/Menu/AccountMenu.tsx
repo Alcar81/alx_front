@@ -5,10 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../../../theme/ThemeContext";
 import { useUserContext } from "../../../contexts/UserContext";
-import "./Menu.css"; // 📌 important : pour garder les styles
+import { useMaintenance } from "../../../hooks/useMaintenance"; // 🔥 Ajouté
+import "./Menu.css";
 
 interface AccountMenuProps {
-  mode: "right" | "ham"; // right = menu desktop / ham = menu hamburger
+  mode: "right" | "ham";
 }
 
 const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
@@ -16,6 +17,9 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
   const { user, logout } = useUserContext();
   const { mode: themeMode, toggleColorMode } = useContext(ThemeContext);
   const navigate = useNavigate();
+  const { isMaintenanceActive } = useMaintenance(); // 🔥 Ajouté
+
+  if (isMaintenanceActive) return null; // 🔥 Menu caché si maintenance active
 
   const handleLogout = () => {
     try {
@@ -35,7 +39,6 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
       onClick={() => setShowMenu(!showMenu)}
       onMouseLeave={() => setShowMenu(false)}
     >
-      {/* Affichage prénom ou icône */}
       <div className="account-label">
         {user ? (
           <span className="account-name">{user.firstName}</span>
@@ -44,31 +47,18 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
         )}
       </div>
 
-      {/* Dropdown */}
       {showMenu && (
         <ul className="dropdown-menu account-dropdown">
           {user ? (
             <>
-              <li>
-                <Link to="/profile">👤 Mon Profil</Link>
-              </li>
-              {isAdmin && (
-                <li>
-                  <Link to="/admin/dashboard">⚙️ Admin</Link>
-                </li>
-              )}
-              <li>
-                <span onClick={handleLogout}>🚪 Déconnexion</span>
-              </li>
+              <li><Link to="/profile">👤 Mon Profil</Link></li>
+              {isAdmin && <li><Link to="/admin/dashboard">⚙️ Admin</Link></li>}
+              <li><span onClick={handleLogout}>🚪 Déconnexion</span></li>
             </>
           ) : (
             <>
-              <li>
-                <Link to="/Connexion">Connexion</Link>
-              </li>
-              <li>
-                <Link to="/Inscription">Inscription</Link>
-              </li>
+              <li><Link to="/Connexion">Connexion</Link></li>
+              <li><Link to="/Inscription">Inscription</Link></li>
             </>
           )}
           <li className="divider"></li>

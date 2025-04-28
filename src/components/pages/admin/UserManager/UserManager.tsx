@@ -4,22 +4,26 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
-import { getAllUsers, deleteUserById, updateUser } from "../../../../utils/requests";
+import { useAdminApi } from "@/api";
+import { useNavigate } from "react-router-dom"; // ✅ Ajouté
 import "./UserManager.css";
+
+const { getAllUsers, deleteUserById, updateUser } = useAdminApi();
 
 interface User {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  roles: string[]; // ✅ tableau de rôles
+  roles: string[];
   createdAt: string;
 }
 
-const AVAILABLE_ROLES = ["USER", "ADMIN"]; // ✅ Centralisé pour ajouter facilement plus tard
+const AVAILABLE_ROLES = ["USER", "ADMIN"];
 
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
+  const navigate = useNavigate(); // ✅ Ajouté
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,6 +129,10 @@ const UserManager: React.FC = () => {
     );
   };
 
+  const handleViewProfile = (id: string) => {
+    navigate(`/profile/${id}`); // ✅ Aller au profil de l'utilisateur
+  };
+
   return (
     <>
       <Header />
@@ -187,6 +195,7 @@ const UserManager: React.FC = () => {
                       <td>
                         <button onClick={() => handleUpdate(u)}>💾</button>
                         <button onClick={() => handleDelete(u.id)}>🗑️</button>
+                        <button onClick={() => handleViewProfile(u.id)}>👁️ Voir</button> {/* 👈 Ajouté */}
                       </td>
                     </tr>
                   ))}
@@ -194,6 +203,7 @@ const UserManager: React.FC = () => {
               </table>
              )}
           </section>
+
           <section id="footer" className="footer">
             <Footer />
           </section>

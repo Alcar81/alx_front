@@ -1,0 +1,81 @@
+/* =========================
+   📌 Menu Compte Utilisateur
+========================= */
+#account-menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.account-menu-right {
+  margin-left: 10px;
+}
+
+.account-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--primary-text-color);
+}
+
+/* Dropdown */
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: var(--primary-back-color);
+  border: 1px solid #ddd;
+  box-shadow: var(--box-shadow);
+  border-radius: 5px;
+  padding: 8px;
+  min-width: 150px;
+  text-align: right;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.account-menu.active .account-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.account-dropdown li {
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+.account-dropdown li:last-child {
+  margin-bottom: 0;
+}
+
+.account-dropdown li a,
+.account-dropdown li span {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.account-dropdown li a:hover,
+.account-dropdown li span:hover {
+  color: var(--secondary-color);
+}
+
+/* Mobile Prénom */
+@media (width <= 768px) {
+  .account-menu-ham {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .account-menu-ham .account-name {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+}

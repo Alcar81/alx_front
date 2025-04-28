@@ -1,5 +1,5 @@
-// src/components/pages/auth/Register/mui_sign_up.tsx
 // 📁 src/components/pages/auth/Register/mui_sign_up.tsx
+
 import React from "react";
 import {
   Box, Button, CssBaseline, Divider, FormControl,
@@ -12,8 +12,10 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import { post } from "../../../../utils/requests";
+import { useAuthApi } from "@/api";
 import "../../auth/authStyles.css";
+
+const { register } = useAuthApi();
 
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
@@ -48,7 +50,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     setLoading(true);
 
     try {
-      await post("/register", {
+      await register({
         firstName,
         lastName,
         email: email.toLowerCase().trim(),

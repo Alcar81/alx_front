@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Menu.css";
-import AccountMenu from "./AccountMenu"; // 🔥 nouveau import
+import "./search-menu.css";
+import AccountMenu from "./AccountMenu"; // ✅ Import pour gestion du compte
 
 const MenuHam: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -29,13 +30,16 @@ const MenuHam: React.FC = () => {
         <div className="menu-ham-dropdown">
           <ul>
             <li><AccountMenu mode="ham" /></li>
+
             <li className="divider"></li>
             <li><Link to="/Accueil">Accueil</Link></li>
             <li><Link to="/À-propos">À propos</Link></li>
             <li><Link to="/Contact">Nous joindre</Link></li>
             <li>
-              <SearchIcon />
-              <Link to="/search">Rechercher</Link>
+              <Link to="/search">
+                <SearchIcon style={{ verticalAlign: "middle", marginRight: "6px" }} />
+                Rechercher
+              </Link>
             </li>
           </ul>
         </div>

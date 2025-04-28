@@ -61,6 +61,20 @@ jobs:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: npm test
 
+      # Étape 6.0 - Générer le fichier .env local pour le build React
+      - name: 6.0 - Générer le fichier .env local
+        run: |
+          echo "Génération du fichier .env local pour React..."
+          cat <<EOT > .env
+            REACT_APP_API_URL=${{ env.REACT_APP_API_URL }}
+            REACT_APP_FRONTEND_URL=${{ env.REACT_APP_FRONTEND_URL }}
+            REACT_APP_ENV=${{ env.REACT_APP_ENV }}
+            # Options techniques
+            REACT_APP_ENABLE_DEBUG=false
+            REACT_APP_MAINTENANCE_MODE=false
+          EOT
+            cat .env
+
       # Étape 6.1 - Nettoyer le répertoire `build` local avant le nouveau build
       - name: 6.1 - Nettoyer le répertoire build local
         run: |

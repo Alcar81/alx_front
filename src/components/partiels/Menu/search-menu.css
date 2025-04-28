@@ -1,0 +1,37 @@
+/* =========================
+   📌 Zone Recherche
+========================= */
+.menu-search {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-search svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Champ Recherche */
+.search-box {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 380px;
+  max-width: 200px;
+  width: 200px;
+  background-color: var(--primary-back-color);
+  border: 1px solid #ddd;
+  padding: 5px;
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.search-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

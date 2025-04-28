@@ -1,4 +1,5 @@
 // 📁 src/components/pages/auth/Login/mui_sign_in.tsx
+
 import React from "react";
 import {
   Box, Button, CssBaseline, Divider, FormControl,
@@ -11,10 +12,11 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import { post } from "../../../../utils/requests";
-import { useAuth } from "../../../../hooks/useAuth";
+import { useUserContext } from "@/contexts/UserContext";
+import { useAuthApi } from "@/api";
 import "../../auth/authStyles.css";
 
+// ✅ Bouton de fermeture
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
     <CloseIcon />
@@ -23,7 +25,9 @@ const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login: loginApi } = useAuthApi(); // 🔥 login de l'API
+  const { login: loginUserContext } = useUserContext(); // 🔥 login du contexte utilisateur
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [message, setMessage] = React.useState("");
@@ -40,12 +44,12 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setMessage("");
 
     try {
-      const data = await post("/login", {
+      const data = await loginApi({
         email: email.toLowerCase().trim(),
         password,
       });
 
-      login(
+      loginUserContext(
         {
           firstName: data.firstName || "",
           lastName: data.lastName || "",
@@ -57,7 +61,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         data.token
       );
 
-      navigate("/Accueil");
+      navigate("/Accueil"); // ✅ Rediriger après connexion
     } catch (err: any) {
       const errMsg = (err?.message || "").toLowerCase();
 

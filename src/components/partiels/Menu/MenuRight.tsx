@@ -3,11 +3,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
+import { useMaintenance } from "../../../hooks/useMaintenance"; // 🔥 Ajouté
+import AccountMenu from "./AccountMenu";
 import "./Menu.css";
-import AccountMenu from "./AccountMenu"; // 🔥 nouveau import
 
 const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = React.useState(false);
+  const { isMaintenanceActive } = useMaintenance(); // 🔥 Ajouté
+
+  if (isMaintenanceActive) return null; // 🔥 Menu caché si maintenance active
 
   return (
     <div id="menu-right" className="light">
@@ -28,7 +32,6 @@ const MenuRight: React.FC = () => {
           </div>
         )}
 
-        {/* Compte utilisateur */}
         <AccountMenu mode="right" />
       </div>
     </div>

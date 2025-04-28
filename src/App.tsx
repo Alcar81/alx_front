@@ -1,41 +1,28 @@
 // src/App.tsx
+
 import React from "react";
 import "./App.css";
-import config from "./config/config";
+import { useConfig } from "./hooks/useConfig"; // 👈 Nouveau import
 import Maintenance from "./components/pages/Maintenance/Maintenance";
 import Layout from "./components/Layout/Layout";
 
-// Fonction utilitaire pour valider les configurations importantes
-const validateConfig = (): string[] => {
-  const errors: string[] = [];
-
-  if (!config.REACT_APP_API_URL) {
-    errors.push("REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts");
-  }
-  if (!config.REACT_APP_FRONTEND_URL) {
-    errors.push("REACT_APP_FRONTEND_URL n'est pas défini dans le fichier .env ou config.ts");
-  }
-  if (!config.REACT_APP_WEBSITE_NAME) {
-    errors.push("REACT_APP_WEBSITE_NAME n'est pas défini dans le fichier .env ou config.ts");
-  }
-
-  if (errors.length > 0) {
-    console.error("Erreurs de configuration détectées :", errors);
-  }
-
-  return errors;
-};
-
 const App: React.FC = () => {
-  const isMaintenance = config.REACT_APP_MAINTENANCE_MODE;
+  const { API_URL, FRONTEND_URL, WEBSITE_NAME, ENABLE_DEBUG, MAINTENANCE_MODE } = useConfig();
+
+  const validateConfig = (): string[] => {
+    const errors: string[] = [];
+    if (!API_URL) errors.push("REACT_APP_API_URL est manquant.");
+    if (!FRONTEND_URL) errors.push("REACT_APP_FRONTEND_URL est manquant.");
+    if (!WEBSITE_NAME) errors.push("REACT_APP_WEBSITE_NAME est manquant.");
+    return errors;
+  };
+
   const errors = validateConfig();
 
-  // Si le mode maintenance est activé, affiche la page de maintenance
-  if (isMaintenance) {
+  if (MAINTENANCE_MODE) {
     return <Maintenance />;
   }
 
-  // Si des erreurs de configuration sont détectées, affiche une page d'erreur explicite
   if (errors.length > 0) {
     return (
       <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
@@ -46,17 +33,15 @@ const App: React.FC = () => {
             <li key={index}>{error}</li>
           ))}
         </ul>
-        <p>Veuillez corriger ces erreurs avant de continuer.</p>
+        <p>Corrigez votre fichier .env avant de continuer.</p>
       </div>
     );
   }
 
-  // Si le mode debug est activé, affiche la configuration dans la console
-  if (config.REACT_APP_ENABLE_DEBUG) {
-    console.log("Mode debug activé. Configuration actuelle :", config);
+  if (ENABLE_DEBUG) {
+    console.log("🧪 Mode debug activé :", { API_URL, FRONTEND_URL, WEBSITE_NAME });
   }
 
-  // Charge le layout principal si tout est correct
   return <Layout />;
 };
 

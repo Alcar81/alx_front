@@ -21,7 +21,7 @@
     // 📌 Ajout des alias pour éviter les imports relatifs longs
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"], 
+      "@/*": ["*"], 
     }
   },
   "include": ["src"],

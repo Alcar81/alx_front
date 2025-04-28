@@ -1,4 +1,5 @@
 // 📁 src/contexts/UserContext.tsx
+
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 // 🔐 Interface pour un utilisateur
@@ -7,7 +8,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  roles: string[]; // 🔄 Maintenant un tableau de rôles
+  roles: string[]; // Plusieurs rôles
   createdAt: string;
 }
 
@@ -21,7 +22,7 @@ export interface AuthContextType {
 }
 
 // 📦 Création du contexte
-export const UserContext = createContext<AuthContextType | undefined>(undefined);
+const UserContext = createContext<AuthContextType | undefined>(undefined);
 
 // ✅ Provider global
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -36,8 +37,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         setUser(JSON.parse(storedUser));
         setToken(storedToken);
-      } catch (e) {
-        console.error("❌ Erreur de parsing localStorage :", e);
+      } catch (error) {
+        console.error("❌ Erreur de parsing localStorage :", error);
       }
     }
   }, []);
@@ -54,7 +55,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/Accueil"; // ou useNavigate si tu veux une redirection contrôlée
   };
 
   const isLoggedIn = !!user && !!token;
@@ -66,11 +66,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-// ✅ Hook exporté correctement
+// ✅ Hook exporté proprement
 export const useUserContext = (): AuthContextType => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUserContext doit être utilisé dans UserProvider");
+    throw new Error("useUserContext doit être utilisé dans un UserProvider");
   }
   return context;
 };
