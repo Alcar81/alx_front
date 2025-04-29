@@ -32,6 +32,7 @@ const UserManager: React.FC = () => {
   const [sortKey, setSortKey] = useState<keyof User>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchUsers = async () => {
       if (!token) return;
