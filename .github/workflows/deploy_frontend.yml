@@ -322,10 +322,26 @@ jobs:
               done
 
               echo "[INFO - 14] 💤 Pause de stabilisation après détection du port..."
-              sleep 30
+              sleep 10
+              
+              echo "[INFO - 14] 🔐 Génération du ADMIN_TEST_TOKEN pour les tests frontend..."
+              ADMIN_TEST_TOKEN=\$(docker exec "\$CONTAINER_BACKEND_NAME" node /app/scripts/dev-only/generateAdminToken.js | tail -n 1)
+
+              if [ -z "\$ADMIN_TEST_TOKEN" ]; then
+                echo "[ERROR - 14] ❌ Impossible de générer ADMIN_TEST_TOKEN" >&2
+                exit 1
+              fi
+              echo "[OK - 14] ✅ Token généré."
+
+              docker exec "\$CONTAINER_BACKEND_NAME" bash -c "
+                sed -i '/^ADMIN_TEST_TOKEN=/d' /app/.env && \
+                echo 'ADMIN_TEST_TOKEN=\$ADMIN_TEST_TOKEN' >> /app/.env
+              "
+
+              docker exec "\$CONTAINER_BACKEND_NAME" grep ADMIN_TEST_TOKEN /app/.env || echo "[WARN - 14] ⚠️ Le token n'a pas été ajouté dans .env"
 
               echo "[INFO - 14] 🧪 Exécution de testComplet.js..."
-              if docker exec "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js; then
+              if docker exec -e ADMIN_TEST_TOKEN="\$ADMIN_TEST_TOKEN" "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js --debug; then
                 echo "[SUCCESS - 14] ✅ Tous les tests post-déploiement ont réussi 🎉"
               else
                 echo "[ERROR - 14] ❌ Le testComplet.js a échoué !" >&2
@@ -340,6 +356,7 @@ jobs:
             fi
 
             echo "✅ Déploiement terminé avec succès !"
+              
           EOF
 
             
