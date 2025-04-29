@@ -1,8 +1,11 @@
+// src/__tests__/configValidation.test.ts
+
+import getConfig from "@/config/config";
 import { configSchema } from "@/config/configSchema";
-import config from "@/config/config";
 
 describe("Validation du fichier réel config.ts", () => {
   it("doit être valide selon le schéma configSchema", () => {
+    const config = getConfig(); // 🔥 Appelle la fonction ici
     const parsed = configSchema.safeParse(config);
 
     if (!parsed.success) {

@@ -2,12 +2,12 @@
 
 import React from "react";
 import "./App.css";
-import { useConfig } from "./hooks/useConfig"; // 👈 Nouveau import
+import getConfig from "@/config/getConfig";
 import Maintenance from "./components/pages/Maintenance/Maintenance";
 import Layout from "./components/Layout/Layout";
 
 const App: React.FC = () => {
-  const { API_URL, FRONTEND_URL, WEBSITE_NAME, ENABLE_DEBUG, MAINTENANCE_MODE } = useConfig();
+  const { API_URL, FRONTEND_URL, WEBSITE_NAME, ENABLE_DEBUG, MAINTENANCE_MODE } = getConfig(); // 🔥 ici
 
   const validateConfig = (): string[] => {
     const errors: string[] = [];
