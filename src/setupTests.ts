@@ -1,6 +1,7 @@
 // 📁 src/setupTests.ts
 
 // ✅ Setup pour les assertions personnalisées
+import "dotenv/config"; 
 import "@testing-library/jest-dom";
 
 // ✅ Mock de l'environnement d'exécution
