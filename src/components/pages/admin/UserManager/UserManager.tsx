@@ -22,7 +22,9 @@ interface User {
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const { deleteUserById, updateUser } = useAdminApi(); // ✅ autorisé ici
+
+  // ✅ Hooks correctement appelés au niveau supérieur
+  const { getAllUsers, deleteUserById, updateUser } = useAdminApi();
 
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -33,8 +35,6 @@ const UserManager: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
-    const { getAllUsers } = useAdminApi(); // ✅ hook appelé dans le scope de useEffect
-
     const fetchUsers = async () => {
       if (!token) return;
       setLoading(true);
@@ -51,7 +51,7 @@ const UserManager: React.FC = () => {
     };
 
     fetchUsers();
-  }, [token]);
+  }, [token, getAllUsers]);
 
   const handleDelete = async (id: string) => {
     if (!token) return;
