@@ -74,9 +74,7 @@ jobs:
           fi
     
       # Étape 5 - Exécuter les tests   
-      - name: 5 - Exécuter les tests
-        env:
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+      - name: 5 - Exécuter les tests        
         run: npm test
 
       # Étape 6.0 - Générer le fichier .env local pour le build React
