@@ -5,7 +5,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
 import { useNavigate } from "react-router-dom";
-import { useAdminApi, User } from "../../../../api/adminApi"; // ✅ Typage importé
+import { useAdminApi, User } from "../../../../api/adminApi";
 import "./UserManager.css";
 
 const AVAILABLE_ROLES = ["USER", "ADMIN"];
@@ -18,37 +18,43 @@ const UserManager: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<keyof User>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
+    let isMounted = true;
+    if (!token) return;
+
     const fetchUsers = async () => {
-      if (!token) return;
       setLoading(true);
-      setError("");
-
-      const response = await getAllUsers(token);
-      if (response?.success) {
-        setUsers(response.users);
-        setFilteredUsers(response.users);
-      } else {
-        setError("❌ Impossible de récupérer les utilisateurs.");
+      try {
+        const response = await getAllUsers(token);
+        if (isMounted && response?.success) {
+          setUsers(response.users);
+          setFilteredUsers(response.users);
+        } else {
+          setError("❌ Impossible de récupérer les utilisateurs.");
+        }
+      } catch (err) {
+        console.error("Erreur API :", err);
+        if (isMounted) setError("❌ Une erreur est survenue.");
+      } finally {
+        if (isMounted) setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchUsers();
-  }, [token, getAllUsers]);
+    return () => {
+      isMounted = false;
+    };
+  }, [token]);
 
   const handleDelete = async (id: string) => {
     if (!token) return;
     const target = users.find((u) => u.id === id);
-    if (!target) return;
-
-    if (!window.confirm(`🗑️ Supprimer ${target.firstName} ${target.lastName} ?`)) return;
+    if (!target || !window.confirm(`🗑️ Supprimer ${target.firstName} ${target.lastName} ?`)) return;
 
     const res = await deleteUserById(id, token);
     if (res?.success) {
@@ -71,8 +77,7 @@ const UserManager: React.FC = () => {
     setFilteredUsers((prev) =>
       prev.map((user) => {
         if (user.id !== id) return user;
-        const hasRole = user.roles.includes(role);
-        const newRoles = hasRole
+        const newRoles = user.roles.includes(role)
           ? user.roles.filter((r) => r !== role)
           : [...user.roles, role];
         return { ...user, roles: newRoles };
@@ -81,26 +86,20 @@ const UserManager: React.FC = () => {
   };
 
   const handleUpdate = async (u: User) => {
-    if (!token) return;
-    if (!window.confirm(`📝 Appliquer les modifications à ${u.firstName} ${u.lastName} ?`)) return;
-
-    const response = await updateUser(u.id, u, token);
-    if (response?.success) {
-      alert("✅ Mise à jour réussie !");
-    } else {
-      alert("❌ Échec de la mise à jour.");
-    }
+    if (!token || !window.confirm(`📝 Appliquer les modifications à ${u.firstName} ${u.lastName} ?`)) return;
+    const res = await updateUser(u.id, u, token);
+    res?.success ? alert("✅ Mise à jour réussie !") : alert("❌ Échec de la mise à jour.");
   };
 
   const handleSort = (key: keyof User) => {
-    const newOrder = sortKey === key && sortOrder === "asc" ? "desc" : "asc";
+    const order = sortKey === key && sortOrder === "asc" ? "desc" : "asc";
     setSortKey(key);
-    setSortOrder(newOrder);
+    setSortOrder(order);
 
     const sorted = [...filteredUsers].sort((a, b) => {
       const aVal = a[key]?.toString().toLowerCase() || "";
       const bVal = b[key]?.toString().toLowerCase() || "";
-      return newOrder === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      return order === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
     });
 
     setFilteredUsers(sorted);
@@ -117,10 +116,6 @@ const UserManager: React.FC = () => {
         u.roles.some((r) => r.toLowerCase().includes(term))
       )
     );
-  };
-
-  const handleViewProfile = (id: string) => {
-    navigate(`/profile/${id}`);
   };
 
   return (
@@ -184,7 +179,6 @@ const UserManager: React.FC = () => {
                       <td>
                         <button onClick={() => handleUpdate(u)}>💾</button>
                         <button onClick={() => handleDelete(u.id)}>🗑️</button>
-                        <button onClick={() => handleViewProfile(u.id)}>👁️ Voir</button>
                       </td>
                     </tr>
                   ))}
@@ -193,9 +187,7 @@ const UserManager: React.FC = () => {
             )}
           </section>
 
-          <section className="footer">
-            <Footer />
-          </section>
+          <Footer />
         </div>
       </main>
     </>
