@@ -74,9 +74,11 @@ describe("App Component", () => {
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "🧪 Mode debug activé :",
       {
-        API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
-        FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
-        WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME
+        REACT_APP_API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
+        REACT_APP_FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
+        REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
+        REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
+        REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
       }
     );
   });
