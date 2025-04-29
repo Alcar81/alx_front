@@ -26,7 +26,6 @@ const mockConfigs = {
     REACT_APP_ENABLE_DEBUG: false,
   },
   missingApiUrl: {
-    REACT_APP_API_URL: undefined,
     REACT_APP_FRONTEND_URL: "https://frontend.example.com",
     REACT_APP_WEBSITE_NAME: "AlxMultimedia",
     REACT_APP_MAINTENANCE_MODE: false,
