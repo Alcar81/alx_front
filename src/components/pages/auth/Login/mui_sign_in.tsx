@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import { useUserContext } from "@/contexts/UserContext";
-import { useAuthApi } from "@/api";
+import { useUserContext } from "../../../../contexts/UserContext";
+import { useAuthApi } from "../../../../api/authApi";
 import "../../auth/authStyles.css";
 
 // ✅ Bouton de fermeture
