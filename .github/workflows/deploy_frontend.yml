@@ -27,6 +27,7 @@ jobs:
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
       REACT_APP_ENV: ${{ vars.ENV }}
+      REACT_APP_WEBSITE_NAME: ${{ vars.REACT_APP_WEBSITE_NAME }}
       
 
     steps:
@@ -85,6 +86,7 @@ jobs:
             REACT_APP_API_URL=${{ env.REACT_APP_API_URL }}
             REACT_APP_FRONTEND_URL=${{ env.REACT_APP_FRONTEND_URL }}
             REACT_APP_ENV=${{ env.REACT_APP_ENV }}
+            REACT_APP_WEBSITE_NAME=${{ env.REACT_APP_WEBSITE_NAME }}
             # Options techniques
             REACT_APP_ENABLE_DEBUG=false
             REACT_APP_MAINTENANCE_MODE=false
@@ -323,7 +325,7 @@ jobs:
 
               echo "[INFO - 14] 💤 Pause de stabilisation après détection du port..."
               sleep 10
-              
+
               echo "[INFO - 14] 🔐 Génération du ADMIN_TEST_TOKEN pour les tests frontend..."
               ADMIN_TEST_TOKEN=\$(docker exec "\$CONTAINER_BACKEND_NAME" node /app/scripts/dev-only/generateAdminToken.js | tail -n 1)
 
