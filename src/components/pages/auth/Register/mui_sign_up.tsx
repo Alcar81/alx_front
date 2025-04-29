@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import { useAuthApi } from "@/api";
+import { useAuthApi } from "../../../../api/authApi";
 import "../../auth/authStyles.css";
 
 const { register } = useAuthApi();
