@@ -1,21 +1,12 @@
 // 📁 src/App.test.tsx
 
 import { render, screen } from "@testing-library/react";
-import { configSchema } from "@/config/configSchema"; // ✅ validation Zod ici
+import { configSchema } from "@/config/configSchema";
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
 if (process.env.NODE_ENV === "test") {
   require("dotenv").config();
 }
-
-// Mock des sous-composants
-jest.mock("./components/pages/Maintenance/Maintenance", () => {
-  return () => <div data-testid="maintenance-mode">Maintenance Mode</div>;
-});
-
-jest.mock("./components/Layout/Layout", () => {
-  return () => <div data-testid="main-layout">Main Layout</div>;
-});
 
 describe("App Component", () => {
   let consoleErrorSpy: jest.SpyInstance;
@@ -48,6 +39,14 @@ describe("App Component", () => {
       __esModule: true,
       default: parsed.data,
     }));
+
+    jest.doMock("./components/pages/Maintenance/Maintenance", () => {
+      return () => <div data-testid="maintenance-mode">Maintenance Mode</div>;
+    });
+
+    jest.doMock("./components/Layout/Layout", () => {
+      return () => <div data-testid="main-layout">Main Layout</div>;
+    });
 
     const App = require("./App").default;
     return App;
