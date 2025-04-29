@@ -1,7 +1,7 @@
 // 📁 src/App.test.tsx
 
 import { render, screen } from "@testing-library/react";
-import { configSchema } from "@/config/configSchema"; // ✅ validation Zod ici
+import { configSchema } from "@/config/configSchema";
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
 if (process.env.NODE_ENV === "test") {
@@ -63,8 +63,6 @@ describe("App Component", () => {
   test("validates required configuration keys", () => {
     const App = setupMockEnv(mockConfigs.missingApiUrl);
     render(<App />);
-
-    // 📌 ➔ Vérification de l'affichage de l'erreur dans la page (et non du console.error)
     expect(screen.getByText("Erreur de configuration")).toBeInTheDocument();
     expect(screen.getByText("REACT_APP_API_URL est manquant.")).toBeInTheDocument();
   });
