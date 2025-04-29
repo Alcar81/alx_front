@@ -2,9 +2,15 @@
 
 import { useSafeFetch } from "./safeFetch";
 
-/**
- * Gestion des utilisateurs pour l'administration.
- */
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  roles: string[];
+  createdAt: string;
+}
+
 export function useAdminApi() {
   const { safeFetch, buildUrl } = useSafeFetch();
 
@@ -20,7 +26,7 @@ export function useAdminApi() {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-  const updateUser = async (id: string, updates: any, token: string) =>
+  const updateUser = async (id: string, updates: Partial<User>, token: string) =>
     safeFetch(buildUrl(`/admin/users/${id}`), {
       method: "PATCH",
       headers: {

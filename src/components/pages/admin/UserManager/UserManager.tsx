@@ -5,25 +5,14 @@ import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
 import { useNavigate } from "react-router-dom";
-import { useAdminApi } from "../../../../api/adminApi";
+import { useAdminApi, User } from "../../../../api/adminApi"; // ✅ Typage importé
 import "./UserManager.css";
 
 const AVAILABLE_ROLES = ["USER", "ADMIN"];
 
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  roles: string[];
-  createdAt: string;
-}
-
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
-
-  // ✅ Hooks correctement appelés au niveau supérieur
   const { getAllUsers, deleteUserById, updateUser } = useAdminApi();
 
   const [users, setUsers] = useState<User[]>([]);
@@ -47,6 +36,7 @@ const UserManager: React.FC = () => {
       } else {
         setError("❌ Impossible de récupérer les utilisateurs.");
       }
+
       setLoading(false);
     };
 
@@ -58,8 +48,7 @@ const UserManager: React.FC = () => {
     const target = users.find((u) => u.id === id);
     if (!target) return;
 
-    const confirmDelete = window.confirm(`🗑️ Supprimer ${target.firstName} ${target.lastName} ?`);
-    if (!confirmDelete) return;
+    if (!window.confirm(`🗑️ Supprimer ${target.firstName} ${target.lastName} ?`)) return;
 
     const res = await deleteUserById(id, token);
     if (res?.success) {
@@ -93,8 +82,7 @@ const UserManager: React.FC = () => {
 
   const handleUpdate = async (u: User) => {
     if (!token) return;
-    const confirmed = window.confirm(`📝 Appliquer les modifications à ${u.firstName} ${u.lastName} ?`);
-    if (!confirmed) return;
+    if (!window.confirm(`📝 Appliquer les modifications à ${u.firstName} ${u.lastName} ?`)) return;
 
     const response = await updateUser(u.id, u, token);
     if (response?.success) {
