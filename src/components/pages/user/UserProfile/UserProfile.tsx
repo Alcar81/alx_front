@@ -5,7 +5,8 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { useParams, Navigate } from "react-router-dom";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
-import { useAdminApi, useAuthApi } from "@/api";
+import { useAuthApi } from "../../../../api/authApi";
+import { useAdminApi } from "../../../../api/adminApi";
 import "./UserProfile.css";
 
 const UserProfile: React.FC = () => {
