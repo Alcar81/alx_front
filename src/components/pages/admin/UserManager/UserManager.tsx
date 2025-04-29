@@ -38,7 +38,7 @@ const UserManager: React.FC = () => {
       if (!token) return;
       setLoading(true);
       setError("");
-
+  
       const response = await getAllUsers(token);
       if (response?.success) {
         setUsers(response.users);
@@ -48,7 +48,7 @@ const UserManager: React.FC = () => {
       }
       setLoading(false);
     };
-
+  
     fetchUsers();
   }, [token]);
 
