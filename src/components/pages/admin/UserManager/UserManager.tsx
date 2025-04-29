@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
-import { useAdminApi } from "@/api";
+import { useAdminApi } from "../../../../api/adminApi";
 import { useNavigate } from "react-router-dom"; // ✅ Ajouté
 import "./UserManager.css";
 
