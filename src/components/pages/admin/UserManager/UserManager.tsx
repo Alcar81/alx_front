@@ -22,6 +22,7 @@ interface User {
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
+  const { deleteUserById, updateUser } = useAdminApi(); // ✅ autorisé ici
 
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -31,13 +32,14 @@ const UserManager: React.FC = () => {
   const [sortKey, setSortKey] = useState<keyof User>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    const { getAllUsers } = useAdminApi(); // ✅ hook appelé dans le scope de useEffect
+
     const fetchUsers = async () => {
       if (!token) return;
       setLoading(true);
       setError("");
-  
+
       const response = await getAllUsers(token);
       if (response?.success) {
         setUsers(response.users);
@@ -47,11 +49,9 @@ const UserManager: React.FC = () => {
       }
       setLoading(false);
     };
-  
+
     fetchUsers();
   }, [token]);
-
-  const { getAllUsers, deleteUserById, updateUser } = useAdminApi();
 
   const handleDelete = async (id: string) => {
     if (!token) return;
