@@ -5,6 +5,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import { useAdminApi } from "../../../../api/adminApi";
 import "./UserManager.css";
 
 const AVAILABLE_ROLES = ["USER", "ADMIN"];
@@ -21,7 +22,7 @@ interface User {
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const { getAllUsers, deleteUserById, updateUser } = require("../../../../api/adminApi").useAdminApi();
+  const { getAllUsers, deleteUserById, updateUser } = useAdminApi(); // ✅ hook déplacé dans le composant
 
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);

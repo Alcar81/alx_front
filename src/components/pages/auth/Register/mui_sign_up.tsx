@@ -12,10 +12,7 @@ import { useNavigate } from "react-router-dom";
 import AppTheme from "../../../../theme/AppTheme";
 import SitemarkIcon from "../../../../assets/images/logos/Alx_logo_long2.png";
 import { GoogleIcon } from "../../../../theme/CustomIcons";
-import { useAuthApi } from "../../../../api/authApi";
 import "../../auth/authStyles.css";
-
-
 
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
@@ -24,9 +21,9 @@ const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
 );
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
-  const { register } = useAuthApi();
-  
+  const { register } = require("../../../../api/authApi").useAuthApi(); // ✅ hook déplacé ici
   const navigate = useNavigate();
+
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -60,7 +57,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       });
 
       setMessage("✅ Inscription réussie !");
-      setTimeout(() => navigate("/Connexion"), 10000); // ⏱️ 10s pour lecture
+      setTimeout(() => navigate("/Connexion"), 10000);
     } catch (err: any) {
       setMessage(`❌ ${err.message || "Erreur lors de l'inscription."}`);
     } finally {
@@ -152,4 +149,3 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     </AppTheme>
   );
 }
-
