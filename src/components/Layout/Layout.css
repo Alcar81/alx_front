@@ -13,6 +13,23 @@ body, .layout {
   width: 100vw;
 }
 
+:root {
+  --header-height: 64px;
+}
+
+header {
+  height: var(--header-height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.page-with-header {
+  padding-top: var(--header-height);
+}
+
 /* 📌 Conteneur centré */
 .content-container {
   width: 100%;
