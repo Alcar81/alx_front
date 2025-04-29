@@ -15,7 +15,7 @@ import { GoogleIcon } from "../../../../theme/CustomIcons";
 import { useAuthApi } from "../../../../api/authApi";
 import "../../auth/authStyles.css";
 
-const { register } = useAuthApi();
+
 
 const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <IconButton className="auth-close-btn" onClick={onClick}>
@@ -24,6 +24,8 @@ const CloseButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
 );
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
+  const { register } = useAuthApi();
+  
   const navigate = useNavigate();
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");

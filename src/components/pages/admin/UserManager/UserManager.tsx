@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
-import { useAdminApi } from "../../../../api/adminApi";
-import { useNavigate } from "react-router-dom"; // ✅ Ajouté
+import { useNavigate } from "react-router-dom";
 import "./UserManager.css";
 
-const { getAllUsers, deleteUserById, updateUser } = useAdminApi();
+const AVAILABLE_ROLES = ["USER", "ADMIN"];
 
 interface User {
   id: string;
@@ -19,11 +18,11 @@ interface User {
   createdAt: string;
 }
 
-const AVAILABLE_ROLES = ["USER", "ADMIN"];
-
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
-  const navigate = useNavigate(); // ✅ Ajouté
+  const navigate = useNavigate();
+  const { getAllUsers, deleteUserById, updateUser } = require("../../../../api/adminApi").useAdminApi();
+
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -130,21 +129,20 @@ const UserManager: React.FC = () => {
   };
 
   const handleViewProfile = (id: string) => {
-    navigate(`/profile/${id}`); // ✅ Aller au profil de l'utilisateur
+    navigate(`/profile/${id}`);
   };
 
   return (
     <>
       <Header />
-
       <main className="main page-with-header">
         <div className="user-manager-page">
           <header className="user-manager-header">
             <h1>👥 Gestionnaire d’utilisateurs</h1>
             <p>Bonjour {user?.firstName} {user?.lastName}</p>
-          </header>  
+          </header>
 
-          <section id="search" className="user-manager-search">
+          <section className="user-manager-search">
             <input
               type="text"
               placeholder="🔍 Rechercher..."
@@ -154,7 +152,7 @@ const UserManager: React.FC = () => {
             />
           </section>
 
-          <section id="table" className="user-manager-table">
+          <section className="user-manager-table">
             {loading ? (
               <p>⏳ Chargement...</p>
             ) : error ? (
@@ -195,20 +193,20 @@ const UserManager: React.FC = () => {
                       <td>
                         <button onClick={() => handleUpdate(u)}>💾</button>
                         <button onClick={() => handleDelete(u.id)}>🗑️</button>
-                        <button onClick={() => handleViewProfile(u.id)}>👁️ Voir</button> {/* 👈 Ajouté */}
+                        <button onClick={() => handleViewProfile(u.id)}>👁️ Voir</button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-             )}
+            )}
           </section>
 
-          <section id="footer" className="footer">
+          <section className="footer">
             <Footer />
           </section>
         </div>
-      </main>      
+      </main>
     </>
   );
 };

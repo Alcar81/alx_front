@@ -5,25 +5,20 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { useParams, Navigate } from "react-router-dom";
 import Header from "../../../partiels/Header/Header";
 import Footer from "../../../partiels/Footer/Footer";
-import { useAuthApi } from "../../../../api/authApi";
-import { useAdminApi } from "../../../../api/adminApi";
 import "./UserProfile.css";
+
+const AVAILABLE_ROLES = ["USER", "ADMIN"];
+
+interface UserUpdateData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  roles: string[];
+}
 
 const UserProfile: React.FC = () => {
   const { user: currentUser, token } = useAuth();
   const { userId } = useParams<{ userId: string }>();
-
-  const { getUserById, updateUser } = useAdminApi();
-  const { changePassword } = useAuthApi();
-
-  interface UserUpdateData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    roles: string[];
-  }
-
-  const AVAILABLE_ROLES = ["USER", "ADMIN"];
 
   const [userData, setUserData] = useState<UserUpdateData>({
     firstName: "",
@@ -34,7 +29,6 @@ const UserProfile: React.FC = () => {
 
   const [saveStatus, setSaveStatus] = useState<"success" | "error" | "">("");
   const [passwordChangeStatus, setPasswordChangeStatus] = useState<"success" | "error" | "">("");
-
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -44,18 +38,16 @@ const UserProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ➔ Protection : Si pas connecté ➔ redirige
-  if (!currentUser || !token) {
-    return <Navigate to="/Accueil" replace />;
-  }
+  // 🛡️ Sécurité : rediriger si pas connecté
+  if (!currentUser || !token) return <Navigate to="/Accueil" replace />;
 
   const isAdmin = currentUser.roles.includes("ADMIN");
   const isSelfProfile = currentUser.id === userId;
+  if (!isAdmin && !isSelfProfile) return <Navigate to="/Unauthorized" replace />;
 
-  // ➔ Protection : accès interdit si ce n'est ni soi-même ni un admin
-  if (!isAdmin && !isSelfProfile) {
-    return <Navigate to="/Unauthorized" replace />;
-  }
+  // ✅ Hooks déplacés dans le composant
+  const { getUserById, updateUser } = require("../../../../api/adminApi").useAdminApi();
+  const { changePassword } = require("../../../../api/authApi").useAuthApi();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -96,11 +88,7 @@ const UserProfile: React.FC = () => {
     if (!token || !userId) return;
     try {
       const response = await updateUser(userId, userData, token);
-      if (response.success) {
-        setSaveStatus("success");
-      } else {
-        setSaveStatus("error");
-      }
+      setSaveStatus(response.success ? "success" : "error");
     } catch (error) {
       console.error(error);
       setSaveStatus("error");
@@ -109,7 +97,7 @@ const UserProfile: React.FC = () => {
 
   const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setPasswordData(prev => ({ ...prev, [name]: value }));
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePasswordChange = async () => {
@@ -125,10 +113,14 @@ const UserProfile: React.FC = () => {
     }
 
     try {
-      const response = await changePassword(userId, {
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword,
-      }, token);
+      const response = await changePassword(
+        userId,
+        {
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        },
+        token
+      );
 
       if (response.success) {
         setPasswordChangeStatus("success");
@@ -158,34 +150,30 @@ const UserProfile: React.FC = () => {
           {saveStatus === "success" && <div className="alert-success">✅ Profil mis à jour avec succès</div>}
           {saveStatus === "error" && <div className="alert-error">❌ Erreur lors de la mise à jour</div>}
 
-          <section id="infos" className="user-profile-info">
+          <section className="user-profile-info">
             <h2>📝 Informations personnelles</h2>
-            <input type="text" name="firstName" placeholder="Prénom" value={userData.firstName} onChange={handleInputChange} />
-            <input type="text" name="lastName" placeholder="Nom" value={userData.lastName} onChange={handleInputChange} />
-            <input type="email" name="email" placeholder="Email" value={userData.email} onChange={handleInputChange} />
-
+            <input name="firstName" placeholder="Prénom" value={userData.firstName} onChange={handleInputChange} />
+            <input name="lastName" placeholder="Nom" value={userData.lastName} onChange={handleInputChange} />
+            <input name="email" placeholder="Email" value={userData.email} onChange={handleInputChange} />
             <div className="save-button-wrapper">
               <button className="save-button" onClick={handleSave}>💾 Sauvegarder</button>
             </div>
           </section>
 
-          <section id="security" className="user-profile-security">
+          <section className="user-profile-security">
             <h2>🔒 Changer le mot de passe</h2>
-
-            {passwordChangeStatus === "success" && <div className="alert-success">✅ Mot de passe changé avec succès</div>}
-            {passwordChangeStatus === "error" && <div className="alert-error">❌ Erreur lors du changement de mot de passe</div>}
-
-            <input type="password" name="currentPassword" placeholder="Mot de passe actuel" value={passwordData.currentPassword} onChange={handlePasswordInputChange} />
-            <input type="password" name="newPassword" placeholder="Nouveau mot de passe" value={passwordData.newPassword} onChange={handlePasswordInputChange} />
-            <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" value={passwordData.confirmPassword} onChange={handlePasswordInputChange} />
-
+            {passwordChangeStatus === "success" && <div className="alert-success">✅ Mot de passe changé</div>}
+            {passwordChangeStatus === "error" && <div className="alert-error">❌ Échec du changement</div>}
+            <input name="currentPassword" type="password" placeholder="Mot de passe actuel" value={passwordData.currentPassword} onChange={handlePasswordInputChange} />
+            <input name="newPassword" type="password" placeholder="Nouveau mot de passe" value={passwordData.newPassword} onChange={handlePasswordInputChange} />
+            <input name="confirmPassword" type="password" placeholder="Confirmer" value={passwordData.confirmPassword} onChange={handlePasswordInputChange} />
             <div className="save-button-wrapper">
               <button className="save-button" onClick={handlePasswordChange}>🔒 Mettre à jour le mot de passe</button>
             </div>
           </section>
 
           {isAdmin && (
-            <section id="roles" className="user-profile-roles">
+            <section className="user-profile-roles">
               <h2>🛡️ Permissions</h2>
               <div className="checkbox-group">
                 {AVAILABLE_ROLES.map((role) => (
@@ -202,7 +190,7 @@ const UserProfile: React.FC = () => {
             </section>
           )}
 
-          <section id="footer" className="footer">
+          <section className="footer">
             <Footer />
           </section>
         </div>
