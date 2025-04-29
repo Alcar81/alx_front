@@ -64,10 +64,16 @@ describe("App Component", () => {
     const App = setupMockEnv(mockConfigs.missingApiUrl);
     render(<App />);
   
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Erreurs de configuration détectées"),
-      expect.arrayContaining(["REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"])
-    );
+    const calls = consoleErrorSpy.mock.calls;
+    const found = calls.some(call => {
+      return (
+        call[0] === "Erreurs de configuration détectées :" &&
+        Array.isArray(call[1]) &&
+        call[1][0] === "REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"
+      );
+    });
+  
+    expect(found).toBe(true);
   });
 
   test("outputs debug information when debug mode is enabled", () => {
