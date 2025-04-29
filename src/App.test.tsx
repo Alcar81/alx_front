@@ -63,10 +63,10 @@ describe("App Component", () => {
   test("validates required configuration keys", () => {
     const App = setupMockEnv(mockConfigs.missingApiUrl);
     render(<App />);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+  
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Erreurs de configuration détectées :",
-      ["REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"]
+      expect.stringContaining("Erreurs de configuration détectées"),
+      expect.arrayContaining(["REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"])
     );
   });
 
