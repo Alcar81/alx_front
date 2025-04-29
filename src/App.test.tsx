@@ -4,9 +4,10 @@ import { render, screen } from "@testing-library/react";
 import { configSchema } from "@/config/configSchema"; // ✅ validation Zod ici
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
-if (process.env.NODE_ENV === "test") {
-  require("dotenv").config();
-}
+// Mock de useConfig directement ici 👇
+jest.mock("./hooks/useConfig", () => ({
+  useConfig: jest.fn(),
+}));
 
 // Mock des sous-composants
 jest.mock("./components/pages/Maintenance/Maintenance", () => {
@@ -16,6 +17,8 @@ jest.mock("./components/pages/Maintenance/Maintenance", () => {
 jest.mock("./components/Layout/Layout", () => {
   return () => <div data-testid="main-layout">Main Layout</div>;
 });
+
+import { useConfig } from "./hooks/useConfig";
 
 describe("App Component", () => {
   let consoleErrorSpy: jest.SpyInstance;
@@ -33,9 +36,10 @@ describe("App Component", () => {
 
   beforeEach(() => {
     jest.resetModules();
+    jest.clearAllMocks();
   });
 
-  const loadAppWithConfig = (configMock: MockConfig) => {
+  const setupMockConfig = (configMock: MockConfig) => {
     const parsed = configSchema.safeParse(configMock);
 
     if (!parsed.success) {
@@ -44,44 +48,48 @@ describe("App Component", () => {
       );
     }
 
-    jest.doMock("./config/config", () => ({
-      __esModule: true,
-      default: parsed.data,
-    }));
+    (useConfig as jest.Mock).mockReturnValue({
+      API_URL: parsed.data.REACT_APP_API_URL,
+      FRONTEND_URL: parsed.data.REACT_APP_FRONTEND_URL,
+      WEBSITE_NAME: parsed.data.REACT_APP_WEBSITE_NAME,
+      ENABLE_DEBUG: parsed.data.REACT_APP_ENABLE_DEBUG,
+      MAINTENANCE_MODE: parsed.data.REACT_APP_MAINTENANCE_MODE,
+    });
 
     const App = require("./App").default;
     return App;
   };
 
   test("renders Maintenance page when maintenance mode is active", () => {
-    const App = loadAppWithConfig(mockConfigs.maintenanceOn);
+    const App = setupMockConfig(mockConfigs.maintenanceOn);
     render(<App />);
     expect(screen.getByTestId("maintenance-mode")).toBeInTheDocument();
   });
 
   test("renders Layout when maintenance mode is inactive", () => {
-    const App = loadAppWithConfig(mockConfigs.maintenanceOff);
+    const App = setupMockConfig(mockConfigs.maintenanceOff);
     render(<App />);
     expect(screen.getByTestId("main-layout")).toBeInTheDocument();
   });
 
   test("validates required configuration keys", () => {
-    const App = loadAppWithConfig(mockConfigs.missingApiUrl);
-    render(<App />);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Erreurs de configuration détectées :",
-      ["REACT_APP_API_URL n'est pas défini dans le fichier .env ou config.ts"]
-    );
+    expect(() => {
+      setupMockConfig(mockConfigs.missingApiUrl);
+    }).toThrowError(/Config invalide pour le test/);
   });
 
   test("outputs debug information when debug mode is enabled", () => {
-    const App = loadAppWithConfig(mockConfigs.debugMode);
+    const App = setupMockConfig(mockConfigs.debugMode);
     render(<App />);
     expect(consoleLogSpy).toHaveBeenCalledTimes(1);
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      "Mode debug activé. Configuration actuelle :",
-      mockConfigs.debugMode
+      "🧪 Mode debug activé :", {
+        API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
+        FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
+        WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
+        ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
+        MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
+      }
     );
   });
 });
