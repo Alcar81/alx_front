@@ -22,7 +22,6 @@ interface User {
 const UserManager: React.FC = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const { getAllUsers, deleteUserById, updateUser } = useAdminApi(); // ✅ hook déplacé dans le composant
 
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -51,6 +50,8 @@ const UserManager: React.FC = () => {
   
     fetchUsers();
   }, [token]);
+
+  const { getAllUsers, deleteUserById, updateUser } = useAdminApi();
 
   const handleDelete = async (id: string) => {
     if (!token) return;
