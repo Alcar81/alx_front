@@ -1,25 +1,31 @@
-// src/App.tsx
+// 📁 src/App.tsx
 
 import React from "react";
 import "./App.css";
-import getConfig from "@/config/getConfig";
+import { useConfig } from "./hooks/useConfig";
 import Maintenance from "./components/pages/Maintenance/Maintenance";
 import Layout from "./components/Layout/Layout";
 
 const App: React.FC = () => {
-  const { API_URL, FRONTEND_URL, WEBSITE_NAME, ENABLE_DEBUG, MAINTENANCE_MODE } = getConfig(); // 🔥 ici
+  const {
+    REACT_APP_API_URL,
+    REACT_APP_FRONTEND_URL,
+    REACT_APP_WEBSITE_NAME,
+    REACT_APP_ENABLE_DEBUG,
+    REACT_APP_MAINTENANCE_MODE,
+  } = useConfig();
 
   const validateConfig = (): string[] => {
     const errors: string[] = [];
-    if (!API_URL) errors.push("REACT_APP_API_URL est manquant.");
-    if (!FRONTEND_URL) errors.push("REACT_APP_FRONTEND_URL est manquant.");
-    if (!WEBSITE_NAME) errors.push("REACT_APP_WEBSITE_NAME est manquant.");
+    if (!REACT_APP_API_URL) errors.push("REACT_APP_API_URL est manquant.");
+    if (!REACT_APP_FRONTEND_URL) errors.push("REACT_APP_FRONTEND_URL est manquant.");
+    if (!REACT_APP_WEBSITE_NAME) errors.push("REACT_APP_WEBSITE_NAME est manquant.");
     return errors;
   };
 
   const errors = validateConfig();
 
-  if (MAINTENANCE_MODE) {
+  if (REACT_APP_MAINTENANCE_MODE) {
     return <Maintenance />;
   }
 
@@ -38,8 +44,14 @@ const App: React.FC = () => {
     );
   }
 
-  if (ENABLE_DEBUG) {
-    console.log("🧪 Mode debug activé :", { API_URL, FRONTEND_URL, WEBSITE_NAME });
+  if (REACT_APP_ENABLE_DEBUG) {
+    console.log("🧪 Mode debug activé :", {
+      REACT_APP_API_URL,
+      REACT_APP_FRONTEND_URL,
+      REACT_APP_WEBSITE_NAME,
+      REACT_APP_ENABLE_DEBUG,
+      REACT_APP_MAINTENANCE_MODE,
+    });
   }
 
   return <Layout />;
