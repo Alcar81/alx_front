@@ -61,9 +61,9 @@ const UserProfile: React.FC = () => {
       }
       setLoading(false);
     };
-
+  
     fetchProfile();
-  }, [userId, token]);
+  }, [userId, token, getUserById]);
 
   if (!currentUser || !token) return <Navigate to="/Accueil" replace />;
   if (!isAdmin && !isSelfProfile) return <Navigate to="/Unauthorized" replace />;
