@@ -9,20 +9,20 @@ import { useAuthApi } from "../../../../api/authApi";
 import { useAdminApi } from "../../../../api/adminApi";
 import "./UserProfile.css";
 
+interface UserUpdateData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  roles: string[];
+}
+
+const AVAILABLE_ROLES = ["USER", "ADMIN"];
+
 const UserProfile: React.FC = () => {
   const { user: currentUser, token } = useAuth();
   const { userId } = useParams<{ userId: string }>();
   const { getUserById, updateUser } = useAdminApi();
   const { changePassword } = useAuthApi();
-
-  interface UserUpdateData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    roles: string[];
-  }
-
-  const AVAILABLE_ROLES = ["USER", "ADMIN"];
 
   const [userData, setUserData] = useState<UserUpdateData>({
     firstName: "",
@@ -33,7 +33,6 @@ const UserProfile: React.FC = () => {
 
   const [saveStatus, setSaveStatus] = useState<"success" | "error" | "">("");
   const [passwordChangeStatus, setPasswordChangeStatus] = useState<"success" | "error" | "">("");
-
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -64,9 +63,8 @@ const UserProfile: React.FC = () => {
     };
 
     fetchProfile();
-  }, [userId, token, getUserById]);
+  }, [userId, token]);
 
-  // ✅ Redirections après tous les hooks
   if (!currentUser || !token) return <Navigate to="/Accueil" replace />;
   if (!isAdmin && !isSelfProfile) return <Navigate to="/Unauthorized" replace />;
   if (loading) return <p>⏳ Chargement du profil...</p>;
