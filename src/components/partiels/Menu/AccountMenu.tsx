@@ -6,7 +6,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../../../theme/ThemeContext";
 import { useUserContext } from "../../../contexts/UserContext";
 import { useMaintenance } from "../../../hooks/useMaintenance"; // 🔥 Ajouté
-import "./Menu.css";
+import "./AccountMenu.css";
 
 interface AccountMenuProps {
   mode: "right" | "ham";

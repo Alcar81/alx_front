@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/images/logos/logo-desktop.png";
 import MenuRight from "./MenuRight";
 import MenuLeft from "./MenuLeft";
-import MenuHam from "./MenuHam"; 
+import MenuHam from "./MenuHam";
 import useIsMobile from "../../../hooks/useIsMobile"; 
 import "./Menu.css";
 

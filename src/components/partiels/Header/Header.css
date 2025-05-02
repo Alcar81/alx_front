@@ -2,12 +2,15 @@
    📌 Styles du Header
 ========================= */
 
-.header {
+/* =========================
+   📌 Header Fixe
+========================= */
+header.header {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80px;
+  height: var(--header-height);
   background-color: var(--primary-back-color);
   box-shadow: var(--box-shadow);
   position: fixed;
