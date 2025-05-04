@@ -1,9 +1,11 @@
 // 📁 src/App.test.tsx
 
 // ✅ Fix Jest: TextEncoder is not defined (Node < 18)
-import { TextEncoder, TextDecoder } from "util";
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+import { TextEncoder, TextDecoder as NodeTextDecoder } from "util";
+
+// ⛑️ Patch global avec cast explicite pour éviter les erreurs TS
+(global as any).TextEncoder = TextEncoder;
+(global as any).TextDecoder = NodeTextDecoder;
 
 import { render, screen } from "@testing-library/react";
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
