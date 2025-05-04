@@ -4,7 +4,7 @@ import React from "react";
 import "./App.css";
 import { useConfig } from "./hooks/useConfig";
 import Maintenance from "./components/pages/Maintenance/Maintenance";
-import Layout from "./components/Layout/Layout";
+import AppRouter from "./routes/AppRouter";
 
 const App: React.FC = () => {
   const {
@@ -54,7 +54,7 @@ const App: React.FC = () => {
     });
   }
 
-  return <Layout />;
+  return <AppRouter />;
 };
 
 export default App;

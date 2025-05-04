@@ -1,18 +1,17 @@
-/* =============================
-   📌 Footer – Styles visuels
-============================= */
+/* =========================
+   📌 Footer – Styles de base
+========================= */
 
 .footer {
   background-color: var(--primary-color);
   color: var(--light-color);
   padding: 40px 20px 20px;
-  font-family: var(--font-family);
+  font-family: Arial, sans-serif;
   text-align: center;
-  box-sizing: border-box;
+  flex-shrink: 0;
   width: 100%;
-  position: relative;
-  border-radius: 8px;
-  margin-top: 100px;
+  box-sizing: border-box;
+  margin-top: 40px;
 }
 
 /* =========================
@@ -26,7 +25,7 @@
   max-width: 1200px;
   margin: 0 auto;
   gap: 20px;
-  width: 100%;
+  padding: 0 20px;
 }
 
 .footer-container > div {
@@ -56,6 +55,7 @@
   list-style: none;
 }
 
+/* Contact et Liens */
 .footer ul {
   display: flex;
   flex-direction: column;
@@ -85,10 +85,9 @@
 
 .footer-bottom {
   margin-top: 20px;
-  padding-top: 15px;
   border-top: 1px solid #34495e;
+  padding-top: 10px;
   font-size: 0.85rem;
-  opacity: 0.7;
 }
 
 /* =========================

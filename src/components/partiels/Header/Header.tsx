@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="header-container">
-        <div className="menu-container">  {/* ✅ On garde ce conteneur ici */}
+        <div className="menu-container">
           <Menu />
         </div>
       </div>

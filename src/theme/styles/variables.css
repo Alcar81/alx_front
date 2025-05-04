@@ -1,13 +1,51 @@
-/* src/components/styles/variables.css */
+/* 📁 src/components/styles/variables.css */
+
+/* 🎨 Thème par défaut : Light */
 :root {
+    /* === Couleurs principales === */
     --primary-color: #2c3e50;
     --secondary-color: #1abc9c;
+    --secondary-dark: #16a085;
     --light-color: #ecf0f1;
+    --dark-color: #1a1a1a;
     --text-color: #333;
-    --font-family: 'Arial, sans-serif';
-    --box-shadow: 0px 2px 4px rgb(0 0 0 / 20%);
-    --primary-back-color: #fff;
-    --input-border-color: #dcdcdc; /* Couleur du contour par défaut */  
     --hover-color: #1e2a38;
-
-}
+  
+    /* === Arrière-plans === */
+    --primary-back-color: #fff;
+    --secondary-back-color: #f7f7f7;
+  
+    /* === Typographie === */
+    --font-family: 'Arial, sans-serif';
+    --font-size-base: 16px;
+  
+    /* === Composants UI === */
+    --box-shadow: 0px 2px 4px rgb(0 0 0 / 20%);
+    --border-color: #ddd;
+    --input-border-color: #dcdcdc;
+  
+    /* === Layout === */
+    --header-height: 80px;
+    --footer-height: 100px; /* Peut être fixe (ex: 100px) si besoin */
+  
+    /* === Transitions === */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+  }
+  
+  /* 🌓 Thème Sombre (actif via [data-theme="dark"]) */
+  [data-theme="dark"] {
+    --primary-color: #1e1e1e;
+    --secondary-color: #16a085;
+    --secondary-dark: #149174;
+    --light-color: #e0e0e0;
+    --dark-color: #000;
+    --text-color: #f0f0f0;
+    --hover-color: #333;
+    --primary-back-color: #121212;
+    --secondary-back-color: #1f1f1f;
+    --box-shadow: 0px 2px 6px rgb(255 255 255 / 10%);
+    --border-color: #444;
+    --input-border-color: #555;
+  }

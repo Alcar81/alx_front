@@ -1,41 +1,58 @@
 /* =========================
-   📌 Styles du Header
+   📌 Header – Apparence visuelle
 ========================= */
 
-/* =========================
-   📌 Header Fixe
-========================= */
 header.header {
+  background-color: var(--primary-back-color);
+  box-shadow: var(--box-shadow);
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: var(--header-height);
-  background-color: var(--primary-back-color);
-  box-shadow: var(--box-shadow);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
   padding: 0 20px;
+  height: var(--header-height);
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ✅ Conteneur du Header */
+/* =========================
+   ✅ Conteneur principal du Header
+========================= */
+
 .header-container {
-  display: flex;
-  justify-content: center; /* ✅ Centre tout */
-  align-items: center;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* ✅ Conteneur du Menu */
+/* =========================
+   ✅ Conteneur du Menu
+========================= */
+
 .menu-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 0 20px;
+}
+
+/* =========================
+   📱 Responsive (mobile/tablette)
+========================= */
+
+@media (width <= 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
 }
