@@ -1,7 +1,6 @@
 // 📁 src/App.test.tsx
 
 import { render, screen } from "@testing-library/react";
-import { configSchema } from "@/config/configSchema";
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
 if (process.env.NODE_ENV === "test") {
@@ -13,7 +12,7 @@ jest.mock("./components/pages/Maintenance/Maintenance", () => {
   return () => <div data-testid="maintenance-mode">Maintenance Mode</div>;
 });
 
-jest.mock("./components/Layout/Layout", () => {
+jest.mock("./components/Layouts/FlexibleLayout", () => {
   return () => <div data-testid="main-layout">Main Layout</div>;
 });
 
