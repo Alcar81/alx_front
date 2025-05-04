@@ -9,18 +9,13 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    // Mapper les alias TypeScript
+    "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js",
+    "\\.(jpg|jpeg|png|gif|mp4|webm|svg|woff|woff2|ttf|eot)$": "<rootDir>/__mocks__/fileMock.js",
     "^@/(.*)$": "<rootDir>/src/$1",
-
-    // ✅ Mapper les fichiers CSS, SCSS, etc.
-    "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
-
-    // ✅ Mapper les fichiers statiques comme images ou vidéos
-    "\\.(jpg|jpeg|png|gif|mp4|svg)$": "<rootDir>/__mocks__/fileMock.js",
   },
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
-  transformIgnorePatterns: ["node_modules/(?!(@mui|your-other-esm-packages)/)"],
+  transformIgnorePatterns: ["/node_modules/"],
 };

@@ -1,16 +1,12 @@
 // 📁 src/App.test.tsx
 
-// ✅ Fix Jest: TextEncoder is not defined (Node < 18)
 import { TextEncoder, TextDecoder as NodeTextDecoder } from "util";
-
-// ⛑️ Patch global avec cast explicite pour éviter les erreurs TS
 (global as any).TextEncoder = TextEncoder;
 (global as any).TextDecoder = NodeTextDecoder;
 
 import { render, screen } from "@testing-library/react";
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
-// Charger les variables d'environnement si nécessaire
 if (process.env.NODE_ENV === "test") {
   require("dotenv").config();
 }
@@ -20,7 +16,7 @@ jest.mock("./components/pages/Maintenance/Maintenance", () => {
   return () => <div data-testid="maintenance-mode">Maintenance Mode</div>;
 });
 
-jest.mock("./components/Layouts/FlexibleLayout", () => {
+jest.mock("./routes/AppRouter", () => {
   return () => <div data-testid="main-layout">Main Layout</div>;
 });
 
@@ -50,40 +46,59 @@ describe("App Component", () => {
     process.env.REACT_APP_WEBSITE_NAME = mock.REACT_APP_WEBSITE_NAME || "";
     process.env.REACT_APP_MAINTENANCE_MODE = String(mock.REACT_APP_MAINTENANCE_MODE ?? false);
     process.env.REACT_APP_ENABLE_DEBUG = String(mock.REACT_APP_ENABLE_DEBUG ?? false);
-
     const App = require("./App").default;
     return App;
   };
 
   test("renders Maintenance page when maintenance mode is active", () => {
-    const App = setupMockEnv(mockConfigs.maintenanceOn);
-    render(<App />);
-    expect(screen.getByTestId("maintenance-mode")).toBeInTheDocument();
+    try {
+      const App = setupMockEnv(mockConfigs.maintenanceOn);
+      render(<App />);
+      expect(screen.getByTestId("maintenance-mode")).toBeInTheDocument();
+    } catch (err) {
+      console.error("❌ [TEST] Maintenance mode failed:", err);
+      throw err;
+    }
   });
 
   test("renders Layout when maintenance mode is inactive", () => {
-    const App = setupMockEnv(mockConfigs.maintenanceOff);
-    render(<App />);
-    expect(screen.getByTestId("main-layout")).toBeInTheDocument();
+    try {
+      const App = setupMockEnv(mockConfigs.maintenanceOff);
+      render(<App />);
+      expect(screen.getByTestId("main-layout")).toBeInTheDocument();
+    } catch (err) {
+      console.error("❌ [TEST] Layout mode failed:", err);
+      throw err;
+    }
   });
 
   test("validates required configuration keys", () => {
-    const App = setupMockEnv(mockConfigs.missingApiUrl);
-    render(<App />);
-    expect(screen.getByText("Erreur de configuration")).toBeInTheDocument();
-    expect(screen.getByText("REACT_APP_API_URL est manquant.")).toBeInTheDocument();
+    try {
+      const App = setupMockEnv(mockConfigs.missingApiUrl);
+      render(<App />);
+      expect(screen.getByText("Erreur de configuration")).toBeInTheDocument();
+      expect(screen.getByText("REACT_APP_API_URL est manquant.")).toBeInTheDocument();
+    } catch (err) {
+      console.error("❌ [TEST] Config validation failed:", err);
+      throw err;
+    }
   });
 
   test("outputs debug information when debug mode is enabled", () => {
-    const App = setupMockEnv(mockConfigs.debugMode);
-    render(<App />);
-    expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-    expect(consoleLogSpy).toHaveBeenCalledWith("🧪 Mode debug activé :", {
-      REACT_APP_API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
-      REACT_APP_FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
-      REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
-      REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
-      REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
-    });
+    try {
+      const App = setupMockEnv(mockConfigs.debugMode);
+      render(<App />);
+      expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+      expect(consoleLogSpy).toHaveBeenCalledWith("🧪 Mode debug activé :", {
+        REACT_APP_API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
+        REACT_APP_FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
+        REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
+        REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
+        REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
+      });
+    } catch (err) {
+      console.error("❌ [TEST] Debug output failed:", err);
+      throw err;
+    }
   });
 });
