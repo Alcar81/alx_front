@@ -1,8 +1,14 @@
 // 📁 src/App.test.tsx
 
+// ✅ Fix Jest: TextEncoder is not defined (Node < 18)
+import { TextEncoder, TextDecoder } from "util";
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
 import { render, screen } from "@testing-library/react";
 import mockConfigs, { MockConfig } from "./mocks/mockConfigs";
 
+// Charger les variables d'environnement si nécessaire
 if (process.env.NODE_ENV === "test") {
   require("dotenv").config();
 }
@@ -70,15 +76,12 @@ describe("App Component", () => {
     const App = setupMockEnv(mockConfigs.debugMode);
     render(<App />);
     expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      "🧪 Mode debug activé :",
-      {
-        REACT_APP_API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
-        REACT_APP_FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
-        REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
-        REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
-        REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
-      }
-    );
+    expect(consoleLogSpy).toHaveBeenCalledWith("🧪 Mode debug activé :", {
+      REACT_APP_API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
+      REACT_APP_FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
+      REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
+      REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
+      REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
+    });
   });
 });
