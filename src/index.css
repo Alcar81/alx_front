@@ -12,6 +12,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   transform: scale(1);
   transform-origin: top left;
+  overflow-x: hidden;
 }
 
 code {
@@ -33,3 +34,7 @@ html, body {
   box-sizing: inherit;
 }
 
+main.landing-page {
+  height: 100vh;
+  overflow: hidden;
+}

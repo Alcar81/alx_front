@@ -1,8 +1,15 @@
 /* =========================
    📌 Styles généraux de Landing
 ========================= */
+.landing-page {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
 .landing-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

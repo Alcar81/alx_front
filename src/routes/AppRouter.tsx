@@ -3,16 +3,16 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PublicRoutes from "./PublicRoutes";
 import AdminRoutes from "./AdminRoutes";
+import LandingPage from "../components/pages/LandingPage/LandingPage";
 import FlexibleLayout from "../components/Layouts/FlexibleLayout";
 
 const AppRouterContent: React.FC = () => {
   return (
-    <FlexibleLayout>
-      <Routes>
-        <Route path="/*" element={<PublicRoutes />} />
-        <Route path="/admin/*" element={<AdminRoutes />} />
-      </Routes>
-    </FlexibleLayout>
+    <Routes>
+      <Route path="/" element={<FlexibleLayout showHeader={false} showFooter={false}><LandingPage /></FlexibleLayout>} />
+      <Route path="/*" element={<FlexibleLayout><PublicRoutes /></FlexibleLayout>} />
+      <Route path="/admin/*" element={<FlexibleLayout><AdminRoutes /></FlexibleLayout>} />
+    </Routes>
   );
 };
 

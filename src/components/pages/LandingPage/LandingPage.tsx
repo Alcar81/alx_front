@@ -18,7 +18,7 @@ const LandingPage: React.FC = () => {
   }, [videoEnded, navigate]);
 
   return (
-    <main className="main">
+    <div className="landing-page">
       <div className={`landing-container ${videoEnded ? "fade-out" : ""}`}>
         <div className="video-container">
           <video 
@@ -27,6 +27,7 @@ const LandingPage: React.FC = () => {
             src={videoIntro}
             autoPlay 
             muted
+            playsInline   // ✅ Ajout essentiel
             onEnded={() => setVideoEnded(true)}
           />
         </div>
@@ -38,7 +39,7 @@ const LandingPage: React.FC = () => {
           </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

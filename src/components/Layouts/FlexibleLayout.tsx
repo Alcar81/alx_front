@@ -26,7 +26,7 @@ const FlexibleLayout: React.FC<FlexibleLayoutProps> = ({
       <div className="content-layout">
         <div className="main-layout">
           <main className="main">
-            <div className={showHeader ? "content-layout-with-header" : undefined}>
+            <div className={showHeader ? "content-layout-header" : undefined}>
               {children}
             </div>
           </main>
