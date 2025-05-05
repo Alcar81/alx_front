@@ -297,17 +297,17 @@ jobs:
             CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
             BACKEND_PORT=${{ env.BACKEND_PORT }}
 
-            echo "[INFO - 14.1] 🔄 Redémarrage du conteneur backend : \$CONTAINER_BACKEND_NAME"
-            docker restart "\$CONTAINER_BACKEND_NAME"
+            echo "[INFO - 14.1] 🔄 Redémarrage du conteneur backend : $CONTAINER_BACKEND_NAME"
+            docker restart "$CONTAINER_BACKEND_NAME"
             echo "[SUCCESS - 14.2] ✅ Conteneur redémarré"
 
-            echo "[INFO - 14.3] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
-            for i in \$(seq 1 30); do
-              if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
-                echo "[SUCCESS - 14.4] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
+            echo "[INFO - 14.3] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
+            for i in $(seq 1 30); do
+              if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
+                echo "[SUCCESS - 14.4] ✅ Port $BACKEND_PORT détecté (tentative $i)"
                 break
               else
-                echo "[WAIT] Tentative \$i/30... en attente"
+                echo "[WAIT] Tentative $i/30... en attente"
                 sleep 2
               fi
             done
@@ -316,11 +316,11 @@ jobs:
             sleep 5
 
             echo "[INFO - 14.6] 🔍 Test basique de /health..."
-            RESPONSE=\$(docker exec "\$CONTAINER_BACKEND_NAME" curl -s http://localhost:\$BACKEND_PORT/health || true)
-            if echo "\$RESPONSE" | grep -q "ok"; then
+            RESPONSE=$(docker exec "$CONTAINER_BACKEND_NAME" curl -s http://localhost:\$BACKEND_PORT/health || true)
+            if echo "$RESPONSE" | grep -q "ok"; then
               echo "[SUCCESS - 14.7] ✅ /health est fonctionnel"
             else
-              echo "[ERROR - 14.7] ❌ /health a échoué ! Réponse : \$RESPONSE" >&2
+              echo "[ERROR - 14.7] ❌ /health a échoué ! Réponse : $RESPONSE" >&2
               exit 1
             fi
 
