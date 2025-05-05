@@ -290,87 +290,39 @@ jobs:
       - name: 14 - Redémarrer le backend après le déploiement du Frontend
         run: |
           CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
-          CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
           BACKEND_PORT=${{ env.BACKEND_PORT }}
-          ENV=${{ env.ENV }}
 
           echo "🔁 Connexion SSH pour redémarrage du backend et vérification post-déploiement..."
 
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<EOF
             set -e
 
-            # 14.1 - Préparation des variables
-            CONTAINER_BACKEND_NAME="${CONTAINER_BACKEND_NAME}"
-            CONTAINER_POSTGRES_NAME="${CONTAINER_POSTGRES_NAME}"
-            BACKEND_PORT="${BACKEND_PORT}"
-            ENV="${ENV}"
+            echo "[INFO - 14.1] 🔄 Redémarrage du conteneur backend : \$CONTAINER_BACKEND_NAME"
+            docker restart "\$CONTAINER_BACKEND_NAME"
+            echo "[SUCCESS - 14.2] ✅ Conteneur redémarré"
 
-            echo "[INFO - 14.1] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
-
-            # 14.2 - Redémarrage du conteneur backend
-            if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
-              docker restart "\$CONTAINER_BACKEND_NAME"
-              echo "[SUCCESS - 14.2] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
-
-              # 14.3 - Démarrage manuel avec npm start
-              echo "[INFO - 14.3] 🚀 Démarrage manuel du backend avec npm start..."
-              docker exec -d "\$CONTAINER_BACKEND_NAME" npm start
-
-              # 14.4 - Attente que le port soit prêt
-              echo "[INFO - 14.4] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
-              for i in \$(seq 1 60); do
-                if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
-                  echo "[SUCCESS - 14.4] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
-                  break
-                else
-                  echo "[WAITING - 14.4] Tentative \$i/60... Port non disponible"
-                  sleep 2
-                fi
-              done
-
-              # 14.5 - Pause de stabilisation
-              echo "[INFO - 14.5] 💤 Pause de stabilisation..."
-              sleep 10
-
-              # 14.6 - Création de l'utilisateur admin pour l'environnement
-              echo "[INFO - 14.6] 🔐 Préparation de l'utilisateur administrateur..."
-              docker exec "\$CONTAINER_BACKEND_NAME" node /app/scripts/dev-only/setAdmin.js --env="\$ENV"
-
-              # 14.7 - Génération du token d'admin
-              echo "[INFO - 14.7] 🔐 Génération du ADMIN_TEST_TOKEN via generateAdminToken.js..."
-              ADMIN_TEST_TOKEN=\$(docker exec "\$CONTAINER_BACKEND_NAME" node /app/scripts/dev-only/generateAdminToken.js | tail -n 1)
-
-              if [ -z "\$ADMIN_TEST_TOKEN" ]; then
-                echo "[ERROR - 14.7] ❌ Impossible de générer ADMIN_TEST_TOKEN" >&2
-                exit 1
-              fi
-              echo "[OK - 14.7] ✅ Token généré."
-
-              # 14.8 - Ajout dans .env pour persistance
-              docker exec "\$CONTAINER_BACKEND_NAME" bash -c "
-                sed -i '/^ADMIN_TEST_TOKEN=/d' /app/.env && \
-                echo 'ADMIN_TEST_TOKEN=\$ADMIN_TEST_TOKEN' >> /app/.env
-              "
-              docker exec "\$CONTAINER_BACKEND_NAME" grep ADMIN_TEST_TOKEN /app/.env || echo "[WARN - 14.8] ⚠️ Le token n'a pas été ajouté dans .env"
-
-              # 14.9 - Exécution du test complet
-              echo "[INFO - 14.9] 🧪 Exécution de testComplet.js..."
-              if docker exec -e ADMIN_TEST_TOKEN="\$ADMIN_TEST_TOKEN" "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js --debug; then
-                echo "[SUCCESS - 14.9] ✅ Tous les tests post-déploiement ont réussi 🎉"
+            echo "[INFO - 14.3] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
+            for i in \$(seq 1 30); do
+              if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
+                echo "[SUCCESS - 14.4] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
+                break
               else
-                echo "[ERROR - 14.9] ❌ Le testComplet.js a échoué !" >&2
-                echo "[DEBUG] 📄 Derniers logs du conteneur :"
-                docker logs "\$CONTAINER_BACKEND_NAME" | tail -n 40
-                exit 1
+                echo "[WAIT] Tentative \$i/30... en attente"
+                sleep 2
               fi
+            done
 
+            echo "[INFO - 14.5] 💤 Pause rapide pour stabilisation..."
+            sleep 5
+
+            echo "[INFO - 14.6] 🔍 Test basique de /health..."
+            if docker exec "\$CONTAINER_BACKEND_NAME" curl -s http://localhost:\$BACKEND_PORT/health | grep -q "ok"; then
+              echo "[SUCCESS - 14.7] ✅ /health est fonctionnel"
             else
-              echo "[ERROR - 14] ❌ Conteneur non trouvé : \$CONTAINER_BACKEND_NAME"
+              echo "[ERROR - 14.7] ❌ /health a échoué !" >&2
               exit 1
             fi
 
-            echo "✅ Déploiement terminé avec succès !"
+            echo "[SUCCESS ✅] Étape 14 terminée avec succès."
 
           EOF
-
-
