@@ -291,7 +291,7 @@ jobs:
         run: |
           echo "🔁 Connexion SSH pour redémarrage du backend et vérification post-déploiement..."
 
-          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<EOF
+          ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<'EOF'
             set -e
 
             CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
@@ -316,10 +316,11 @@ jobs:
             sleep 5
 
             echo "[INFO - 14.6] 🔍 Test basique de /health..."
-            if docker exec "\$CONTAINER_BACKEND_NAME" curl -s http://localhost:\$BACKEND_PORT/health | grep -q "ok"; then
+            RESPONSE=\$(docker exec "\$CONTAINER_BACKEND_NAME" curl -s http://localhost:\$BACKEND_PORT/health || true)
+            if echo "\$RESPONSE" | grep -q "ok"; then
               echo "[SUCCESS - 14.7] ✅ /health est fonctionnel"
             else
-              echo "[ERROR - 14.7] ❌ /health a échoué !" >&2
+              echo "[ERROR - 14.7] ❌ /health a échoué ! Réponse : \$RESPONSE" >&2
               exit 1
             fi
 
