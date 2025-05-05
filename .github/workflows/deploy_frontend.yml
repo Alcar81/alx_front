@@ -303,7 +303,7 @@ jobs:
 
             echo "[INFO - 14.3] ⏳ Attente de l'ouverture du port $BACKEND_PORT..."
             for i in $(seq 1 30); do
-              if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
+              if docker exec "$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":$BACKEND_PORT"; then
                 echo "[SUCCESS - 14.4] ✅ Port $BACKEND_PORT détecté (tentative $i)"
                 break
               else
@@ -316,7 +316,7 @@ jobs:
             sleep 5
 
             echo "[INFO - 14.6] 🔍 Test basique de /health..."
-            RESPONSE=$(docker exec "$CONTAINER_BACKEND_NAME" curl -s http://localhost:\$BACKEND_PORT/health || true)
+            RESPONSE=$(docker exec "$CONTAINER_BACKEND_NAME" curl -s http://localhost:$BACKEND_PORT/health || true)
             if echo "$RESPONSE" | grep -q "ok"; then
               echo "[SUCCESS - 14.7] ✅ /health est fonctionnel"
             else
