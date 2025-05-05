@@ -313,7 +313,7 @@ jobs:
             done
 
             echo "[INFO - 14.5] 💤 Pause rapide pour stabilisation..."
-            sleep 30
+            sleep 5
 
             echo "[INFO - 14.6] 🔍 Test basique de /health..."
             RESPONSE=$(docker exec "$CONTAINER_BACKEND_NAME" curl -s http://localhost:$BACKEND_PORT/health || true)
