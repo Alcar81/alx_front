@@ -289,13 +289,13 @@ jobs:
 
       - name: 14 - Redémarrer le backend après le déploiement du Frontend
         run: |
-          CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
-          BACKEND_PORT=${{ env.BACKEND_PORT }}
-
           echo "🔁 Connexion SSH pour redémarrage du backend et vérification post-déploiement..."
 
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<EOF
             set -e
+
+            CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
+            BACKEND_PORT=${{ env.BACKEND_PORT }}
 
             echo "[INFO - 14.1] 🔄 Redémarrage du conteneur backend : \$CONTAINER_BACKEND_NAME"
             docker restart "\$CONTAINER_BACKEND_NAME"
@@ -324,5 +324,4 @@ jobs:
             fi
 
             echo "[SUCCESS ✅] Étape 14 terminée avec succès."
-
           EOF
