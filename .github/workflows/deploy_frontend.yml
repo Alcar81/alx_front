@@ -23,12 +23,11 @@ jobs:
       FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
       CONTAINER_PORT: ${{ vars.CONTAINER_PORT }}
       FRONT: ${{ vars.FRONT }}
-      NGINX: ${{ vars.NGINX }}      
+      NGINX: ${{ vars.NGINX }}
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
       REACT_APP_ENV: ${{ vars.ENV }}
       REACT_APP_WEBSITE_NAME: ${{ vars.REACT_APP_WEBSITE_NAME }}
-      
 
     steps:
       # Étape 1 - Afficher les variables
@@ -42,7 +41,7 @@ jobs:
           echo "Port Frontend : $FRONTEND_PORT"
           echo "Port Conteneur : $CONTAINER_PORT"
 
-      # Étape 2 - Checkout  repository    
+      # Étape 2 - Checkout  repository
       - name: 2 - Checkout repository
         uses: actions/checkout@v3
 
@@ -50,12 +49,12 @@ jobs:
       - name: 3 - Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.18.1'
+          node-version: "20.18.1"
 
-      # Étape 4 - Install dependencies     
+      # Étape 4 - Install dependencies
       - name: 4 - Install dependencies
         run: npm install
-      
+
       - name: 4.1 - Vérification de jsdom
         run: |
           if ! npm ls jsdom >/dev/null 2>&1; then
@@ -64,7 +63,7 @@ jobs:
           else
             echo "✅ jsdom déjà installé."
           fi
-      
+
       - name: 4.2 - Correction jest-environment-jsdom
         run: |
           if ! npm ls jest-environment-jsdom >/dev/null 2>&1; then
@@ -73,9 +72,9 @@ jobs:
           else
             echo "✅ jest-environment-jsdom déjà installé."
           fi
-    
-      # Étape 5 - Exécuter les tests   
-      - name: 5 - Exécuter les tests        
+
+      # Étape 5 - Exécuter les tests
+      - name: 5 - Exécuter les tests
         run: npm test
 
       # Étape 6.0 - Générer le fichier .env local pour le build React
@@ -103,7 +102,7 @@ jobs:
       - name: 6.2 - Build project
         env:
           REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
-          REACT_APP_FRONTEND_URL: ${{ env.REACT_APP_FRONTEND_URL }}          
+          REACT_APP_FRONTEND_URL: ${{ env.REACT_APP_FRONTEND_URL }}
         run: npm run build
 
       # Étape 7 - Start SSH agent and add key
@@ -126,7 +125,7 @@ jobs:
             docker network create $NETWORK || true
           "
 
-      # Étape 9 - Copy build and config to server      
+      # Étape 9 - Copy build and config to server
       - name: 9 - Copy build and config to server
         run: |
           mkdir -p build_with_config
@@ -157,17 +156,17 @@ jobs:
             NETWORK=${{ vars.NET }}_${{ vars.ENV }}
             FRONTEND_PORT=${{ vars.FRONTEND_PORT }}
             CONTAINER_PORT=${{ vars.CONTAINER_PORT }}
-      
+
             echo "Chemin de répertoire : $DEPLOY_DIRECTORY"
             echo "Nom du conteneur : $CONTAINER_NAME"
             echo "Réseau Docker : $NETWORK"
             echo "Port Frontend : $FRONTEND_PORT"
             echo "Port Conteneur : $CONTAINER_PORT"
-      
+
             echo "Arrêt et suppression du conteneur existant, s'il existe..."
             docker ps -a --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -w "$CONTAINER_NAME" && docker stop $CONTAINER_NAME || true
             docker ps -a --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -w "$CONTAINER_NAME" && docker rm $CONTAINER_NAME || true
-      
+
             echo "Validation des chemins avant la création du conteneur..."
             if [ -d "$DEPLOY_DIRECTORY" ]; then
               echo "Le chemin $DEPLOY_DIRECTORY est valide."
@@ -175,14 +174,14 @@ jobs:
               echo "Erreur : le chemin $DEPLOY_DIRECTORY n'existe pas." >&2
               exit 1
             fi
-      
+
             echo "Recréation du conteneur avec les dernières configurations..."
             docker run -d --name $CONTAINER_NAME \
               --network $NETWORK \
               -p ${FRONTEND_PORT}:${CONTAINER_PORT} \
               -v $DEPLOY_DIRECTORY:/usr/share/nginx/html:ro \
               nginx:alpine
-      
+
             echo "Conteneur recréé avec succès !"
           EOF
 
@@ -193,18 +192,18 @@ jobs:
             DEPLOY_DIRECTORY=${{ vars.DEPLOY_DIRECTORY }}
             MODE=$(grep REACT_APP_MAINTENANCE_MODE $DEPLOY_DIRECTORY../src/config/config.js | cut -d ':' -f2 | tr -d ' ,')
             echo "=== Configuration Nginx en mode $MODE ==="
-      
+
             if [ "$MODE" = "true" ]; then
               echo "Mode maintenance activé."
               cat <<EOT > /tmp/default.conf
           server {
               listen 80;
               server_name localhost;
-          
+
               location / {
                   return 503;
               }
-          
+
               error_page 503 /maintenance.html;
               location = /maintenance.html {
                   root $DEPLOY_DIRECTORY;
@@ -217,12 +216,12 @@ jobs:
           server {
               listen 80;
               server_name localhost;
-          
+
               location / {
                   root $DEPLOY_DIRECTORY;
                   index index.html index.htm;
               }
-          
+
               error_page 404 /404.html;
               location = /404.html {
                   root $DEPLOY_DIRECTORY;
@@ -230,12 +229,12 @@ jobs:
           }
           EOT
                 fi
-          
+
                 echo "Déploiement de la nouvelle configuration Nginx..."
                 docker cp /tmp/default.conf front_nginx_dev:/etc/nginx/conf.d/default.conf
                 docker exec front_nginx_dev nginx -s reload
           EOF
-        
+
       # Étape 12 - Health Check and Debugging
       - name: 12 - Health Check and Debugging
         run: |
@@ -252,15 +251,15 @@ jobs:
             echo "=== Vérifier les permissions sur le répertoire local ==="
             ls -ld ${DEPLOY_DIRECTORY} || echo "Erreur : Problème de permissions ou de chemin sur ${DEPLOY_DIRECTORY}."
           EOF
-      
+
       - name: 13 - Configurer logrotate pour Nginx
         run: |
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP << EOF
               LOGROTATE_CONF="/etc/logrotate.d/dev.alxmultimedia.com"
               LOG_FILE="/home/dev.alxmultimedia.com/logs/dev.alxmultimedia.com.access_log"
-        
+
               echo "[INFO] Configuration de logrotate pour \$LOG_FILE..."
-        
+
               if [ -f "\$LOGROTATE_CONF" ]; then
                 echo "[INFO] La configuration logrotate existe déjà : \$LOGROTATE_CONF"
               else
@@ -282,7 +281,7 @@ jobs:
           EOT
                   echo "[SUCCESS] Configuration logrotate créée : \$LOGROTATE_CONF"
                 fi
-          
+
                 # Vérifier la configuration logrotate
                 echo "[INFO] Test de la configuration logrotate..."
                 logrotate -d "\$LOGROTATE_CONF"
@@ -293,60 +292,73 @@ jobs:
           CONTAINER_BACKEND_NAME="back_node_${{ env.ENV }}"
           CONTAINER_POSTGRES_NAME="postgres_${{ env.ENV }}"
           BACKEND_PORT=${{ env.BACKEND_PORT }}
+          ENV=${{ env.ENV }}
 
           echo "🔁 Connexion SSH pour redémarrage du backend et vérification post-déploiement..."
 
           ssh -p $SSH_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/git_id_rsa $SSH_USER@$SERVER_IP bash <<EOF
             set -e
 
+            # 14.1 - Préparation des variables
             CONTAINER_BACKEND_NAME="${CONTAINER_BACKEND_NAME}"
             CONTAINER_POSTGRES_NAME="${CONTAINER_POSTGRES_NAME}"
             BACKEND_PORT="${BACKEND_PORT}"
+            ENV="${ENV}"
 
-            echo "[INFO - 14] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
+            echo "[INFO - 14.1] 🔄 Redémarrage du backend : \$CONTAINER_BACKEND_NAME"
 
+            # 14.2 - Redémarrage du conteneur backend
             if docker ps -a --format '{{.Names}}' | grep -w "\$CONTAINER_BACKEND_NAME"; then
               docker restart "\$CONTAINER_BACKEND_NAME"
-              echo "[SUCCESS - 14] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
+              echo "[SUCCESS - 14.2] ✅ Conteneur redémarré : \$CONTAINER_BACKEND_NAME"
 
-              echo "[INFO - 14] 🚀 Démarrage manuel du backend avec npm start..."
+              # 14.3 - Démarrage manuel avec npm start
+              echo "[INFO - 14.3] 🚀 Démarrage manuel du backend avec npm start..."
               docker exec -d "\$CONTAINER_BACKEND_NAME" npm start
 
-              echo "[INFO - 14] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
+              # 14.4 - Attente que le port soit prêt
+              echo "[INFO - 14.4] ⏳ Attente de l'ouverture du port \$BACKEND_PORT..."
               for i in \$(seq 1 60); do
                 if docker exec "\$CONTAINER_BACKEND_NAME" netstat -tln | grep -q ":\$BACKEND_PORT"; then
-                  echo "[SUCCESS] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
+                  echo "[SUCCESS - 14.4] ✅ Port \$BACKEND_PORT détecté (tentative \$i)"
                   break
                 else
-                  echo "[WAITING] Tentative \$i/60... Port non disponible"
+                  echo "[WAITING - 14.4] Tentative \$i/60... Port non disponible"
                   sleep 2
                 fi
               done
 
-              echo "[INFO - 14] 💤 Pause de stabilisation après détection du port..."
+              # 14.5 - Pause de stabilisation
+              echo "[INFO - 14.5] 💤 Pause de stabilisation..."
               sleep 10
 
-              echo "[INFO - 14] 🔐 Génération du ADMIN_TEST_TOKEN pour les tests frontend..."
+              # 14.6 - Création de l'utilisateur admin pour l'environnement
+              echo "[INFO - 14.6] 🔐 Préparation de l'utilisateur administrateur..."
+              docker exec "\$CONTAINER_BACKEND_NAME" node /app/scripts/dev-only/setAdmin.js --env="\$ENV"
+
+              # 14.7 - Génération du token d'admin
+              echo "[INFO - 14.7] 🔐 Génération du ADMIN_TEST_TOKEN via generateAdminToken.js..."
               ADMIN_TEST_TOKEN=\$(docker exec "\$CONTAINER_BACKEND_NAME" node /app/scripts/dev-only/generateAdminToken.js | tail -n 1)
 
               if [ -z "\$ADMIN_TEST_TOKEN" ]; then
-                echo "[ERROR - 14] ❌ Impossible de générer ADMIN_TEST_TOKEN" >&2
+                echo "[ERROR - 14.7] ❌ Impossible de générer ADMIN_TEST_TOKEN" >&2
                 exit 1
               fi
-              echo "[OK - 14] ✅ Token généré."
+              echo "[OK - 14.7] ✅ Token généré."
 
+              # 14.8 - Ajout dans .env pour persistance
               docker exec "\$CONTAINER_BACKEND_NAME" bash -c "
                 sed -i '/^ADMIN_TEST_TOKEN=/d' /app/.env && \
                 echo 'ADMIN_TEST_TOKEN=\$ADMIN_TEST_TOKEN' >> /app/.env
               "
+              docker exec "\$CONTAINER_BACKEND_NAME" grep ADMIN_TEST_TOKEN /app/.env || echo "[WARN - 14.8] ⚠️ Le token n'a pas été ajouté dans .env"
 
-              docker exec "\$CONTAINER_BACKEND_NAME" grep ADMIN_TEST_TOKEN /app/.env || echo "[WARN - 14] ⚠️ Le token n'a pas été ajouté dans .env"
-
-              echo "[INFO - 14] 🧪 Exécution de testComplet.js..."
+              # 14.9 - Exécution du test complet
+              echo "[INFO - 14.9] 🧪 Exécution de testComplet.js..."
               if docker exec -e ADMIN_TEST_TOKEN="\$ADMIN_TEST_TOKEN" "\$CONTAINER_BACKEND_NAME" node /app/tests/testComplet.js --debug; then
-                echo "[SUCCESS - 14] ✅ Tous les tests post-déploiement ont réussi 🎉"
+                echo "[SUCCESS - 14.9] ✅ Tous les tests post-déploiement ont réussi 🎉"
               else
-                echo "[ERROR - 14] ❌ Le testComplet.js a échoué !" >&2
+                echo "[ERROR - 14.9] ❌ Le testComplet.js a échoué !" >&2
                 echo "[DEBUG] 📄 Derniers logs du conteneur :"
                 docker logs "\$CONTAINER_BACKEND_NAME" | tail -n 40
                 exit 1
@@ -358,8 +370,7 @@ jobs:
             fi
 
             echo "✅ Déploiement terminé avec succès !"
-              
+
           EOF
 
-            
-        
+
