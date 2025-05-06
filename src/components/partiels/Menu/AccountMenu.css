@@ -22,7 +22,7 @@
 .account-dropdown {
   position: absolute;
   top: calc(100% + 8px);
-  right: 0;
+  right: 0; 
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
   box-shadow: var(--box-shadow);

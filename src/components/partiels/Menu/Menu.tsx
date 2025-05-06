@@ -5,7 +5,7 @@ import logo from "../../../assets/images/logos/logo-desktop.png";
 import MenuRight from "./MenuRight";
 import MenuLeft from "./MenuLeft";
 import MenuHam from "./MenuHam";
-import useIsMobile from "../../../hooks/useIsMobile"; 
+import useIsMobile from "../../../hooks/useIsMobile";
 import "./Menu.css";
 
 const Menu: React.FC = () => {

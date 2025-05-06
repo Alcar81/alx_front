@@ -6,7 +6,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useMaintenance } from "../../../hooks/useMaintenance"; // 🔥 Ajouté
 import AccountMenu from "./AccountMenu";
 import "./Menu.css";
-import "./AccountMenu.css";
 
 const MenuRight: React.FC = () => {
   const [showSearch, setShowSearch] = React.useState(false);
@@ -33,7 +32,9 @@ const MenuRight: React.FC = () => {
           </div>
         )}
 
-        <AccountMenu mode="right" />
+        <div className="account-wrapper">
+            <AccountMenu mode="right" />
+        </div>        
       </div>
     </div>
   );

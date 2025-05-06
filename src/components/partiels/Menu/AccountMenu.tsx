@@ -34,11 +34,12 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
   const isAdmin = user?.roles?.some((r) => r.toLowerCase() === "admin");
 
   return (
-    <div
-      className={`account-menu ${mode}`}
-      onClick={() => setShowMenu(!showMenu)}
-      onMouseLeave={() => setShowMenu(false)}
-    >
+      <div
+        className={`account-menu ${mode} ${showMenu ? "active" : ""}`}
+        onClick={() => setShowMenu(!showMenu)}
+        onMouseLeave={() => setShowMenu(false)}
+      >
+  
       <div className="account-label">
         {user ? (
           <span className="account-name">{user.firstName}</span>
