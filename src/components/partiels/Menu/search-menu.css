@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  position: relative;
+  position: relative; /* ✅ nécessaire pour l'alignement du dropdown */
 }
 
 .menu-search svg {
@@ -13,17 +13,18 @@
   height: 24px;
 }
 
-/* Champ Recherche */
+/* 📌 Champ Recherche */
 .search-box {
   position: absolute;
-  top: calc(100% + 6px);
-  right: 380px;
+  top: calc(100% + 11px); /* aligne verticalement avec le menu compte */
+  right: -5px; /* ajuste finement le décalage horizontal */
   max-width: 200px;
   width: 200px;
   background-color: var(--primary-back-color);
   border: 1px solid #ddd;
   padding: 5px;
   box-shadow: var(--box-shadow);
+  border-radius: 6px;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -31,6 +32,7 @@
 }
 
 .search-input {
+  width: 100%;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
