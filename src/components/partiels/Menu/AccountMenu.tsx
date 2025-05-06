@@ -1,11 +1,9 @@
-// 📁 src/components/partiels/Menu/AccountMenu.tsx
-
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../../../theme/ThemeContext";
 import { useUserContext } from "../../../contexts/UserContext";
-import { useMaintenance } from "../../../hooks/useMaintenance"; // 🔥 Ajouté
+import { useMaintenance } from "../../../hooks/useMaintenance";
 import "./AccountMenu.css";
 
 interface AccountMenuProps {
@@ -14,12 +12,14 @@ interface AccountMenuProps {
 
 const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const { user, logout } = useUserContext();
   const { mode: themeMode, toggleColorMode } = useContext(ThemeContext);
   const navigate = useNavigate();
-  const { isMaintenanceActive } = useMaintenance(); // 🔥 Ajouté
+  const { isMaintenanceActive } = useMaintenance();
 
-  if (isMaintenanceActive) return null; // 🔥 Menu caché si maintenance active
+  if (isMaintenanceActive) return null;
 
   const handleLogout = () => {
     try {
@@ -33,14 +33,24 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ mode }) => {
 
   const isAdmin = user?.roles?.some((r) => r.toLowerCase() === "admin");
 
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setShowMenu(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setShowMenu(false);
+    }, 300); // délai avant fermeture
+  };
+
   return (
-      <div
-        className={`account-menu ${mode} ${showMenu ? "active" : ""}`}
-        onClick={() => setShowMenu(!showMenu)}
-        onMouseLeave={() => setShowMenu(false)}
-      >
-  
-      <div className="account-label">
+    <div
+      className={`account-menu ${mode} ${showMenu ? "active" : ""}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="account-label" onClick={() => setShowMenu(!showMenu)}>
         {user ? (
           <span className="account-name">{user.firstName}</span>
         ) : (
