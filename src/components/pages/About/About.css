@@ -9,6 +9,7 @@
   text-align: center;
   width: 100%;
   padding: 20px;
+  flex-grow: 1; 
 }
 
 /* =========================
@@ -22,11 +23,10 @@
   border-radius: 8px;
   box-shadow: var(--box-shadow);
   max-width: 900px;
-  display: flex !important;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  margin: 0 auto 30px;
+  margin: 0 auto 30px;/* Espace pour le header sticky */ 
 }
 
 .about-header h1 {
@@ -148,11 +148,6 @@
 ========================= */
 
 @media (width <= 768px) {
-  .about-page {
-    margin-top: -65px;
-    padding: 10px;
-  }
-
   .about-header {
       max-width: 100%;
       padding: 30px 20px;

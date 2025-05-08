@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../hooks/useAuth";
 import { useParams, Navigate } from "react-router-dom";
-import Header from "../../../partiels/Header/Header";
-import Footer from "../../../partiels/Footer/Footer";
 import { useAuthApi } from "../../../../api/authApi";
 import { useAdminApi } from "../../../../api/adminApi";
 import "./UserProfile.css";
@@ -132,63 +130,56 @@ const UserProfile: React.FC = () => {
   };
 
   return (
-    <>
-      <Header />
-      <main className="main page-with-header">
-        <div className="user-profile-page">
-          <header className="user-profile-header">
-            <h1>👤 Profil Utilisateur</h1>
-            <p>Bienvenue {userData.firstName} {userData.lastName}</p>
-          </header>
+    <>      
+      <div className="user-profile-page">
+        <header className="user-profile-header">
+          <h1>👤 Profil Utilisateur</h1>
+          <p>Bienvenue {userData.firstName} {userData.lastName}</p>
+        </header>
 
-          {saveStatus === "success" && <div className="alert-success">✅ Profil mis à jour avec succès</div>}
-          {saveStatus === "error" && <div className="alert-error">❌ Erreur lors de la mise à jour</div>}
+        {saveStatus === "success" && <div className="alert-success">✅ Profil mis à jour avec succès</div>}
+        {saveStatus === "error" && <div className="alert-error">❌ Erreur lors de la mise à jour</div>}
 
-          <section id="infos" className="user-profile-info">
-            <h2>📝 Informations personnelles</h2>
-            <input type="text" name="firstName" placeholder="Prénom" value={userData.firstName} onChange={handleInputChange} />
-            <input type="text" name="lastName" placeholder="Nom" value={userData.lastName} onChange={handleInputChange} />
-            <input type="email" name="email" placeholder="Email" value={userData.email} onChange={handleInputChange} />
-            <div className="save-button-wrapper">
-              <button className="save-button" onClick={handleSave}>💾 Sauvegarder</button>
+        <section id="infos" className="user-profile-info">
+          <h2>📝 Informations personnelles</h2>
+          <input type="text" name="firstName" placeholder="Prénom" value={userData.firstName} onChange={handleInputChange} />
+          <input type="text" name="lastName" placeholder="Nom" value={userData.lastName} onChange={handleInputChange} />
+          <input type="email" name="email" placeholder="Email" value={userData.email} onChange={handleInputChange} />
+          <div className="save-button-wrapper">
+            <button className="save-button" onClick={handleSave}>💾 Sauvegarder</button>
+          </div>
+        </section>
+
+        <section id="security" className="user-profile-security">
+          <h2>🔒 Changer le mot de passe</h2>
+          {passwordChangeStatus === "success" && <div className="alert-success">✅ Mot de passe changé avec succès</div>}
+          {passwordChangeStatus === "error" && <div className="alert-error">❌ Erreur lors du changement de mot de passe</div>}
+          <input type="password" name="currentPassword" placeholder="Mot de passe actuel" value={passwordData.currentPassword} onChange={handlePasswordInputChange} />
+          <input type="password" name="newPassword" placeholder="Nouveau mot de passe" value={passwordData.newPassword} onChange={handlePasswordInputChange} />
+          <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" value={passwordData.confirmPassword} onChange={handlePasswordInputChange} />
+          <div className="save-button-wrapper">
+            <button className="save-button" onClick={handlePasswordChange}>🔒 Mettre à jour le mot de passe</button>
+          </div>
+        </section>
+
+        {isAdmin && (
+          <section id="roles" className="user-profile-roles">
+            <h2>🛡️ Permissions</h2>
+            <div className="checkbox-group">
+              {AVAILABLE_ROLES.map((role) => (
+                <label key={role} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={userData.roles.includes(role)}
+                    onChange={(e) => handleRoleToggle(e, role)}
+                  />
+                  {role}
+                </label>
+              ))}
             </div>
           </section>
-
-          <section id="security" className="user-profile-security">
-            <h2>🔒 Changer le mot de passe</h2>
-            {passwordChangeStatus === "success" && <div className="alert-success">✅ Mot de passe changé avec succès</div>}
-            {passwordChangeStatus === "error" && <div className="alert-error">❌ Erreur lors du changement de mot de passe</div>}
-            <input type="password" name="currentPassword" placeholder="Mot de passe actuel" value={passwordData.currentPassword} onChange={handlePasswordInputChange} />
-            <input type="password" name="newPassword" placeholder="Nouveau mot de passe" value={passwordData.newPassword} onChange={handlePasswordInputChange} />
-            <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" value={passwordData.confirmPassword} onChange={handlePasswordInputChange} />
-            <div className="save-button-wrapper">
-              <button className="save-button" onClick={handlePasswordChange}>🔒 Mettre à jour le mot de passe</button>
-            </div>
-          </section>
-
-          {isAdmin && (
-            <section id="roles" className="user-profile-roles">
-              <h2>🛡️ Permissions</h2>
-              <div className="checkbox-group">
-                {AVAILABLE_ROLES.map((role) => (
-                  <label key={role} className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={userData.roles.includes(role)}
-                      onChange={(e) => handleRoleToggle(e, role)}
-                    />
-                    {role}
-                  </label>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <section id="footer" className="footer">
-            <Footer />
-          </section>
-        </div>
-      </main>
+        )}         
+      </div>      
     </>
   );
 };
