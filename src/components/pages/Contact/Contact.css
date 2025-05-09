@@ -8,7 +8,6 @@
     max-width: 1200px;
     margin: 0 auto;
     color: #333;
-  }
   
   /* =========================
    📌 Section d'Accueil (Header)
@@ -136,4 +135,5 @@
         margin-top: 100px;
         padding: 10px;
     }
+}
 }

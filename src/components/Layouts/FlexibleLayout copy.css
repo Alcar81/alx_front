@@ -26,40 +26,36 @@
 .content-layout {
   width: 100vw;
   min-height: 100vh;
+  margin-top: var(--header-height); /* Espace pour le header sticky */
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  flex-direction: column; /* Aligne les enfants verticalement */
+  flex: 1; /* Permet à content-layout de s'étendre pour occuper l'espace disponible */
   flex-shrink: 0;
 }
 
-/* Section principale avec gestion de contenu */
+/* Optionnel : compensation du header sticky si besoin */
 .content-layout-header {
-  margin-top: calc(var(--header-height) + 80px);
-  padding-top: 0; /* plus besoin de compenser le sticky */
+  margin-top: calc(var(--header-height) + 160px);
   flex: 1;
   display: flex;
-  flex-direction: column;
-}
-
-.main-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: var(--header-height);
+  flex-direction: column;  
 }
 
 /* ========== Main ========== */
+
 .main-layout {
-  flex: 1;
+  flex: 1; /* Le contenu principal prend l'espace restant avant le footer */
   display: flex;
   flex-direction: column;
 }
+
 
 /* =========================
    📌 Footer
 ========================= */
 .footer-layout {
-  height: var(--footer-height);
+  height: var(--footer-height); /* Hauteur fixe pour le footer */
+
 }
 
 .footer-hidden {
@@ -69,23 +65,24 @@
 /* =========================
    📱 Responsive - petits écrans
 ========================= */
+
 @media (width <= 768px) {
-  .header-layout {
-    padding: 0 10px;
-    box-shadow: none; /* Option : alléger le visuel */
+  .content-layout-header {
+    margin-top: calc(var(--header-height) + 1000px); /* Réduction de l'espace */
   }
 
-  .content-layout-header {
-    margin-top: calc(var(--header-height) + 0px);
-    padding-top: 0; /* plus besoin de compenser le sticky */
+  .header-layout {
+    padding: 0 10px; /* Un peu plus de souffle */
+    box-shadow: none; /* Option : retirer l’ombre pour alléger */
   }
 
   .main-wrapper {
-    padding-top: calc(var(--header-height) + 1000px); /* ajustable */
+    padding-top: calc(var(--header-height) + 10px); /* ajustable */
   }
-
+  
   .main-layout {
     padding: 0 10px;
+    flex: 1;
   }
 
   .footer-layout {

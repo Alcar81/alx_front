@@ -18,13 +18,15 @@ const FlexibleLayout: React.FC<FlexibleLayoutProps> = ({
 }) => {
   return (
     <>
-      <div className="layout"> 
-      {showHeader && (          
-        <div className="header-layout">
-          <Header />
-        </div>            
-      )} 
-        <div className="content-layout">         
+      <div className="layout">
+        {showHeader && (          
+          <div className="header-layout">
+            <Header />
+          </div>            
+        )}
+
+        <div className="content-layout"> 
+          <div className="header-placeholder" />          
           <main className="main-wrapper">
             <div className="main-layout">            
                 <div className={showHeader ? "content-layout-header" : undefined}>

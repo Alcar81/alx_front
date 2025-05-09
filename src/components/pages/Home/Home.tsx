@@ -4,6 +4,7 @@ import "./Home.css";
 
 const Home: React.FC = () => {
   return (
+      <>
         <div className="home-page">
           <header className="home-header">
             <h1>Bienvenue chez AlxMultimedia</h1>
@@ -40,7 +41,8 @@ const Home: React.FC = () => {
               </div>
             </div>
           </section>
-        </div>
+        </div>      
+      </>
   );
 };
 

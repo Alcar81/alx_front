@@ -33,7 +33,9 @@
     --transition-medium: 0.3s ease;
     --transition-slow: 0.5s ease;
   }
-  
+
+
+
   /* 🌓 Thème Sombre (actif via [data-theme="dark"]) */
   [data-theme="dark"] {
     --primary-color: #1e1e1e;

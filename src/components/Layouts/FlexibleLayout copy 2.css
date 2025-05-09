@@ -16,6 +16,14 @@
   align-items: center;
 }
 
+/* 🔧 Espace réservé dans le flux pour compenser sticky */
+.header-placeholder {
+  height: var(--header-height);
+  min-height: var(--header-height); /* sécurise l’affichage */
+  display: block;
+  flex-shrink: 0;
+}
+
 .header-hidden {
   display: none;
 }
@@ -39,13 +47,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.main-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: var(--header-height);
 }
 
 /* ========== Main ========== */
@@ -75,13 +76,16 @@
     box-shadow: none; /* Option : alléger le visuel */
   }
 
-  .content-layout-header {
-    margin-top: calc(var(--header-height) + 0px);
-    padding-top: 0; /* plus besoin de compenser le sticky */
+  .header-placeholder {
+    height: var(--header-height);
+    min-height: var(--header-height); /* sécurise l’affichage */
+    display: block;
+    flex-shrink: 0;
   }
 
-  .main-wrapper {
-    padding-top: calc(var(--header-height) + 1000px); /* ajustable */
+  .content-layout-header {
+    margin-top: calc(var(--header-height) + 1000px);
+    padding-top: 0; /* plus besoin de compenser le sticky */
   }
 
   .main-layout {
