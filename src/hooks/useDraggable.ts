@@ -19,6 +19,7 @@ export function useDraggable(surfaceRef: React.RefObject<HTMLElement>) {
       const evt = e as MouseEvent;
       evt.preventDefault();
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const bounds = surface.getBoundingClientRect();
       const elemRect = element.getBoundingClientRect();
 
