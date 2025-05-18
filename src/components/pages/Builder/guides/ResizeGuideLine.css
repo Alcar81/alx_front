@@ -1,0 +1,9 @@
+/* 📁 src/components/pages/Builder/guides/ResizeGuideLine.css */
+.resize-guide-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(0 128 255 / 70%);
+  z-index: 9999;
+  pointer-events: none;
+}

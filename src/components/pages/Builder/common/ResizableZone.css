@@ -1,0 +1,49 @@
+/* 📁 src/components/pages/Builder/common/ResizableZone.css */
+
+/* =========================
+   🧱 Zone redimensionnable
+========================= */
+.resizable-zone {
+  position: absolute;
+  box-sizing: border-box;
+  background-color: transparent;
+  border: 2px dashed transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  z-index: 10;
+}
+
+.resizable-zone.selected {
+  border-color: rgb(0 128 255 / 30%);
+  background-color: rgb(0 0 255 / 3%);
+}
+
+.resizable-zone.selected .resize-handle.se {
+  display: block;
+}
+
+/* ↘️ Coin inférieur droit */
+.resize-handle.se {
+  display: none;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+  background-color: rgb(0 128 255 / 80%);
+  border-radius: 3px;
+  z-index: 20;
+}
+
+/* 🟢 Drag zone en haut */
+.zone-drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 100%;
+  cursor: move;
+  z-index: 30;
+  background-color: transparent;
+  pointer-events: auto;
+}

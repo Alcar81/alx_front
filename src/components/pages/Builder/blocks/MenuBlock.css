@@ -1,0 +1,30 @@
+/* 📁 src/components/pages/Builder/blocks/MenuBlock.css */
+
+.menu-block {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.menu-block ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-block li a {
+  text-decoration: none;
+  color: var(--text-color, #333);
+  font-weight: 500;
+}
+
+.menu-block.left {
+  justify-content: flex-start;
+}
+
+.menu-block.right {
+  justify-content: flex-end;
+  margin-left: auto;
+}

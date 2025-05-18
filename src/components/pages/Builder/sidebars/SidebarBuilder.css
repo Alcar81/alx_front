@@ -1,0 +1,47 @@
+/* 📁 src/components/pages/Builder/sidebars/SidebarBuilder.css */
+
+/* =========================
+   📌 Sidebars
+========================= */
+.sidebar-builder-left,
+.sidebar-builder-right {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden; /* Empêche les scrollbars */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-builder-left {
+  background-color: #f8f9fa;
+  border-right: 1px solid #ccc;
+}
+
+.sidebar-builder-right {
+  background-color: #f1f1f1;
+  border-left: 1px solid #ccc;
+}
+
+.option-group {
+  margin-top: 20px;
+}
+
+.option-group input[type="range"] {
+  width: 100%;
+}
+
+/* =========================
+   📱 Responsive
+========================= */
+@media (width <= 768px) {
+  .sidebar-builder-left,
+  .sidebar-builder-right {
+    width: 100%;
+    height: auto;
+    border: none;
+    padding: 10px;
+  }
+}

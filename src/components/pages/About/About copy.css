@@ -1,3 +1,7 @@
+/* =========================
+   📌 Styles généraux de About
+========================= */
+
 .about-page {
   display: flex;
   flex-direction: column;
@@ -5,8 +9,11 @@
   text-align: center;
   padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
 }
+
+/* =========================
+ 📌 Section d'Accueil (Header)
+========================= */
 
 .about-header {
   background-color: var(--primary-color);
@@ -15,17 +22,24 @@
   border-radius: 8px;
   box-shadow: var(--box-shadow);
   max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 40px;
 }
 
 .about-header h1 {
   font-size: 2.5rem;
-  margin: 130px 0;
 }
 
 .about-header p {
   font-size: 1.2rem;
+  margin: 15px 0;
 }
+
+/* =========================
+ 📌 Sections About (Mission, Histoire)
+========================= */
 
 .about-mission, .about-histoire {
   background-color: var(--light-color);
@@ -36,14 +50,19 @@
   max-width: 900px;
 }
 
-.about-mission h2, .about-histoire h2 {
+
+.about-mission, .about-histoire h2 {
   font-size: 1.8rem;
   font-weight: bold;
 }
 
+/* =========================
+ 📌 Liste des Valeurs/Avantages
+========================= */
+
 .about-valeurs {
   padding: 40px;
-  margin-bottom: 10px;
+  margin-bottom: 10px;  
 }
 
 .about-valeurs h2 {
@@ -72,6 +91,10 @@
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+/* =========================
+ 📌 Section Équipe
+========================= */
 
 .about-team {
   padding: 40px 20px;
@@ -119,49 +142,61 @@
   color: #555;
 }
 
-@media (width <= 768px) {
-  .about-page {
-    padding: 10px;
-    max-width: 100%;
-  }
+/* =========================
+ 📌 Ajustements Responsive pour About
+========================= */
 
+@media (width <= 768px) {
   .about-header {
-    max-width: 100%;
-    padding: 30px 20px;
-    margin: 0 auto 30px;
+      max-width: 100%;
+      padding: 30px 20px;
+      margin: 0 auto 30px; /* ✅ Ajustement cohérent avec grand écran */
   }
 
   .about-header h1 {
-    font-size: 2rem;
+      font-size: 2rem;
   }
 
   .about-header p {
-    font-size: 1rem;
-    padding: 10px 0;
+      font-size: 1rem;
+      padding: 10px 0;
   }
 
   .about-mission, .about-histoire, .about-valeurs {
-    padding: 30px;
-    max-width: 100%;
+      padding: 30px;
+      max-width: 100%;
+  }
+
+  .about-content h2 {
+      font-size: 1.5rem;
   }
 
   .about-list {
-    flex-direction: column;
-    align-items: center;
+      flex-direction: column;
+      align-items: center;
   }
 
   .about-item {
-    max-width: 250px;
-    min-height: 120px;
+    flex: 1 1 300px;  /* 🔹 Largeur initiale de 300px, adaptative */
+    max-width: 250px; /* 📏 Limite la largeur */
+    background-color: var(--light-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
     text-align: center;
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ✅ Centre horizontalement */
+    height: auto; /* 📏 Ajuste à la hauteur du contenu */
+    min-height: 120px; /* 🔹 Définit une hauteur minimale */
+}
 
   .team-container {
-    flex-direction: column;
-    align-items: center;
+      flex-direction: column;
+      align-items: center;
   }
 
   .team-member {
-    max-width: 100%;
+      max-width: 100%;
   }
 }

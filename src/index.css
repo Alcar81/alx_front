@@ -34,7 +34,4 @@ html, body {
   box-sizing: inherit;
 }
 
-main.landing-page {
-  height: 100vh;
-  overflow: hidden;
-}
+

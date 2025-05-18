@@ -1,0 +1,44 @@
+/* 📁 src/components/pages/Builder/zones/Zones.css */
+
+/* =========================
+   ✅ Sélection & surbrillance
+========================= */
+.zone-clickable {
+  cursor: pointer;
+  transition: outline 0.15s ease;
+  position: relative;
+}
+
+.zone-clickable:hover:not(.zone-selected) {
+  outline: 2px dashed rgb(0 128 255 / 50%);
+  outline-offset: -2px;
+}
+
+.zone-selected {
+  outline: 2px solid limegreen;
+  outline-offset: -2px;
+  z-index: 15;
+}
+
+/* =========================
+   🟩 Poignées invisibles
+========================= */
+.resize-border-top,
+.resize-border-bottom {
+  position: absolute;
+  height: 6px;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  z-index: 10;
+}
+
+.resize-border-bottom {
+  bottom: 0;
+  cursor: ns-resize;
+}
+
+.resize-border-top {
+  top: 0;
+  cursor: ns-resize;
+}

@@ -2,14 +2,21 @@
    📌 Styles généraux de Home
 ========================= */
 
+/* Le wrapper global est déjà défini dans Layout.css, inutile ici */
+
+/* =========================
+   📌 Styles de la page d'accueil
+========================= */
+
 .home-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
   padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  flex-grow: 1; 
 }
 
 /* =========================
@@ -23,7 +30,10 @@
   border-radius: 8px;
   box-shadow: var(--box-shadow);
   max-width: 900px;
-  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 30px;/* Espace pour le header sticky */  
 }
 
 .home-header h1 {
@@ -106,19 +116,14 @@
 }
 
 /* =========================
-   📱 Responsive
+   📌 Responsive
 ========================= */
 
 @media (width <= 768px) {
-  .home-page {
-    padding: 10px;
-    max-width: 100%;
-  }
-
   .home-header {
     max-width: 100%;
     padding: 30px 20px;
-    margin: 0 auto 30px;
+    margin: 0 auto 30px; 
   }
 
   .home-header h1 {
@@ -152,5 +157,7 @@
   .service-item {
     max-width: 100%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
   }
 }

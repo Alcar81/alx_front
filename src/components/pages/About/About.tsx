@@ -89,8 +89,7 @@ const About: React.FC = () => {
             </div>
           </div>
         </section>         
-      </div>
-      
+      </div>      
     </>
   );
 };

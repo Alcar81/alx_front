@@ -1,9 +1,8 @@
 /* ==========================================
-   📌 Styles du Layout - FlexibleLayout.css
+   📌 Layout principal - FlexibleLayout.css
 ========================================== */
 
 /* ========== Header Sticky ========== */
-
 .header-layout {
   position: sticky;
   top: 0;
@@ -16,48 +15,30 @@
   align-items: center;
 }
 
-.header-hidden {
-  display: none;
-}
-
-/* =========================
-   📌 Conteneur principal (Main + Footer)
-========================= */
-.content-layout {
-  width: 100vw;
+/* ========== Layout global ========== */
+.layout {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  flex-shrink: 0;
 }
 
-/* Section principale avec gestion de contenu */
+/* ========== Conteneur principal ========== */
+.content-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Section principale, en-dessous du header */
 .content-layout-header {
-  margin-top: calc(var(--header-height) + 80px);
-  padding-top: 0; /* plus besoin de compenser le sticky */
+  margin-top: var(--header-height); /* espace pour le header sticky */
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.main-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: var(--header-height);
-}
-
-/* ========== Main ========== */
-.main-layout {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* =========================
-   📌 Footer
-========================= */
+/* ========== Footer ========== */
 .footer-layout {
   height: var(--footer-height);
 }
@@ -66,26 +47,22 @@
   display: none;
 }
 
-/* =========================
-   📱 Responsive - petits écrans
-========================= */
+.header-hidden {
+  display: none;
+}
+
+/* ==========================================
+   📱 Responsive
+========================================== */
 @media (width <= 768px) {
   .header-layout {
     padding: 0 10px;
-    box-shadow: none; /* Option : alléger le visuel */
+    box-shadow: none;
+    margin-bottom: 2320px;
   }
 
   .content-layout-header {
-    margin-top: calc(var(--header-height) + 0px);
-    padding-top: 0; /* plus besoin de compenser le sticky */
-  }
-
-  .main-wrapper {
-    padding-top: calc(var(--header-height) + 1000px); /* ajustable */
-  }
-
-  .main-layout {
-    padding: 0 10px;
+    padding-top: var(--header-height);
   }
 
   .footer-layout {
