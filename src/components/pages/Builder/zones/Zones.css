@@ -42,3 +42,10 @@
   top: 0;
   cursor: ns-resize;
 }
+
+/* 🧱 Bordure rouge si taille minimale atteinte */
+.resize-border-bottom.blocked,
+.resize-border-top.blocked {
+  background-color: rgb(255 0 0 / 30%);
+  transition: background-color 0.2s ease;
+}

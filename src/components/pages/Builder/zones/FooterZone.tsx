@@ -1,5 +1,4 @@
 // 📁 src/components/pages/Builder/zones/FooterZone.tsx
-
 import React, { useRef, useState } from "react";
 import "./Zones.css";
 import { useBuilderStore } from "../../../../store/builderStore";
@@ -12,10 +11,9 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
   const setHoveredZone = useBuilderStore((state) => state.setHoveredZone);
 
   const isSelected = selectedZone === "footer";
-  const containerRef = useRef<HTMLDivElement>(null);
-
   const [guideY, setGuideY] = useState<number | null>(null);
   const { startResize } = useResizableHandle("footer", surfaceRef, setGuideY);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -26,15 +24,19 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         onMouseEnter={() => setHoveredZone("footer")}
         onMouseLeave={() => setHoveredZone(null)}
       >
-        <span style={{ fontSize: "1.2rem", color: "#fff" }}>🔻 Pied de page (Footer)</span>
+        <span style={{ fontSize: "1.2rem", color: "#f36" }}>🔻 Pied de page (Footer)</span>
+
+        {/* ✅ Zone de redimensionnement en haut */}
         {isSelected && (
           <div
             className="resize-border-top"
             onMouseDown={startResize}
-            title="Redimensionner le footer"
+            title="Redimensionner le pied de page"
           />
         )}
       </footer>
+
+      {/* ✅ Affichage ligne guide */}
       {guideY !== null && <ResizeGuideLine y={guideY} />}
     </>
   );

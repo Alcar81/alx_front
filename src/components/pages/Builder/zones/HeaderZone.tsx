@@ -11,10 +11,9 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
   const setHoveredZone = useBuilderStore((state) => state.setHoveredZone);
 
   const isSelected = selectedZone === "header";
-  const containerRef = useRef<HTMLDivElement>(null);
-
   const [guideY, setGuideY] = useState<number | null>(null);
   const { startResize } = useResizableHandle("header", surfaceRef, setGuideY);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -26,14 +25,18 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         onMouseLeave={() => setHoveredZone(null)}
       >
         <span style={{ fontSize: "1.2rem", color: "#333" }}>🔷 En-tête (Header)</span>
+
+        {/* ✅ Zone de redimensionnement en bas */}
         {isSelected && (
           <div
             className="resize-border-bottom"
             onMouseDown={startResize}
-            title="Redimensionner le header"
+            title="Redimensionner l'en-tête"
           />
         )}
       </header>
+
+      {/* ✅ Affichage ligne guide */}
       {guideY !== null && <ResizeGuideLine y={guideY} />}
     </>
   );

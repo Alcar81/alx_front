@@ -10,7 +10,9 @@ const ResizeGuideLine: React.FC<ResizeGuideLineProps> = ({ y }) => {
   return (
     <div
       className="resize-guide-line"
-      style={{ top: `${y}px` }}
+      style={{
+        top: `${y}px`,
+      }}
     />
   );
 };

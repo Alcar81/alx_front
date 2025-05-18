@@ -4,16 +4,17 @@ import React from "react";
 import "./FloatingBuilderPanel.css";
 import { useDraggable } from "../../../../hooks/useDraggable";
 import { useBuilderStore, ZoneKey } from "../../../../store/builderStore";
+import {
+  useLayoutStore,
+  MIN_HEIGHTS,
+  MAX_HEIGHTS,
+} from "../../../../store/layoutStore";
 
 interface FloatingBuilderPanelProps {
   surfaceRef: React.RefObject<HTMLDivElement>;
 }
 
-const zoneOptions: ZoneKey[] = [
-  "header",
-  "main",
-  "footer",
-];
+const zoneOptions: ZoneKey[] = ["header", "main", "footer"];
 
 const clamp = (val: number, min: number, max: number) =>
   Math.min(Math.max(val, min), max);
@@ -26,10 +27,10 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
     setSelectedZone,
     panelPosition,
     zones,
-    resetLayout,
     updateZone,
   } = useBuilderStore();
 
+  const { layout, setHeight, toggleSection } = useLayoutStore();
   const zoneData = selectedZone ? zones[selectedZone] : null;
 
   const handleZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -40,7 +41,15 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
   };
 
   const handleReset = () => {
-    resetLayout(); // 🟢 Simplicité absolue
+    if (!selectedZone) return;
+
+    if (selectedZone === "header") {
+      setHeight("header", "80px");
+      updateZone("header", { height: 80 });
+    } else if (selectedZone === "footer") {
+      setHeight("footer", "60px");
+      updateZone("footer", { height: 60 });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +57,13 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
     const numericValue = Number(value);
     if (!selectedZone || isNaN(numericValue)) return;
 
-    updateZone(selectedZone, { [name]: numericValue });
+    if (name === "height" && (selectedZone === "header" || selectedZone === "footer")) {
+      const clamped = clamp(numericValue, MIN_HEIGHTS[selectedZone], MAX_HEIGHTS[selectedZone]);
+      setHeight(selectedZone, `${clamped}px`);
+      updateZone(selectedZone, { height: clamped });
+    } else {
+      updateZone(selectedZone, { [name]: numericValue });
+    }
   };
 
   const bounds = surfaceRef.current?.getBoundingClientRect();
@@ -57,8 +72,10 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
 
   const clampedStyle = {
     left: `${clamp(panelPosition.x, 0, maxWidth - 260)}px`,
-    top: `${clamp(panelPosition.y, 0, maxHeight - 160)}px`,
+    top: `${clamp(panelPosition.y, 0, maxHeight - 180)}px`,
   };
+
+  const showHeightInput = selectedZone === "header" || selectedZone === "footer";
 
   return (
     <div ref={ref} className="floating-panel" style={clampedStyle}>
@@ -78,7 +95,7 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
         </label>
 
         {zoneData && (
-          <div className="position-inputs">            
+          <div className="position-inputs">
             <label>
               Largeur:
               <input
@@ -86,21 +103,40 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
                 name="width"
                 value={zoneData.width}
                 onChange={handleInputChange}
+                disabled
               />
             </label>
-            <label>
-              Hauteur:
-              <input
-                type="number"
-                name="height"
-                value={zoneData.height}
-                onChange={handleInputChange}
-              />
-            </label>
+
+            {showHeightInput && (
+              <label>
+                Hauteur:
+                <input
+                  type="number"
+                  name="height"
+                  min={MIN_HEIGHTS[selectedZone]}
+                  max={MAX_HEIGHTS[selectedZone]}
+                  value={parseInt(layout[selectedZone].height)}
+                  onChange={handleInputChange}
+                />
+              </label>
+            )}
+
+            {showHeightInput && (
+              <label style={{ display: "block", marginTop: "0.5rem" }}>
+                <input
+                  type="checkbox"
+                  checked={layout[selectedZone].visible}
+                  onChange={() => toggleSection(selectedZone)}
+                />
+                {" "}Afficher la zone
+              </label>
+            )}
           </div>
         )}
 
-        <button onClick={handleReset}>🔁 Réinitialiser</button>
+        {showHeightInput && (
+          <button onClick={handleReset}>🔁 Réinitialiser cette zone</button>
+        )}
       </div>
     </div>
   );
