@@ -1,3 +1,5 @@
+// src/components/pages/Builder/floatingBuilderPanel/FloatingBuilderPanel.tsx
+
 import React, { useState } from "react";
 import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -10,6 +12,7 @@ import {
   MIN_HEIGHTS,
   MAX_HEIGHTS,
 } from "../../../../store/layoutStore";
+import { useTemplateStore } from "../../../../store/templateStore";
 
 interface FloatingBuilderPanelProps {
   surfaceRef: React.RefObject<HTMLDivElement>;
@@ -25,29 +28,15 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
   const [activeTab, setActiveTab] = useState<"general" | "zones">("zones");
   const [isDirty, setIsDirty] = useState(true);
 
-  const [selectedLayout, setSelectedLayout] = useState("Portfolio-2024");
-  const [layouts, setLayouts] = useState([
-    { name: "Portfolio-2024", createdAt: "2024-11-10" },
-    { name: "BlogPro", createdAt: "2025-01-18" },
-    { name: "PromoSite", createdAt: "2025-05-01" },
-  ]);
-
-  const handleCreateLayout = () => {
-    const name = prompt("Nom du nouveau layout ?");
-    if (!name) return;
-    const newLayout = { name, createdAt: new Date().toISOString().split("T")[0] };
-    setLayouts([...layouts, newLayout]);
-    setSelectedLayout(name);
-    setIsDirty(true);
-  };
-
-  const handleDeleteLayout = () => {
-    if (!selectedLayout) return;
-    if (!window.confirm(`Supprimer le layout "${selectedLayout}" ?`)) return;
-    setLayouts(layouts.filter((l) => l.name !== selectedLayout));
-    setSelectedLayout(layouts[0]?.name || "");
-    setIsDirty(true);
-  };
+  const {
+    templates,
+    selectedTemplate,
+    setSelectedTemplate,
+    addTemplate,
+    removeTemplate,
+    incrementVersion,
+    updateTemplateLayout,
+  } = useTemplateStore();
 
   const {
     selectedZone,
@@ -95,6 +84,25 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
     setIsDirty(true);
   };
 
+  const handleCreateLayout = () => {
+    const name = prompt("Nom du nouveau template ?");
+    if (!name) return;
+    addTemplate(name);
+    setIsDirty(true);
+  };
+
+  const handleDeleteLayout = () => {
+    if (!selectedTemplate) return;
+    if (!window.confirm(`Supprimer le template "${selectedTemplate}" ?`)) return;
+    removeTemplate(selectedTemplate);
+    setIsDirty(true);
+  };
+
+  const handleIncrementVersion = () => {
+    incrementVersion(selectedTemplate);
+    setIsDirty(true);
+  };
+
   const bounds = surfaceRef.current?.getBoundingClientRect();
   const maxWidth = bounds?.width ?? window.innerWidth;
   const maxHeight = bounds?.height ?? window.innerHeight;
@@ -133,10 +141,10 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
               <select
                 id="layout-select"
                 className="layout-dropdown"
-                value={selectedLayout}
-                onChange={(e) => setSelectedLayout(e.target.value)}
+                value={selectedTemplate}
+                onChange={(e) => setSelectedTemplate(e.target.value)}
               >
-                {layouts.map((layout) => (
+                {templates.map((layout) => (
                   <option key={layout.name} value={layout.name}>
                     {layout.name}
                   </option>
@@ -148,16 +156,16 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
               <IconButton
                 className="icon-create"
                 onClick={handleCreateLayout}
-                aria-label="Créer un layout"
+                aria-label="Créer un template"
               >
                 <AddIcon />
               </IconButton>
 
               <IconButton
-                className={`icon-delete ${selectedLayout === "Portfolio-2024" ? "disabled" : ""}`}
+                className={`icon-delete ${selectedTemplate === "Portfolio-2024" ? "disabled" : ""}`}
                 onClick={handleDeleteLayout}
-                aria-label="Supprimer ce layout"
-                disabled={selectedLayout === "Portfolio-2024"}
+                aria-label="Supprimer ce template"
+                disabled={selectedTemplate === "Portfolio-2024"}
               >
                 <DeleteOutlineIcon />
               </IconButton>
@@ -165,7 +173,15 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
 
             <div className="row-input">
               <label>Créé le :</label>
-              <span>{layouts.find(l => l.name === selectedLayout)?.createdAt || "-"}</span>
+              <span>{templates.find(t => t.name === selectedTemplate)?.createdAt || "-"}</span>
+            </div>
+
+            <div className="row-input">
+              <label>Version :</label>
+              <span>
+                v.{templates.find(t => t.name === selectedTemplate)?.version || 1}
+              </span>
+              <button className="zone-reset-button" onClick={handleIncrementVersion}>📈 +1</button>
             </div>
 
             <div className="layout-actions">
@@ -210,7 +226,7 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
                       name="height"
                       min={MIN_HEIGHTS[selectedZone]}
                       max={MAX_HEIGHTS[selectedZone]}
-                      value={parseInt(layout[selectedZone].height)}
+                      value={layout[selectedZone].height}
                       onChange={handleInputChange}
                     />
                   </div>
@@ -233,7 +249,7 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
 
                 {showHeightInput && (
                   <div className="layout-actions">
-                    <button onClick={handleReset}>🔁 Réinitialiser cette zone</button>
+                    <button className="zone-reset-button" onClick={handleReset}>🔁 Réinitialiser cette zone</button>
                   </div>
                 )}
               </>
@@ -247,7 +263,8 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
           <button
             className="save-button"
             onClick={() => {
-              alert("✔️ Layout enregistré !");
+              updateTemplateLayout(selectedTemplate, layout); // ✅ Sauvegarde layout
+              alert("✔️ Template enregistré !");
               setIsDirty(false);
             }}
           >
