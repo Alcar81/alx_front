@@ -15,6 +15,11 @@ export const MAX_HEIGHTS: Record<LayoutZoneKey, number> = {
   footer: 300,
 };
 
+export interface LayoutData {
+  header: { visible: boolean; height: string };
+  footer: { visible: boolean; height: string };
+}
+
 // 🧠 Interface du store
 interface LayoutStore {
   layout: {
