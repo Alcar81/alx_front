@@ -1,7 +1,7 @@
 // 📁 src/__tests__/testMockConfigs.test.ts
 
-import mockConfigs from "@/mocks/mockConfigs";
-import { configSchema } from "@/config/configSchema";
+import mockConfigs from "../mocks/mockConfigs";
+import { configSchema } from "../config/configSchema";
 
 describe("Mock Configs Structure", () => {
   it("Chaque mockConfig valide respecte le schéma de configuration", () => {
