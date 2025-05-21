@@ -28,6 +28,6 @@
       "@/types/*": ["types/*"]
     }
   },
-  "include": ["src", "tsconfig.jest.json", "jest.config.js", "__mocks__"],
+  "include": ["src", "tsconfig.jest.json", "jest.config.js", "__mocks__", "src/types/aliases.d.ts"],
   "exclude": ["node_modules", "dist", "build"]
 }
