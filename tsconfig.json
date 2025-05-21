@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",  // Améliore la compatibilité avec les navigateurs modernes
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -9,19 +9,25 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",  // Meilleure gestion des modules modernes
-    "moduleResolution": "bundler", // Gestion efficace des modules en build moderne
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
 
-    // 📌 Ajout des alias pour éviter les imports relatifs longs
+    // 👇 Ceci désactive le chargement implicite des types (comme babel__core)
+    "types": [],
+
+    // 📌 Alias
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"], 
+      "@/components/*": ["components/*"],
+      "@/store/*": ["store/*"],
+      "@/utils/*": ["utils/*"],
+      "@/types/*": ["types/*"]
     }
   },
   "include": ["src", "tsconfig.jest.json", "jest.config.js", "__mocks__"],
-  "exclude": ["node_modules", "dist", "build"] // Exclusion des dossiers inutiles pour TypeScript
+  "exclude": ["node_modules", "dist", "build"]
 }

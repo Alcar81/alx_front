@@ -1,4 +1,5 @@
 // 📁 src/components/pages/Builder/GridLayoutBuilder.tsx
+
 import React, { useEffect, useRef, useState } from "react";
 import "./GridLayoutBuilder.css";
 
@@ -6,7 +7,8 @@ import { useLayoutStore } from "../../../store/layoutStore";
 import { useBuilderStore } from "../../../store/builderStore";
 import { generateLayoutCSSVars } from "../../../utils/generateLayoutCSSVars";
 import FloatingBuilderPanel from "./floatingBuilderPanel/FloatingBuilderPanel";
-
+import FloatingPagePanel from "./floatingPagePanel/FloatingPagePanel";
+import TogglePanelsButton from "../Builder/common/TogglePanelsButton"; // 👈 à créer
 import { HeaderZone, MainZone, FooterZone } from "./zones";
 
 const GridLayoutBuilder: React.FC = () => {
@@ -14,7 +16,9 @@ const GridLayoutBuilder: React.FC = () => {
   const { resetLayout, setSurfaceOffset } = useBuilderStore();
   const surfaceRef = useRef<HTMLDivElement>(null);
   const styleVars = generateLayoutCSSVars();
+
   const [initialized, setInitialized] = useState(false);
+  const [panelsVisible, setPanelsVisible] = useState(true);
 
   useEffect(() => {
     if (surfaceRef.current && !initialized) {
@@ -34,9 +38,17 @@ const GridLayoutBuilder: React.FC = () => {
           {layout.footer.visible && <FooterZone surfaceRef={surfaceRef} />}
         </div>
 
-        <div className="floating-panel-root">
-          <FloatingBuilderPanel surfaceRef={surfaceRef} />
-        </div>
+        <TogglePanelsButton
+          onClick={() => setPanelsVisible((v) => !v)}
+          isVisible={panelsVisible}
+        />
+
+        {panelsVisible && (
+          <div className="floating-panel-root">
+            <FloatingBuilderPanel surfaceRef={surfaceRef} />
+            <FloatingPagePanel surfaceRef={surfaceRef} />
+          </div>
+        )}
       </div>
     </div>
   );
