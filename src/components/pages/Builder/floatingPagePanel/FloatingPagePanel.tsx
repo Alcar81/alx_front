@@ -1,6 +1,8 @@
 import React from "react";
 import { useDraggable } from "../../../../hooks/useDraggable";
 import { usePageBuilderStore } from "../../../../store/pageBuilderStore";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import ImageIcon from "@mui/icons-material/Image";
 import "./FloatingPagePanel.css";
 
 interface FloatingPagePanelProps {
@@ -18,8 +20,8 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
       <div className="panel-content">
         <p><strong>Ajouter un bloc</strong></p>
         <div className="block-toolbar">
-          <button onClick={() => addBlock("TextBlock")}>🅣</button>
-          <button onClick={() => addBlock("ImageBlock")}>🅘</button>
+          <button onClick={() => addBlock("TextBlock")}><TextFieldsIcon style={{ color: "blue" }} /></button>
+          <button onClick={() => addBlock("ImageBlock")}><ImageIcon style={{ color: "blue" }} /></button>
         </div>
 
         <hr />
