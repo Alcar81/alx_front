@@ -8,24 +8,24 @@ import AppRouter from "./routes/AppRouter";
 
 const App: React.FC = () => {
   const {
-    REACT_APP_API_URL,
-    REACT_APP_FRONTEND_URL,
-    REACT_APP_WEBSITE_NAME,
-    REACT_APP_ENABLE_DEBUG,
-    REACT_APP_MAINTENANCE_MODE,
-  } = useConfig();
+    API_URL,
+    FRONTEND_URL,
+    WEBSITE_NAME,
+    ENABLE_DEBUG,
+    MAINTENANCE_MODE,
+} = useConfig();
 
   const validateConfig = (): string[] => {
     const errors: string[] = [];
-    if (!REACT_APP_API_URL) errors.push("REACT_APP_API_URL est manquant.");
-    if (!REACT_APP_FRONTEND_URL) errors.push("REACT_APP_FRONTEND_URL est manquant.");
-    if (!REACT_APP_WEBSITE_NAME) errors.push("REACT_APP_WEBSITE_NAME est manquant.");
+    if (!API_URL) errors.push("REACT_APP_API_URL est manquant.");
+    if (!FRONTEND_URL) errors.push("REACT_APP_FRONTEND_URL est manquant.");
+    if (!WEBSITE_NAME) errors.push("REACT_APP_WEBSITE_NAME est manquant.");
     return errors;
   };
 
   const errors = validateConfig();
 
-  if (REACT_APP_MAINTENANCE_MODE) {
+  if (MAINTENANCE_MODE) {
     return <Maintenance />;
   }
 
@@ -44,13 +44,13 @@ const App: React.FC = () => {
     );
   }
 
-  if (REACT_APP_ENABLE_DEBUG) {
+  if (ENABLE_DEBUG) {
     console.log("🧪 Mode debug activé :", {
-      REACT_APP_API_URL,
-      REACT_APP_FRONTEND_URL,
-      REACT_APP_WEBSITE_NAME,
-      REACT_APP_ENABLE_DEBUG,
-      REACT_APP_MAINTENANCE_MODE,
+      API_URL,
+      FRONTEND_URL,
+      WEBSITE_NAME,
+      ENABLE_DEBUG,
+      MAINTENANCE_MODE,
     });
   }
 
