@@ -25,7 +25,8 @@
       "@/components/*": ["components/*"],
       "@/store/*": ["store/*"],
       "@/utils/*": ["utils/*"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/*": ["*"]
     }
   },
   "include": ["src", "tsconfig.jest.json", "jest.config.js", "__mocks__", "src/types/aliases.d.ts"],

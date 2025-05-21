@@ -1,6 +1,6 @@
 // src/__tests__/configValidation.test.ts
 
-import { configSchema } from "@/config/configSchema";
+import { configSchema } from "../config/configSchema";
 import config from "@/config/config";
 
 describe("Validation du fichier réel config.ts", () => {
