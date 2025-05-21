@@ -1,6 +1,6 @@
 // 📁 src/__tests__/testConfigReal.ts
-import config from "@/config/config";
-import { configSchema } from "@/config/configSchema";
+import config from "../config/config";
+import { configSchema } from "../config/configSchema";
 
 describe("Validation de la configuration réelle", () => {
   it("devrait valider correctement le fichier config.ts", () => {
