@@ -1,6 +1,6 @@
 // 📁 src/__tests__/testMockConfigs.test.ts
 
-import mockConfigs from "@/mocks/mockConfigs";
+import mockConfigs from "../mocks/mockConfigs";
 import { configSchema } from "../config/configSchema";
 
 describe("Mock Configs Structure", () => {
