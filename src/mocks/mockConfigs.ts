@@ -2,41 +2,41 @@
 
 // ✅ Définir le type MockConfig pour mieux typer les objets
 export interface MockConfig {
-  API_URL?: string;
-  FRONTEND_URL?: string;
-  WEBSITE_NAME?: string;
-  MAINTENANCE_MODE?: boolean;
-  ENABLE_DEBUG?: boolean;
+  REACT_APP_API_URL?: string;
+  REACT_APP_FRONTEND_URL?: string;
+  REACT_APP_WEBSITE_NAME?: string;
+  REACT_APP_MAINTENANCE_MODE?: boolean;
+  REACT_APP_ENABLE_DEBUG?: boolean;
 }
 
 // ✅ Exporter tes jeux de configurations de tests
 const mockConfigs: Record<string, MockConfig> = {
   maintenanceOn: {
-    API_URL: "https://api.example.com",
-    FRONTEND_URL: "https://frontend.example.com",
-    WEBSITE_NAME: "AlxMultimedia",
-    MAINTENANCE_MODE: true,
-    ENABLE_DEBUG: false,
+    REACT_APP_API_URL: "https://api.example.com",
+    REACT_APP_FRONTEND_URL: "https://frontend.example.com",
+    REACT_APP_WEBSITE_NAME: "AlxMultimedia",
+    REACT_APP_MAINTENANCE_MODE: true,
+    REACT_APP_ENABLE_DEBUG: false,
   },
   maintenanceOff: {
-    API_URL: "https://api.example.com",
-    FRONTEND_URL: "https://frontend.example.com",
-    WEBSITE_NAME: "AlxMultimedia",
-    MAINTENANCE_MODE: false,
-    ENABLE_DEBUG: false,
+    REACT_APP_API_URL: "https://api.example.com",
+    REACT_APP_FRONTEND_URL: "https://frontend.example.com",
+    REACT_APP_WEBSITE_NAME: "AlxMultimedia",
+    REACT_APP_MAINTENANCE_MODE: false,
+    REACT_APP_ENABLE_DEBUG: false,
   },
   missingApiUrl: {
-    FRONTEND_URL: "https://frontend.example.com",
-    WEBSITE_NAME: "AlxMultimedia",
-    MAINTENANCE_MODE: false,
-    ENABLE_DEBUG: false,
+    REACT_APP_FRONTEND_URL: "https://frontend.example.com",
+    REACT_APP_WEBSITE_NAME: "AlxMultimedia",
+    REACT_APP_MAINTENANCE_MODE: false,
+    REACT_APP_ENABLE_DEBUG: false,
   },
   debugMode: {
-    API_URL: "https://api.example.com",
-    FRONTEND_URL: "https://frontend.example.com",
-    WEBSITE_NAME: "AlxMultimedia",
-    MAINTENANCE_MODE: false,
-    ENABLE_DEBUG: true,
+    REACT_APP_API_URL: "https://api.example.com",
+    REACT_APP_FRONTEND_URL: "https://frontend.example.com",
+    REACT_APP_WEBSITE_NAME: "AlxMultimedia",
+    REACT_APP_MAINTENANCE_MODE: false,
+    REACT_APP_ENABLE_DEBUG: true,
   },
 };
 
