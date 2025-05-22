@@ -1,6 +1,6 @@
 // 📁 src/hooks/useConfig.ts
 
-import config from "@/config/config";
+import config from "../config/config";
 import { configSchema, AppConfig } from "../config/configSchema";
 
 /**
