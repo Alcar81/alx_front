@@ -46,7 +46,7 @@ describe("App Component", () => {
     process.env.REACT_APP_MAINTENANCE_MODE = String(mock.REACT_APP_MAINTENANCE_MODE ?? false);
     process.env.REACT_APP_ENABLE_DEBUG = String(mock.REACT_APP_ENABLE_DEBUG ?? false);
 
-    const App = require("../App").default;
+    const App = require("./App").default;
     return App;
   };
 
