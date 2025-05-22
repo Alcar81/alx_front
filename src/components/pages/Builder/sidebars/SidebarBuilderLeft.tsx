@@ -2,16 +2,9 @@
 
 import React from "react";
 import "./SidebarBuilder.css";
-import { useLayoutStore } from "../../../../store/layoutStore";
 
 const SidebarBuilderLeft: React.FC = () => {
-  const width = useLayoutStore((state) => state.layout.sidebarLeft.width);
-  const setSidebarWidth = useLayoutStore((state) => state.setSidebarWidth);
-
-  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSidebarWidth("sidebarLeft", `${e.target.value}px`);
-  };
-
+  
   return (
     <aside className="sidebar-builder sidebar-left">
       <h2 className="sidebar-title">🛠️ Menu latéral gauche</h2>

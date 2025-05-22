@@ -22,10 +22,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({
           <Header />
         </header>
       )}
-
-      <aside className="grid-sidebar">
-        {/* Tu pourras y mettre un menu ou des widgets */}
-      </aside>
+    
 
       <main className="grid-main">
         {children}

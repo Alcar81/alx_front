@@ -2,16 +2,9 @@
 
 import React from "react";
 import "./SidebarBuilder.css";
-import { useLayoutStore } from "../../../../store/layoutStore";
 
 const SidebarBuilderRight: React.FC = () => {
-  const width = useLayoutStore((state) => state.layout.sidebarRight.width);
-  const setSidebarWidth = useLayoutStore((state) => state.setSidebarWidth);
-
-  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSidebarWidth("sidebarRight", `${e.target.value}px`);
-  };
-
+  
   return (
     <aside className="sidebar-builder sidebar-right">
       <h2 className="sidebar-title">🔧 Options</h2>
