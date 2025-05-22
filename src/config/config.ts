@@ -1,12 +1,11 @@
-// 📁 src/config/configSchema.ts
-import { z } from "zod";
+// 📁 src/config/config.ts
 
-export const configSchema = z.object({
-  REACT_APP_API_URL: z.string().url(),
-  REACT_APP_FRONTEND_URL: z.string().url(),
-  REACT_APP_WEBSITE_NAME: z.string().min(1),
-  REACT_APP_MAINTENANCE_MODE: z.boolean(),
-  REACT_APP_ENABLE_DEBUG: z.boolean(),
-});
+const config = {
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL || "",
+  REACT_APP_FRONTEND_URL: process.env.REACT_APP_FRONTEND_URL || "",
+  REACT_APP_WEBSITE_NAME: process.env.REACT_APP_WEBSITE_NAME || "",
+  REACT_APP_MAINTENANCE_MODE: process.env.REACT_APP_MAINTENANCE_MODE === "true",
+  REACT_APP_ENABLE_DEBUG: process.env.REACT_APP_ENABLE_DEBUG === "true",
+};
 
-export type AppConfig = z.infer<typeof configSchema>; // ✅ Ce type doit être bien exporté
+export default config;
