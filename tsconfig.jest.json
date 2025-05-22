@@ -2,22 +2,23 @@
   "compilerOptions": {
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "commonjs",                    // ✅ requis pour Jest
+    "moduleResolution": "node",
     "allowJs": true,
-    "skipLibCheck": true,
+    "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "commonjs",
-    "types": ["jest", "node"],
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
 
-    // 👇 pour que les imports "@/..." fonctionnent dans les tests
+    // ✅ Types pour Jest
+    "types": ["jest", "node"],
+
+    // ✅ Pour que les imports "@/..." fonctionnent
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"],
@@ -27,5 +28,10 @@
       "@/types/*": ["types/*"]
     }
   },
-  "include": ["src", "src/__tests__", "src/types/aliases.d.ts"]
+  "include": [
+    "src",
+    "src/__tests__",
+    "src/setupTests.ts",
+    "src/types/aliases.d.ts"
+  ]
 }

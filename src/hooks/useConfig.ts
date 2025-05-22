@@ -1,10 +1,10 @@
-// 📁 src/hook/useConfig.ts
+// 📁 src/hooks/useConfig.ts
 
-import getConfig from "@/config/config";
+import config from "@/config/config";
 import { configSchema, AppConfig } from "../config/configSchema";
 
 export function useConfig() {
-  const rawConfig = getConfig();
+  const rawConfig = config;
   const parsed = configSchema.parse(rawConfig) as AppConfig;
 
   return {
