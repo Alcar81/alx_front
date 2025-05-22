@@ -1,7 +1,7 @@
 // 📁 src/hooks/useConfig.ts
 
 import config from "../config/config";
-import { configSchema, AppConfig } from "../config/configSchema";
+import { configSchema } from "../config/configSchema";
 
 /**
  * Retourne la configuration typée à partir du .env
