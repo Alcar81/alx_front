@@ -1,7 +1,7 @@
 // 📁 jest.config.ts
-import type { InitialOptionsTsJest } from "ts-jest";
+import type { JestConfigWithTsJest } from "ts-jest";
 
-const config: InitialOptionsTsJest = {
+const config: JestConfigWithTsJest = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   globals: {
