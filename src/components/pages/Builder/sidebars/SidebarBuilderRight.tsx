@@ -3,7 +3,7 @@
 import React from "react";
 import "./SidebarBuilder.css";
 
-const SidebarBuilderLeft: React.FC = () => {
+const SidebarBuilderRight: React.FC = () => {
   return (
     <aside className="sidebar-builder sidebar-right">
       <h2 className="sidebar-title">🛠️ Menu latéral gauche</h2>
