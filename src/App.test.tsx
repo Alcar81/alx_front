@@ -40,12 +40,13 @@ describe("App Component", () => {
   });
 
   const setupMockEnv = (mock: MockConfig) => {
-    process.env.REACT_APP_API_URL = mock.API_URL || "";
-    process.env.REACT_APP_FRONTEND_URL = mock.FRONTEND_URL || "";
-    process.env.REACT_APP_WEBSITE_NAME = mock.WEBSITE_NAME || "";
-    process.env.REACT_APP_MAINTENANCE_MODE = String(mock.MAINTENANCE_MODE ?? false);
-    process.env.REACT_APP_ENABLE_DEBUG = String(mock.ENABLE_DEBUG ?? false);
-    const App = require("./App").default;
+    process.env.REACT_APP_API_URL = mock.REACT_APP_API_URL || "";
+    process.env.REACT_APP_FRONTEND_URL = mock.REACT_APP_FRONTEND_URL || "";
+    process.env.REACT_APP_WEBSITE_NAME = mock.REACT_APP_WEBSITE_NAME || "";
+    process.env.REACT_APP_MAINTENANCE_MODE = String(mock.REACT_APP_MAINTENANCE_MODE ?? false);
+    process.env.REACT_APP_ENABLE_DEBUG = String(mock.REACT_APP_ENABLE_DEBUG ?? false);
+
+    const App = require("../App").default;
     return App;
   };
 
@@ -73,11 +74,11 @@ describe("App Component", () => {
     render(<App />);
     expect(consoleLogSpy).toHaveBeenCalledTimes(1);
     expect(consoleLogSpy).toHaveBeenCalledWith("🧪 Mode debug activé :", {
-      REACT_APP_API_URL: mockConfigs.debugMode.API_URL,
-      REACT_APP_FRONTEND_URL: mockConfigs.debugMode.FRONTEND_URL,
-      REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.WEBSITE_NAME,
-      REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.ENABLE_DEBUG,
-      REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.MAINTENANCE_MODE,
+      REACT_APP_API_URL: mockConfigs.debugMode.REACT_APP_API_URL,
+      REACT_APP_FRONTEND_URL: mockConfigs.debugMode.REACT_APP_FRONTEND_URL,
+      REACT_APP_WEBSITE_NAME: mockConfigs.debugMode.REACT_APP_WEBSITE_NAME,
+      REACT_APP_ENABLE_DEBUG: mockConfigs.debugMode.REACT_APP_ENABLE_DEBUG,
+      REACT_APP_MAINTENANCE_MODE: mockConfigs.debugMode.REACT_APP_MAINTENANCE_MODE,
     });
   });
 });
