@@ -1,6 +1,7 @@
-// 📁 jest.config.js
+// 📁 jest.config.ts
+import type { InitialOptionsTsJest } from "ts-jest";
 
-module.exports = {
+const config: InitialOptionsTsJest = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   globals: {
@@ -14,8 +15,6 @@ module.exports = {
     "\\.(jpg|jpeg|png|gif|mp4|webm|svg|woff|woff2|ttf|eot)$": "<rootDir>/__mocks__/fileMock.js",
   },
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
-  },
-  transformIgnorePatterns: ["/node_modules/"],
 };
+
+export default config;

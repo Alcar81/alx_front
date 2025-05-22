@@ -10,6 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
+    "types": ["jest", "node"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
