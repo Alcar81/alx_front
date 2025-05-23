@@ -1,4 +1,4 @@
-// 📁 src/components/common/TogglePanelsButton.tsx
+// 📁 src/components/builder/ui/TogglePanelsButton.tsx
 
 import React from "react";
 import "./TogglePanelsButton.css";

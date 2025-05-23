@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-export type BlockType = "TextBlock" | "ImageBlock"; // ✅ Tu pourras ajouter d'autres types plus tard
+export type BlockType = "TextBlock" | "ImageBlock" | "DraggableBlock"; // ✅ Tu pourras ajouter d'autres types plus tard
 
 export interface PageBlock {
   id: string; // Identifiant unique

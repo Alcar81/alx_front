@@ -4,19 +4,20 @@
    📌 Layout principal
 ========================= */
 
-
 .grid-layout-builder {
   display: grid;
   position: relative;
+  width: 100vw;         /* ✅ largeur pleine */
+  max-width: none;      /* ✅ empêche les limites héritées */
+  margin: 0;            /* ✅ pas de centrage */
   padding: 0;
-  margin: 0;
   box-sizing: border-box;
   overflow: visible;
+  grid-template-columns: 1fr;
   grid-template-rows:
     var(--header-height, 80px)
     1fr
     var(--footer-height, 60px);
-  grid-template-columns: 1fr;
 
   /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
   grid-template-areas:
@@ -24,7 +25,6 @@
     "main"
     "footer";
   min-height: 100vh;
-  width: 100%;
 
   /* 👻 Pour transition douce du layout */
   transition:
@@ -32,6 +32,12 @@
     height 0.01s ease-out;
 }
 
+/* Étendre les zones */
+.grid-header,
+.grid-main,
+.grid-footer {
+  width: 100%;
+}
 
 /* =========================
    📌 Zones de contenu
@@ -46,7 +52,6 @@
   background-color: #f8f8f8;
   border-bottom: 1px solid #ccc;
   transition: height 0.01s ease-out;
-
 }
 
 .grid-main {
@@ -54,7 +59,6 @@
   padding: 2rem;
   background-color: #fff;
   transition: height 0.01s ease;
-
 }
 
 .grid-footer {
@@ -80,7 +84,7 @@
 
 .surface-active {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   pointer-events: auto;
 }
 
@@ -101,7 +105,6 @@
   color: #333;
 }
 
-
 /* =========================
    🧱 Panneau flottant
 ========================= */
@@ -116,6 +119,27 @@
   z-index: 9999;
 }
 
+/* =========================
+   🧱 guidelines
+========================= */
+
+.guideline-vertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: red;
+  z-index: 999;
+}
+
+.guideline-horizontal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: red;
+  z-index: 999;
+}
 
 /* =========================
    📱 Responsive
@@ -123,7 +147,10 @@
 
 @media (width <= 768px) {
   .grid-layout-builder {
-    grid-template: "header" auto "main" 1fr "footer" auto / 1fr;
+    grid-template:
+      "header" auto
+      "main" 1fr
+      "footer" auto / 1fr;
     transition: height 0.01s ease-out;
   }
 
@@ -132,7 +159,6 @@
     align-items: flex-start;
     padding: 10px;
     transition: height 0.01s ease-out;
-
   }
 
   .grid-main {

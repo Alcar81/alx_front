@@ -1,10 +1,10 @@
-// src/components/pages/Builder/floatingBuilderPanel/FloatingBuilderPanel.tsx
+// src/components/pages/Builder/panels/floatingBuilderPanel/FloatingBuilderPanel.tsx
 
 import React, { useState } from "react";
 import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import "./FloatingBuilderPanel.css";
+import "./Panels.css";
 import { useDraggable } from "../../../../hooks/useDraggable";
 import { useBuilderStore, ZoneKey } from "../../../../store/builderStore";
 import {

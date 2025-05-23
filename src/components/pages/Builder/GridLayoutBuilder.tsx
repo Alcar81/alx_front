@@ -1,19 +1,30 @@
 // 📁 src/components/pages/Builder/GridLayoutBuilder.tsx
 
-import React, { useEffect, useRef, useState } from "react";
-import "./GridLayoutBuilder.css";
+import React, { useRef, useState, useEffect } from "react";
 
+// Stores
 import { useLayoutStore } from "../../../store/layoutStore";
 import { useBuilderStore } from "../../../store/builderStore";
+
+// Utils
 import { generateLayoutCSSVars } from "../../../utils/generateLayoutCSSVars";
-import FloatingBuilderPanel from "./floatingBuilderPanel/FloatingBuilderPanel";
-import FloatingPagePanel from "./floatingPagePanel/FloatingPagePanel";
-import TogglePanelsButton from "../Builder/common/TogglePanelsButton"; // 👈 à créer
-import { HeaderZone, MainZone, FooterZone } from "./zones";
+
+// Zones
+import HeaderZone from "../Builder/zones/HeaderZone";
+import MainZone from "../Builder/zones/MainZone";
+import FooterZone from "../Builder/zones/FooterZone";
+
+// Composants
+import TogglePanelsButton from "../Builder/ui/TogglePanelsButton";
+import FloatingBuilderPanel from "../Builder/panels/FloatingBuilderPanel";
+import FloatingPagePanel from "../Builder/panels/FloatingPagePanel";
+
+// CSS
+import "./GridLayoutBuilder.css";
 
 const GridLayoutBuilder: React.FC = () => {
   const layout = useLayoutStore((state) => state.layout);
-  const { resetLayout, setSurfaceOffset } = useBuilderStore();
+  const { setSurfaceOffset } = useBuilderStore();
   const surfaceRef = useRef<HTMLDivElement>(null);
   const styleVars = generateLayoutCSSVars();
 
@@ -24,14 +35,13 @@ const GridLayoutBuilder: React.FC = () => {
     if (surfaceRef.current && !initialized) {
       const rect = surfaceRef.current.getBoundingClientRect();
       setSurfaceOffset({ x: rect.left, y: rect.top });
-      resetLayout();
       setInitialized(true);
     }
-  }, [initialized, resetLayout, setSurfaceOffset]);
+  }, [initialized, setSurfaceOffset]);
 
   return (
-    <div className="surface-windows" ref={surfaceRef}>
-      <div className="surface-active">
+    <div className="grid-builder-wrapper">
+      <div className="surface-active" ref={surfaceRef}>
         <div className="grid-layout-builder" style={styleVars}>
           {layout.header.visible && <HeaderZone surfaceRef={surfaceRef} />}
           <MainZone surfaceRef={surfaceRef} />
@@ -39,7 +49,7 @@ const GridLayoutBuilder: React.FC = () => {
         </div>
 
         <TogglePanelsButton
-          onClick={() => setPanelsVisible((v) => !v)}
+          onClick={() => setPanelsVisible((v: boolean) => !v)}
           isVisible={panelsVisible}
         />
 

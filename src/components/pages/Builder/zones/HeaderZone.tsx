@@ -1,4 +1,5 @@
 // 📁 src/components/pages/Builder/zones/HeaderZone.tsx
+
 import React, { useRef, useState } from "react";
 import "./Zones.css";
 import { useBuilderStore } from "../../../../store/builderStore";
@@ -26,7 +27,6 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
       >
         <span style={{ fontSize: "1.2rem", color: "#333" }}>🔷 En-tête (Header)</span>
 
-        {/* ✅ Zone de redimensionnement en bas */}
         {isSelected && (
           <div
             className="resize-border-bottom"
@@ -36,7 +36,6 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         )}
       </header>
 
-      {/* ✅ Affichage ligne guide */}
       {guideY !== null && <ResizeGuideLine y={guideY} />}
     </>
   );

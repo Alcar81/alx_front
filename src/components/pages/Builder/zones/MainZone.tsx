@@ -5,6 +5,8 @@ import "./Zones.css";
 import { useBuilderStore } from "../../../../store/builderStore";
 import { usePageBuilderStore } from "../../../../store/pageBuilderStore";
 import TextBlock from "../blocks/TextBlock";
+import ImageBlock from "../blocks/ImageBlock";
+import DraggableBlock from "../blocks/DraggableBlock"; // ✅ Ajout
 
 const MainZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ surfaceRef }) => {
   const selectedZone = useBuilderStore((state) => state.selectedZone);
@@ -18,7 +20,18 @@ const MainZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ s
     switch (block.type) {
       case "TextBlock":
         return <TextBlock key={block.id} />;
-      // 🧱 Ajoute ici d'autres types plus tard (ImageBlock, etc.)
+      case "ImageBlock":
+        return <ImageBlock key={block.id} />;
+      case "DraggableBlock": // ✅ Gestion du bloc draggable
+        return (
+          <DraggableBlock
+            key={block.id}
+            surfaceRef={surfaceRef}
+            snapTargetsX={[0, 100, 200, 300, 400, 500]}
+            snapTargetsY={[0, 100, 200, 300, 400, 500]}
+            tolerance={10}
+          />
+        );
       default:
         return (
           <div key={block.id} className="block unknown-block">
@@ -35,7 +48,7 @@ const MainZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ s
       onMouseEnter={() => setHoveredZone("main")}
       onMouseLeave={() => setHoveredZone(null)}
     >
-      <p>📄 Zone principale (Main content)</p>
+      <p style={{ fontSize: "1.2rem", color: "#555" }}>📄 Zone principale (Main content)</p>
       {blocks.map(renderBlock)}
     </main>
   );

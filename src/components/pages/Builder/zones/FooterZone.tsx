@@ -1,4 +1,3 @@
-// 📁 src/components/pages/Builder/zones/FooterZone.tsx
 import React, { useRef, useState } from "react";
 import "./Zones.css";
 import { useBuilderStore } from "../../../../store/builderStore";
@@ -26,7 +25,6 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
       >
         <span style={{ fontSize: "1.2rem", color: "#f36" }}>🔻 Pied de page (Footer)</span>
 
-        {/* ✅ Zone de redimensionnement en haut */}
         {isSelected && (
           <div
             className="resize-border-top"
@@ -36,7 +34,6 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         )}
       </footer>
 
-      {/* ✅ Affichage ligne guide */}
       {guideY !== null && <ResizeGuideLine y={guideY} />}
     </>
   );
