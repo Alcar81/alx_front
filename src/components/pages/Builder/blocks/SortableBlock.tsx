@@ -30,9 +30,9 @@ const SortableBlock: React.FC<SortableBlockProps> = ({ block }) => {
   const renderBlock = () => {
     switch (block.type) {
       case "TextBlock":
-        return <TextBlock />;
+        return <TextBlock block={block} />;
       case "ImageBlock":
-        return <ImageBlock />;
+        return <ImageBlock block={block} />;
       default:
         return <div>🧱 Bloc inconnu : {block.type}</div>;
     }

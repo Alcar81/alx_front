@@ -1,5 +1,3 @@
-/* 📁 src/components/pages/Builder/GridLayoutBuilder.css */
-
 /* =========================
    📌 Layout principal
 ========================= */
@@ -7,9 +5,9 @@
 .grid-layout-builder {
   display: grid;
   position: relative;
-  width: 100vw;         /* ✅ largeur pleine */
-  max-width: none;      /* ✅ empêche les limites héritées */
-  margin: 0;            /* ✅ pas de centrage */
+  width: 100vw;
+  max-width: none;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
   overflow: visible;
@@ -18,21 +16,17 @@
     var(--header-height, 80px)
     1fr
     var(--footer-height, 60px);
-
-  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+  /* stylelint-disable declaration-block-no-redundant-longhand-properties */
   grid-template-areas:
     "header"
     "main"
     "footer";
   min-height: 100vh;
-
-  /* 👻 Pour transition douce du layout */
   transition:
     grid-template-rows 0.01s ease-out,
     height 0.01s ease-out;
 }
 
-/* Étendre les zones */
 .grid-header,
 .grid-main,
 .grid-footer {
@@ -74,39 +68,15 @@
    🖥️ Surface d’édition
 ========================= */
 
-.surface-windows {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  overflow: hidden;
-}
-
 .surface-active {
+  position: relative;
   width: 100%;
   height: 100vh;
   pointer-events: auto;
 }
 
 /* =========================
-   🧱 Blocks
-========================= */
-
-.block {
-  border: 1px dashed #ccc;
-  padding: 12px;
-  margin-bottom: 12px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-}
-
-.text-block {
-  font-size: 16px;
-  color: #333;
-}
-
-/* =========================
-   🧱 Panneau flottant
+   🧱 Panneaux flottants
 ========================= */
 
 .floating-panel-root {
@@ -117,28 +87,6 @@
   height: 100%;
   pointer-events: none;
   z-index: 9999;
-}
-
-/* =========================
-   🧱 guidelines
-========================= */
-
-.guideline-vertical {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: red;
-  z-index: 999;
-}
-
-.guideline-horizontal {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: red;
-  z-index: 999;
 }
 
 /* =========================

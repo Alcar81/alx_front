@@ -1,4 +1,5 @@
 // 📁 src/hooks/useResizableHandle.ts
+
 import { useCallback } from "react";
 import { useLayoutStore } from "../store/layoutStore";
 
@@ -9,8 +10,6 @@ export function useResizableHandle(
   surfaceRef: React.RefObject<HTMLDivElement>,
   setGuideY: (value: number | null) => void
 ) {
-  const setHeight = useLayoutStore((state) => state.setHeight);
-
   const startResize = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
@@ -27,13 +26,14 @@ export function useResizableHandle(
         } else if (zone === "footer") {
           const surfaceBottom = surfaceRect.bottom;
           const newHeight = Math.max(40, surfaceBottom - clientY);
-          newY = surfaceBottom - newHeight; // Position de la ligne guide
+          newY = surfaceBottom - newHeight;
         }
 
         setGuideY(newY);
       };
 
       const handleMouseUp = (moveEvent: MouseEvent) => {
+        const setHeight = useLayoutStore.getState().setHeight; // 👈 déplacé ici
         const clientY = moveEvent.clientY;
 
         if (zone === "header") {
@@ -53,7 +53,7 @@ export function useResizableHandle(
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     },
-    [zone, surfaceRef, setGuideY, setHeight]
+    [zone, surfaceRef, setGuideY] // ✅ plus de warning maintenant
   );
 
   return { startResize };

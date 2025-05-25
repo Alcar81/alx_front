@@ -1,4 +1,5 @@
 // 📁 src/store/builderStore.ts
+
 import { create } from "zustand";
 
 export type ZoneKey = "header" | "main" | "footer";

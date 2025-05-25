@@ -1,6 +1,6 @@
 /* index.css */
-@import url('./theme/styles/reset.css');
-@import url('./theme/styles/variables.css');
+@import url('./styles/reset.css');
+@import url('./styles/variables.css');
 
 
 body {

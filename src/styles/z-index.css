@@ -1,0 +1,6 @@
+/* 📁 src/styles/z-index.css */
+.z-grid { z-index: 5000; }
+.z-block { z-index: 5001; }
+.z-tooltip { z-index: 6000; }
+.z-panels { z-index: 9999; }
+.z-modal { z-index: 10000; }

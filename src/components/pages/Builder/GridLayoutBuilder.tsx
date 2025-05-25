@@ -16,6 +16,9 @@ import FooterZone from "../Builder/zones/FooterZone";
 
 // Composants
 import TogglePanelsButton from "../Builder/ui/TogglePanelsButton";
+import ToggleGridButton from "../Builder/ui/ToggleGridButton";
+import FullGridOverlay from "../Builder/ui/FullGridOverlay";
+
 import FloatingBuilderPanel from "../Builder/panels/FloatingBuilderPanel";
 import FloatingPagePanel from "../Builder/panels/FloatingPagePanel";
 
@@ -30,6 +33,7 @@ const GridLayoutBuilder: React.FC = () => {
 
   const [initialized, setInitialized] = useState(false);
   const [panelsVisible, setPanelsVisible] = useState(true);
+  const [showGrid, setShowGrid] = useState(true);
 
   useEffect(() => {
     if (surfaceRef.current && !initialized) {
@@ -59,6 +63,16 @@ const GridLayoutBuilder: React.FC = () => {
             <FloatingPagePanel surfaceRef={surfaceRef} />
           </div>
         )}
+
+        <ToggleGridButton
+          onClick={() => setShowGrid((g) => !g)}
+          isVisible={showGrid}
+        />       
+
+        {showGrid && (
+          <FullGridOverlay surfaceRef={surfaceRef} />
+        )}
+
       </div>
     </div>
   );

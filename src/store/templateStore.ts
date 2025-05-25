@@ -33,6 +33,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
       layout: {
         header: { visible: true, height: "80px" },
         footer: { visible: true, height: "60px" },
+        main: { visible: true, height: "400px" },
       },
     },
     // ... autres templates initiaux

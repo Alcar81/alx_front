@@ -10,4 +10,5 @@ export interface LayoutSection {
 export interface LayoutData {
   header: LayoutSection;
   footer: LayoutSection;
+  main: LayoutSection;
 }

@@ -7,11 +7,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import "./Panels.css";
 import { useDraggable } from "../../../../hooks/useDraggable";
 import { useBuilderStore, ZoneKey } from "../../../../store/builderStore";
-import {
-  useLayoutStore,
-  MIN_HEIGHTS,
-  MAX_HEIGHTS,
-} from "../../../../store/layoutStore";
+import { useLayoutStore, MIN_HEIGHTS, MAX_HEIGHTS, LayoutZoneKey } from "../../../../store/layoutStore";
 import { useTemplateStore } from "../../../../store/templateStore";
 
 interface FloatingBuilderPanelProps {
@@ -103,14 +99,35 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
     setIsDirty(true);
   };
 
+  const handleResetAll = () => {
+    const zonesToReset: LayoutZoneKey[] = ["header", "main", "footer"];
+
+    zonesToReset.forEach((zone) => {
+      // Hauteur par défaut
+      const defaultHeight = zone === "header" ? 80 : zone === "footer" ? 60 : 400;
+
+      setHeight(zone, `${defaultHeight}px`);
+      updateZone(zone as ZoneKey, { height: defaultHeight });
+
+      // Forcer la visibilité uniquement si false
+      if (!layout[zone]?.visible) {
+        toggleSection(zone);
+      }
+    });
+
+    setIsDirty(true);
+  };
+
+
   const bounds = surfaceRef.current?.getBoundingClientRect();
   const maxWidth = bounds?.width ?? window.innerWidth;
   const maxHeight = bounds?.height ?? window.innerHeight;
 
   const clampedStyle = {
-    left: `${clamp(panelPosition.x, 0, maxWidth - 260)}px`,
-    top: `${clamp(panelPosition.y, 0, maxHeight - 200)}px`,
+    left: "100px",
+    top: "100px",
   };
+
 
   const showHeightInput = selectedZone === "header" || selectedZone === "footer";
 
@@ -221,14 +238,18 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
                 {showHeightInput && (
                   <div className="row-input">
                     <label>Hauteur :</label>
-                    <input
-                      type="number"
-                      name="height"
-                      min={MIN_HEIGHTS[selectedZone]}
-                      max={MAX_HEIGHTS[selectedZone]}
-                      value={layout[selectedZone].height}
-                      onChange={handleInputChange}
-                    />
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <input
+                        type="number"
+                        name="height"
+                        min={MIN_HEIGHTS[selectedZone]}
+                        max={MAX_HEIGHTS[selectedZone]}
+                        value={parseInt(layout[selectedZone].height, 10)}
+                        onChange={handleInputChange}
+                        style={{ width: "80px" }} // ✅ largeur confortable
+                      />
+                      <span style={{ fontSize: "0.9em", color: "#666" }}>px</span>
+                    </div>
                   </div>
                 )}
 
@@ -257,6 +278,18 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
           </>
         )}
       </div>
+      <div className="bottom-actions">
+        <div className="centered-reset">
+          <button
+            className="reset-layout-btn alt"
+            onClick={handleResetAll}
+          >
+            🔄 Réinitialiser
+          </button>
+        </div>
+      </div>
+
+      <hr className="panel-separator" />
 
       <div className="bottom-actions">
         <div className="centered-save">

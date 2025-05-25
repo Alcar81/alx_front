@@ -1,0 +1,25 @@
+/* 📁 src/components/pages/Builder/ui/FullGridOverlay.css */
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 5000;
+
+  /* ✅ Pas de fond */
+  background-color: transparent;
+
+  /* ✅ 2 grilles empilées (fine + large) sans transparence */
+  background-image:
+    linear-gradient(to right, #ccc 1px, transparent 1px),
+    linear-gradient(to bottom, #ccc 1px, transparent 1px),
+    linear-gradient(to right, #000 1px, transparent 1px),
+    linear-gradient(to bottom, #000 1px, transparent 1px);
+  background-size: 
+    20px 20px,  /* grille fine */
+    20px 20px,
+    100px 100px, /* grille principale */
+    100px 100px;
+}
+

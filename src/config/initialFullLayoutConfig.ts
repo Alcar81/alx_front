@@ -11,6 +11,10 @@ const initialFullLayoutConfig: LayoutData = {
     height: "60px",
     visible: true,
   },
+  main: {
+    height: "400px",
+    visible: true,
+  },
 };
 
 export default initialFullLayoutConfig;

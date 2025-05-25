@@ -3,7 +3,7 @@ import React from "react";
 import Header from "../partiels/Header/Header";
 import Footer from "../partiels/Footer/Footer";
 import "./FlexibleLayout.css";
-import "../../theme/styles/variables.css";
+import "../../styles/variables.css";
 
 interface FlexibleLayoutProps {
   showHeader?: boolean;
