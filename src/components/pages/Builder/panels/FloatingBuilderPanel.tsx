@@ -118,7 +118,7 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
   };
 
 
-  const bounds = surfaceRef.current?.getBoundingClientRect();
+  //const bounds = surfaceRef.current?.getBoundingClientRect();
   //const maxWidth = bounds?.width ?? window.innerWidth;
   //const maxHeight = bounds?.height ?? window.innerHeight;
 
