@@ -6,20 +6,16 @@
   left: 0;
   pointer-events: none;
   z-index: 5000;
-
-  /* ✅ Pas de fond */
-  background-color: transparent;
-
-  /* ✅ 2 grilles empilées (fine + large) sans transparence */
   background-image:
-    linear-gradient(to right, #ccc 1px, transparent 1px),
-    linear-gradient(to bottom, #ccc 1px, transparent 1px),
-    linear-gradient(to right, #000 1px, transparent 1px),
-    linear-gradient(to bottom, #000 1px, transparent 1px);
-  background-size: 
-    20px 20px,  /* grille fine */
+    /* Petites lignes (1px tous les 20px) */
+    linear-gradient(to right, #999 1px, transparent 1px),
+    linear-gradient(to bottom, #999 1px, transparent 1px),
+    /* Lignes majeures (1px tous les 100px) */
+    linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px);
+  background-size:
     20px 20px,
-    100px 100px, /* grille principale */
+    20px 20px,
+    100px 100px,
     100px 100px;
 }
-

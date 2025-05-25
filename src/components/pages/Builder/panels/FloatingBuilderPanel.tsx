@@ -37,7 +37,6 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
   const {
     selectedZone,
     setSelectedZone,
-    panelPosition,
     zones,
     updateZone,
   } = useBuilderStore();
@@ -120,8 +119,8 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
 
 
   const bounds = surfaceRef.current?.getBoundingClientRect();
-  const maxWidth = bounds?.width ?? window.innerWidth;
-  const maxHeight = bounds?.height ?? window.innerHeight;
+  //const maxWidth = bounds?.width ?? window.innerWidth;
+  //const maxHeight = bounds?.height ?? window.innerHeight;
 
   const clampedStyle = {
     left: "100px",
