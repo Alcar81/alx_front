@@ -1,18 +1,20 @@
 /* 📁 src/components/pages/Builder/BuilderBlocks.css */
 
+/* 🌟 Style général de tous les blocs */
 .builder-block {
   padding: 10px 20px;
   border-radius: 6px;
   font-weight: bold;
-  background-color: var(--light-color);
-  color: var(--text-color);
-  box-shadow: var(--box-shadow);
   margin: 5px;
+  box-shadow: var(--box-shadow, 0 2px 8px rgb(0 0 0 / 15%));
+  color: var(--text-color, #333);
+  background-color: var(--light-color, #f8f9fa);
 }
 
+/* 🎨 Variantes spécifiques */
 .builder-block.logo {
-  background-color: var(--primary-color);
-  color: var(--light-color);
+  background-color: var(--primary-color, #007bff);
+  color: var(--light-color, #fff);
 }
 
 .builder-block.title {
@@ -27,11 +29,10 @@
 .builder-block.footer {
   text-align: center;
   font-size: 0.9rem;
-  color: var(--text-color);
+  color: var(--text-color, #666);
 }
 
-
-/* ✅ Bloc draggable générique */
+/* 🔄 Bloc draggable générique */
 .builder-block.draggable {
   width: 100px;
   height: 50px;
@@ -43,7 +44,13 @@
   align-items: center;
   justify-content: center;
   cursor: grab;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
   user-select: none;
+  transition: transform 0.1s ease;
   z-index: 10;
+}
+
+/* ✨ Visuel au survol */
+.builder-block.draggable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
 }

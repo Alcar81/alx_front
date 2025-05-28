@@ -1,6 +1,7 @@
-// 📁 src/store/pageBuilderStore.ts
+// 📁 Builder/store/pageBuilderStore.ts
 
 import { create } from "zustand";
+import type { GhostBlock } from "../types/GhostBlockTypes";
 
 export type BlockType = "TextBlock" | "ImageBlock" | "DraggableBlock";
 export type ZoneKey = "header" | "main" | "footer";
@@ -17,6 +18,8 @@ export interface PageBlock {
 
 interface PageBuilderStore {
   blocks: PageBlock[];
+  ghostBlock: GhostBlock | null;
+
   addBlock: (zone: ZoneKey, type: BlockType) => void;
   removeBlock: (id: string) => void;
   clearBlocks: () => void;
@@ -26,12 +29,13 @@ interface PageBuilderStore {
   selectedBlockId: string | null;
   setSelectedBlock: (id: string | null) => void;
 
-  // ✅ Utilisation manuelle (non-reactive)
   getBlocksByZone: (zone: ZoneKey) => PageBlock[];
+  setGhostBlock: (ghost: GhostBlock | null) => void;
 }
 
 export const usePageBuilderStore = create<PageBuilderStore>((set, get) => ({
   blocks: [],
+  ghostBlock: null,
   selectedBlockId: null,
 
   addBlock: (zone, type) =>
@@ -77,11 +81,12 @@ export const usePageBuilderStore = create<PageBuilderStore>((set, get) => ({
       blocks: state.blocks.map((b) => (b.id === id ? { ...b, ...updates } : b)),
     })),
 
-  // ✅ Non utilisé dans hook
+  setSelectedBlock: (id) => set({ selectedBlockId: id }),
+
   getBlocksByZone: (zone) =>
     get()
       .blocks.filter((b) => b.zone === zone)
       .sort((a, b) => a.order - b.order),
 
-  setSelectedBlock: (id) => set({ selectedBlockId: id }),
+  setGhostBlock: (ghost) => set({ ghostBlock: ghost }),
 }));

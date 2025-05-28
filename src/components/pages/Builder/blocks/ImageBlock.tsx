@@ -1,5 +1,5 @@
 import React from "react";
-import { PageBlock } from "../../../../store/pageBuilderStore";
+import { PageBlock } from "../store/pageBuilderStore";
 import "./BuilderBlock.css";
 
 interface ImageBlockProps {

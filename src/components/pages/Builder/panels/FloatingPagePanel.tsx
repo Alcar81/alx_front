@@ -1,11 +1,10 @@
-// 📁 src/components/pages/Builder/panels/floatingPagePanel/FloatingPagePanel.tsx
-
-// 📁 src/components/pages/Builder/panels/floatingPagePanel/FloatingPagePanel.tsx
+// 📁 Builder/panels/floatingPagePanel/FloatingPagePanel.tsx
 
 import React, { useState } from "react";
-import { useDraggable } from "../../../../hooks/useDraggable";
-import { usePageBuilderStore } from "../../../../store/pageBuilderStore";
-import { useBuilderStore } from "../../../../store/builderStore";
+import { useDraggable } from "../hooks/useDraggable";
+import { usePageBuilderStore } from "../store/pageBuilderStore";
+import { useBuilderStore } from "../store/builderStore";
+import { blockTypes } from "../config/blockTypes";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
 import "./Panels.css";
@@ -35,6 +34,8 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
     addBlock(selectedZone, type as any);
   };
 
+  const filteredBlocks = blockTypes.filter((b) => b.type === selectedCategory);
+
   return (
     <div ref={ref} className="floating-panel page-panel" style={clampedStyle}>
       <div className="floating-header">📦 Panneau Outils</div>
@@ -50,7 +51,7 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
           className={`tab ${activeTab === "features" ? "active" : ""}`}
           onClick={() => setActiveTab("features")}
         >
-          Features
+          Fonctionnalités
         </button>
       </div>
 
@@ -77,21 +78,15 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
             <hr className="panel-separator" />
 
             <div className="block-subgroup">
-              {selectedCategory === "text" && (
-                <>
-                  <button onClick={() => handleAdd("TextBlock")}>H1</button>
-                  <button onClick={() => handleAdd("TextBlock")}>H2</button>
-                  <button onClick={() => handleAdd("TextBlock")}>H3</button>
-                </>
-              )}
-
-              {selectedCategory === "image" && (
-                <>
-                  <button onClick={() => handleAdd("ImageBlock")}>Img</button>
-                  <button onClick={() => handleAdd("ImageBlock")}>Vid</button>
-                  <button onClick={() => handleAdd("ImageBlock")}>Logo</button>
-                </>
-              )}
+              {filteredBlocks.map((block) => (
+                <button
+                  key={block.id}
+                  title={block.label}
+                  onClick={() => handleAdd(block.id)}
+                >
+                  {block.icon}
+                </button>
+              ))}
             </div>
           </div>
         )}

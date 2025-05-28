@@ -5,10 +5,10 @@ import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import "./Panels.css";
-import { useDraggable } from "../../../../hooks/useDraggable";
-import { useBuilderStore, ZoneKey } from "../../../../store/builderStore";
-import { useLayoutStore, MIN_HEIGHTS, MAX_HEIGHTS, LayoutZoneKey } from "../../../../store/layoutStore";
-import { useTemplateStore } from "../../../../store/templateStore";
+import { useDraggable } from "../hooks/useDraggable";
+import { useBuilderStore, ZoneKey } from "../store/builderStore";
+import { useLayoutStore, MIN_HEIGHTS, MAX_HEIGHTS, LayoutZoneKey } from "../store/layoutStore";
+import { useTemplateStore } from "../store/templateStore";
 
 interface FloatingBuilderPanelProps {
   surfaceRef: React.RefObject<HTMLDivElement>;

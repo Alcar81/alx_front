@@ -1,8 +1,8 @@
-// 📁 src/components/pages/Builder/ui/FullGridOverlay.tsx
+// 📁 Builder/ui/FullGridOverlay.tsx
 
 import React from "react";
 import "./FullGridOverlay.css"; // on réutilise la même classe `.grid-overlay`
-import { Z_INDEX } from "../../../../constants/zIndexes";
+import { Z_INDEX } from "../constants/zIndexes";
 
 
 interface Props {

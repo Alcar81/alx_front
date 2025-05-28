@@ -2,13 +2,13 @@
 
 import React from "react";
 import "./Zones.css";
-import { useBuilderStore } from "../../../../store/builderStore";
-import { usePageBuilderStore, PageBlock } from "../../../../store/pageBuilderStore";
-import TextBlock from "../blocks/TextBlock";
-import ImageBlock from "../blocks/ImageBlock";
-import DraggableBlock from "../blocks/DraggableBlock";
+import { useBuilderStore } from "../../store/builderStore";
+import { usePageBuilderStore, PageBlock } from "../../store/pageBuilderStore";
+import TextBlock from "../../blocks/TextBlock";
+import ImageBlock from "../../blocks/ImageBlock";
+import DraggableBlock from "../../blocks/DraggableBlock";
 
-const MainZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ surfaceRef }) => {
+const MainZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = ({ surfaceRefZone }) => {
   const selectedZone = useBuilderStore((state) => state.selectedZone);
   const setSelectedZone = useBuilderStore.getState().setSelectedZone;
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
@@ -30,7 +30,7 @@ const MainZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ s
         return (
           <DraggableBlock
             key={block.id}
-            surfaceRef={surfaceRef}
+            surfaceRefZone={surfaceRefZone}
             snapTargetsX={[0, 100, 200, 300, 400, 500]}
             snapTargetsY={[0, 100, 200, 300, 400, 500]}
             tolerance={10}
@@ -43,6 +43,7 @@ const MainZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ s
 
   return (
     <main
+      ref={surfaceRefZone}
       className={`grid-main zone-clickable ${isSelected ? "zone-selected" : ""}`}
       onClick={() => setSelectedZone("main")}
       onMouseEnter={() => setHoveredZone("main")}

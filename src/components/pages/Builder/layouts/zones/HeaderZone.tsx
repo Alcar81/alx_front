@@ -1,20 +1,19 @@
 // 📁 src/components/pages/Builder/zones/HeaderZone.tsx
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./Zones.css";
-import { useBuilderStore } from "../../../../store/builderStore";
-import { usePageBuilderStore, PageBlock } from "../../../../store/pageBuilderStore";
-import { useResizableHandle } from "../../../../hooks/useResizableHandle";
-import ResizeGuideLine from "../guides/ResizeGuideLine";
-import TextBlock from "../blocks/TextBlock";
-import ImageBlock from "../blocks/ImageBlock";
-import DraggableBlock from "../blocks/DraggableBlock";
+import { useBuilderStore } from "../../store/builderStore";
+import { usePageBuilderStore, PageBlock } from "../../store/pageBuilderStore";
+import { useResizableHandle } from "../../hooks/useResizableHandle";
+import ResizeGuideLine from "../../guides/ResizeGuideLine";
+import TextBlock from "../../blocks/TextBlock";
+import ImageBlock from "../../blocks/ImageBlock";
+import DraggableBlock from "../../blocks/DraggableBlock";
 
-const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ surfaceRef }) => {
+const HeaderZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = ({ surfaceRefZone }) => {
   const selectedZone = useBuilderStore((state) => state.selectedZone);
   const setSelectedZone = useBuilderStore.getState().setSelectedZone;
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
-
 
   const blocksRaw = usePageBuilderStore((state) => state.blocks);
   const blocks = blocksRaw
@@ -23,8 +22,7 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
 
   const isSelected = selectedZone === "header";
   const [guideY, setGuideY] = useState<number | null>(null);
-  const { startResize } = useResizableHandle("header", surfaceRef, setGuideY);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { startResize } = useResizableHandle("header", surfaceRefZone, setGuideY);
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
@@ -36,7 +34,7 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         return (
           <DraggableBlock
             key={block.id}
-            surfaceRef={surfaceRef}
+            surfaceRefZone={surfaceRefZone}
             snapTargetsX={[0, 100, 200, 300, 400]}
             snapTargetsY={[0, 100, 200, 300, 400]}
             tolerance={10}
@@ -50,7 +48,7 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
   return (
     <>
       <header
-        ref={containerRef}
+        ref={surfaceRefZone}
         className={`grid-header zone-clickable ${isSelected ? "zone-selected" : ""}`}
         onClick={() => setSelectedZone("header")}
         onMouseEnter={() => setHoveredZone("header")}
@@ -61,7 +59,7 @@ const HeaderZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         {isSelected && (
           <div
             className="resize-border-bottom"
-             onMouseDown={startResize}
+            onMouseDown={startResize}
             title="Redimensionner l'en-tête"
           />
         )}

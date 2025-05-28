@@ -2,8 +2,8 @@
 
 import React from "react";
 import "./ResizableZone.css";
-import { useResizableZone } from "../../../../hooks/useResizableZone";
-import type { ZoneKey } from "../../../../store/builderStore";
+import { useResizableZone } from "../hooks/useResizableZone";
+import type { ZoneKey } from "../store/builderStore";
 
 interface ResizableZoneProps {
   zone: ZoneKey;

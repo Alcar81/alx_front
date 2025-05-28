@@ -1,7 +1,7 @@
 // 📁 src/components/pages/Builder/blocks/TextBlock.tsx
 
 import React from "react";
-import { PageBlock } from "../../../../store/pageBuilderStore";
+import { PageBlock } from "../store/pageBuilderStore";
 import "./BuilderBlock.css"; // ✅ Pour le style général du bloc
 
 interface TextBlockProps {

@@ -1,0 +1,30 @@
+/* 📁 src/components/pages/Builder/ghost/GhostBlock.css */
+
+.ghost-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  user-select: none;
+  border: 2px dashed;
+  border-radius: 4px;
+  padding: 4px;
+  transition: border-color 0.1s ease, background-color 0.1s ease;
+}
+
+/* États visuels dynamiques */
+.ghost-valid {
+  border-color: green;
+  background-color: rgb(0 255 0 / 5%);
+}
+
+.ghost-invalid {
+  border-color: red;
+  background-color: rgb(255 0 0 / 5%);
+}
+
+.ghost-default {
+  border-color: blue;
+  background-color: rgb(0 123 255 / 5%);
+}

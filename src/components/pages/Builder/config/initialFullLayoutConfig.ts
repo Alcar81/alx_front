@@ -1,4 +1,4 @@
-// src/config/initialFullLayoutConfig.ts
+// 📁 Builder/config/initialFullLayoutConfig.ts
 
 import type { LayoutData } from "../types/layoutData";
 

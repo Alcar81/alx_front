@@ -1,7 +1,7 @@
 // 📁 src/components/pages/Builder/blocks/SortableBlockList.tsx
 
 import React from "react";
-import { usePageBuilderStore } from "../../../../store/pageBuilderStore";
+import { usePageBuilderStore } from "../store/pageBuilderStore";
 import SortableBlock from "./SortableBlock";
 
 import {

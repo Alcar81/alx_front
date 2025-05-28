@@ -1,4 +1,4 @@
-// 📁 src/store/templateStore.ts
+// 📁 Builder/store/templateStore.ts
 
 import { create } from "zustand";
 import type { LayoutData } from "../types/layoutData";

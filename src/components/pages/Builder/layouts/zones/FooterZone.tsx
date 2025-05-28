@@ -1,16 +1,16 @@
 // 📁 src/components/pages/Builder/zones/FooterZone.tsx
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./Zones.css";
-import { useBuilderStore } from "../../../../store/builderStore";
-import { usePageBuilderStore, PageBlock } from "../../../../store/pageBuilderStore";
-import { useResizableHandle } from "../../../../hooks/useResizableHandle";
-import ResizeGuideLine from "../guides/ResizeGuideLine";
-import TextBlock from "../blocks/TextBlock";
-import ImageBlock from "../blocks/ImageBlock";
-import DraggableBlock from "../blocks/DraggableBlock";
+import { useBuilderStore } from "../../store/builderStore";
+import { usePageBuilderStore, PageBlock } from "../../store/pageBuilderStore";
+import { useResizableHandle } from "../../hooks/useResizableHandle";
+import ResizeGuideLine from "../../guides/ResizeGuideLine";
+import TextBlock from "../../blocks/TextBlock";
+import ImageBlock from "../../blocks/ImageBlock";
+import DraggableBlock from "../../blocks/DraggableBlock";
 
-const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({ surfaceRef }) => {
+const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = ({ surfaceRefZone }) => {
   const selectedZone = useBuilderStore((state) => state.selectedZone);
   const setSelectedZone = useBuilderStore.getState().setSelectedZone;
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
@@ -22,8 +22,7 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
 
   const isSelected = selectedZone === "footer";
   const [guideY, setGuideY] = useState<number | null>(null);
- const { startResize } = useResizableHandle("footer", surfaceRef, setGuideY);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { startResize } = useResizableHandle("footer", surfaceRefZone, setGuideY);
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
@@ -35,7 +34,7 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         return (
           <DraggableBlock
             key={block.id}
-            surfaceRef={surfaceRef}
+            surfaceRefZone={surfaceRefZone}
             snapTargetsX={[0, 100, 200, 300, 400]}
             snapTargetsY={[0, 100, 200, 300, 400]}
             tolerance={10}
@@ -49,7 +48,7 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
   return (
     <>
       <footer
-        ref={containerRef}
+        ref={surfaceRefZone}
         className={`grid-footer zone-clickable ${isSelected ? "zone-selected" : ""}`}
         onClick={() => setSelectedZone("footer")}
         onMouseEnter={() => setHoveredZone("footer")}
@@ -60,7 +59,7 @@ const FooterZone: React.FC<{ surfaceRef: React.RefObject<HTMLDivElement> }> = ({
         {isSelected && (
           <div
             className="resize-border-top"
-              onMouseDown={startResize}
+            onMouseDown={startResize}
             title="Redimensionner le pied de page"
           />
         )}

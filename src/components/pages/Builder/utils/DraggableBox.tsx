@@ -1,7 +1,7 @@
 // 📁 src/components/utils/DraggableBox.tsx
 
 import React, { useState, useRef } from "react";
-import { useSnapping } from "@/hooks/useSnapping";
+import { useSnapping } from "@/components/pages/Builder/hooks/useSnapping";
 import "./DraggableBox.css";
 
 const DraggableBox: React.FC = () => {

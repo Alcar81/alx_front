@@ -1,18 +1,18 @@
 // 📁 src/components/pages/Builder/blocks/DraggableBlock.tsx
 
 import React, { useRef, useState, useEffect } from "react";
-import { getSnappedPosition } from "../../../../utils/snapping";
-import "./BuilderBlock.css"; // ✅ Import centralisé
+import { getSnappedPosition } from "../utils/snapping";
+import "./BuilderBlock.css";
 
 interface DraggableBlockProps {
-  surfaceRef: React.RefObject<HTMLDivElement>;
+  surfaceRefZone: React.RefObject<HTMLDivElement>; // ✅ Plus explicite
   snapTargetsX: number[];
   snapTargetsY: number[];
   tolerance: number;
 }
 
 const DraggableBlock: React.FC<DraggableBlockProps> = ({
-  surfaceRef,
+  surfaceRefZone,
   snapTargetsX,
   snapTargetsY,
   tolerance,
@@ -21,10 +21,10 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
   const isDragging = useRef(false);
   const [position, setPosition] = useState({ x: 120, y: 80 });
 
-  // ✅ Centrage automatique initial
+  // ✅ Centrage automatique à l'initialisation
   useEffect(() => {
-    if (surfaceRef.current) {
-      const rect = surfaceRef.current.getBoundingClientRect();
+    if (surfaceRefZone.current) {
+      const rect = surfaceRefZone.current.getBoundingClientRect();
       const centerX = rect.width / 2 - 50;
       const centerY = rect.height / 2 - 25;
 
@@ -35,9 +35,9 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
 
       setPosition(snapped);
     }
-  }, [surfaceRef, snapTargetsX, snapTargetsY, tolerance]);
+  }, [surfaceRefZone, snapTargetsX, snapTargetsY, tolerance]);
 
-  // ✅ Drag events
+  // ✅ Gestion des événements de drag
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     isDragging.current = true;
@@ -46,9 +46,9 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging.current || !surfaceRef.current) return;
+    if (!isDragging.current || !surfaceRefZone.current) return;
 
-    const surfaceRect = surfaceRef.current.getBoundingClientRect();
+    const surfaceRect = surfaceRefZone.current.getBoundingClientRect();
     const newX = e.clientX - surfaceRect.left - 50;
     const newY = e.clientY - surfaceRect.top - 25;
 
@@ -70,7 +70,11 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({
     <div
       ref={blockRef}
       className="builder-block draggable"
-      style={{ left: position.x, top: position.y, position: "absolute" }}
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        position: "absolute",
+      }}
       onMouseDown={handleMouseDown}
     >
       📦

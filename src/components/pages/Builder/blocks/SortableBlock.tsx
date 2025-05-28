@@ -3,7 +3,7 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { PageBlock, usePageBuilderStore } from "@/store/pageBuilderStore";
+import { PageBlock, usePageBuilderStore } from "@/components/pages/Builder/store/pageBuilderStore";
 
 // Blocs visuels
 import TextBlock from "./TextBlock";
