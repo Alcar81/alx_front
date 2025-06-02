@@ -7,12 +7,12 @@ const initialFullLayoutConfig: LayoutData = {
     height: "80px",
     visible: true,
   },
-  footer: {
-    height: "60px",
-    visible: true,
-  },
   main: {
     height: "400px",
+    visible: true,
+  },
+  footer: {
+    height: "60px",
     visible: true,
   },
 };

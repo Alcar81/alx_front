@@ -1,4 +1,4 @@
-// 📁 src/components/pages/Builder/GridLayoutBuilder.tsx
+// 📁 Builder/GridLayoutBuilder.tsx
 
 import React, { useRef, useState, useEffect } from "react";
 
@@ -30,7 +30,6 @@ const GridLayoutBuilder: React.FC = () => {
   const { setSurfaceOffset } = useBuilderStore();
   const styleVars = generateLayoutCSSVars();
 
-  // ✅ Références séparées
   const surfaceRefFull = useRef<HTMLDivElement>(null);
   const surfaceRefZoneHeader = useRef<HTMLDivElement>(null);
   const surfaceRefZoneMain = useRef<HTMLDivElement>(null);
@@ -61,15 +60,12 @@ const GridLayoutBuilder: React.FC = () => {
           )}
         </div>
 
-        {/* ✅ Bloc fantôme visible pendant le drag */}
         <GhostBlock />
 
-        {/* ✅ Grille */}
         {showGrid && <FullGridOverlay surfaceRef={surfaceRefFull} />}
 
-        {/* ✅ Boutons de contrôle */}
         <TogglePanelsButton
-          onClick={() => setPanelsVisible((v: boolean) => !v)}
+          onClick={() => setPanelsVisible((v) => !v)}
           isVisible={panelsVisible}
         />
         <ToggleGridButton
@@ -77,7 +73,6 @@ const GridLayoutBuilder: React.FC = () => {
           isVisible={showGrid}
         />
 
-        {/* ✅ Panneaux flottants */}
         {panelsVisible && (
           <div className="floating-panel-root">
             <FloatingBuilderPanel surfaceRef={surfaceRefFull} />

@@ -1,4 +1,4 @@
-// 📁 src/components/pages/Builder/components/BuilderRenderer/BuilderRenderer.tsx
+// 📁 Builder/components/BuilderRenderer/BuilderRenderer.tsx
 
 import React from "react";
 import homeTemplate from "../../data/pageTemplates/homeTemplate";
@@ -10,16 +10,19 @@ import LogoHeaderBlock from "../../blocks/LogoHeaderBlock";
 import PageTitleBlock from "../../blocks/PageTitleBlock";
 import UserActionsBlock from "../../blocks/UserActionsBlock";
 import FooterBlock from "../../blocks/FooterBlock";
+import MainBlock from "../../blocks/MainBlock";
 
 const componentMap: any = {
   LogoHeaderBlock,
   PageTitleBlock,
   UserActionsBlock,
+  MainBlock,
   FooterBlock,
 };
 
 const BuilderRenderer: React.FC = () => {
   const headerBlocks = homeTemplate.blocks.filter((b) => b.position === "header");
+  const mainBlocks = homeTemplate.blocks.filter((b) => b.position === "main");
   const footerBlocks = homeTemplate.blocks.filter((b) => b.position === "footer");
 
   return (
@@ -34,7 +37,10 @@ const BuilderRenderer: React.FC = () => {
       </div>
 
       <div className="grid-main">
-        <p>📦 Contenu central</p>
+        {mainBlocks.map((block) => {
+          const Comp = componentMap[block.component];
+          return <Comp key={block.id} />;
+        })}
       </div>
 
       <div className="grid-footer">

@@ -1,4 +1,4 @@
-// 📁 src/data/gridLayoutConfig.ts
+// 📁 Builder/data/gridLayoutConfig.ts
 export const gridLayoutConfig = {
   header: {
     blocks: ["LogoHeaderBlock", "PageTitleBlock", "UserActionsBlock"],

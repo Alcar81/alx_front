@@ -29,7 +29,7 @@
   position: absolute;
   left: 100px;
   top: 100px;
-  width: 240px;
+  width: 326px;
   min-width: 200px;
   max-width: 400px;
   background-color: white;
@@ -306,4 +306,27 @@
   border-radius: 4px;
   max-width: 100px;
   width: 100%;
+}
+
+
+/* =========================
+    🗺️ Sélecteur de zone de template
+========================= */
+
+
+.template-zone-selector button {
+  margin: 0 5px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.template-zone-selector button.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
 }
