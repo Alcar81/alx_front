@@ -1,4 +1,4 @@
-// 📁 src/components/pages/Builder/zones/MainZone.tsx
+// 📁 Builder/layouts/zones/MainZone.tsx
 
 import React from "react";
 import "./Zones.css";
@@ -14,11 +14,22 @@ const MainZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = 
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
 
   const blocksRaw = usePageBuilderStore((state) => state.blocks);
+  const addBlock = usePageBuilderStore.getState().addBlock;
   const blocks = blocksRaw
     .filter((b) => b.zone === "main")
     .sort((a, b) => a.order - b.order);
 
   const isSelected = selectedZone === "main";
+
+  // ✅ Drop d’un bloc
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const type = e.dataTransfer.getData("application/block-type");
+
+    if (!type || blocks.length > 0) return;
+
+    addBlock("main", type as any);
+  };
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
@@ -48,6 +59,8 @@ const MainZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = 
       onClick={() => setSelectedZone("main")}
       onMouseEnter={() => setHoveredZone("main")}
       onMouseLeave={() => setHoveredZone(null)}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}
     >
       <p className="zone-title">📄 Zone principale (Main content)</p>
       {blocks.map(renderBlock)}

@@ -1,4 +1,4 @@
-// 📁 src/components/pages/Builder/zones/FooterZone.tsx
+// 📁 Builder/layouts/zones/FooterZone.tsx
 
 import React, { useState } from "react";
 import "./Zones.css";
@@ -16,6 +16,8 @@ const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
 
   const blocksRaw = usePageBuilderStore((state) => state.blocks);
+  const addBlock = usePageBuilderStore.getState().addBlock;
+
   const blocks = blocksRaw
     .filter((b) => b.zone === "footer")
     .sort((a, b) => a.order - b.order);
@@ -23,6 +25,13 @@ const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
   const isSelected = selectedZone === "footer";
   const [guideY, setGuideY] = useState<number | null>(null);
   const { startResize } = useResizableHandle("footer", surfaceRefZone, setGuideY);
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const type = e.dataTransfer.getData("application/block-type");
+    if (!type || blocks.length > 0) return;
+    addBlock("footer", type as any);
+  };
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
@@ -53,6 +62,8 @@ const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
         onClick={() => setSelectedZone("footer")}
         onMouseEnter={() => setHoveredZone("footer")}
         onMouseLeave={() => setHoveredZone(null)}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
       >
         <span className="zone-title">🔻 Pied de page (Footer)</span>
         {blocks.map(renderBlock)}

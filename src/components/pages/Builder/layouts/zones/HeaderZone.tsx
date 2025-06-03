@@ -1,4 +1,4 @@
-// 📁 src/components/pages/Builder/zones/HeaderZone.tsx
+// 📁 Builder/layouts/zones/HeaderZone.tsx
 
 import React, { useState } from "react";
 import "./Zones.css";
@@ -16,6 +16,8 @@ const HeaderZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
 
   const blocksRaw = usePageBuilderStore((state) => state.blocks);
+  const addBlock = usePageBuilderStore.getState().addBlock;
+
   const blocks = blocksRaw
     .filter((b) => b.zone === "header")
     .sort((a, b) => a.order - b.order);
@@ -23,6 +25,13 @@ const HeaderZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
   const isSelected = selectedZone === "header";
   const [guideY, setGuideY] = useState<number | null>(null);
   const { startResize } = useResizableHandle("header", surfaceRefZone, setGuideY);
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const type = e.dataTransfer.getData("application/block-type");
+    if (!type || blocks.length > 0) return;
+    addBlock("header", type as any);
+  };
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
@@ -53,6 +62,8 @@ const HeaderZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
         onClick={() => setSelectedZone("header")}
         onMouseEnter={() => setHoveredZone("header")}
         onMouseLeave={() => setHoveredZone(null)}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
       >
         <span className="zone-title">🔷 En-tête (Header)</span>
         {blocks.map(renderBlock)}

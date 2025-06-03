@@ -91,17 +91,22 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
 
             <hr className="panel-separator" />
 
-            <div className="block-subgroup">
+           <div className="block-subgroup">
               {filteredBlocks.map((block) => (
                 <button
                   key={block.id}
                   title={block.label}
-                  onClick={() => handleAdd(block.id)}
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData("application/block-type", block.id);
+                    e.dataTransfer.effectAllowed = "copy";
+                  }}
                 >
                   {block.icon}
                 </button>
               ))}
             </div>
+
           </div>
         )}
 
