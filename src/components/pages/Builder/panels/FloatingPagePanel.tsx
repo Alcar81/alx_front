@@ -33,11 +33,13 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
     top: `100px`,
   };
 
+  // 🧪 handleAdd sera remplacé prochainement par ghostBlock
+  /*
   const handleAdd = (type: string) => {
     if (!selectedZone) return;
     addBlock(selectedZone, type as any);
   };
-
+  */
   const filteredBlocks = blockTypes.filter((b) => b.type === selectedCategory);
 
   const [selectedTemplateZone, setSelectedTemplateZone] = useState<"header" | "main" | "footer">("header");
