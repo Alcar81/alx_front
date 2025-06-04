@@ -1,10 +1,10 @@
 // 📁 Builder/store/pageBuilderStore.ts
 
 import { create } from "zustand";
-import type { GhostBlock } from "../types/GhostBlockTypes";
 import { defaultBlockStyle } from "../constants/blockDefaults";
-import { BlockStyle } from "../types/blockStyles";
+import type { GhostBlock } from "../types/GhostBlockTypes";
 import type { PageBlock, BlockType, BlockPosition } from "../types/blockTypes";
+import type { BlockStyle } from "../types/blockStyles";
 
 interface PageBuilderStore {
   blocks: PageBlock[];
@@ -21,7 +21,9 @@ interface PageBuilderStore {
   setSelectedBlock: (id: string | null) => void;
 
   getBlocksByZone: (zone: BlockPosition) => PageBlock[];
+
   setGhostBlock: (ghost: GhostBlock | null) => void;
+  updateGhostPosition: (position: { x: number; y: number }) => void;
 }
 
 export const usePageBuilderStore = create<PageBuilderStore>((set, get) => ({
@@ -105,4 +107,15 @@ export const usePageBuilderStore = create<PageBuilderStore>((set, get) => ({
       .sort((a, b) => a.order - b.order),
 
   setGhostBlock: (ghost) => set({ ghostBlock: ghost }),
+
+  updateGhostPosition: (position) =>
+    set((state) => {
+      if (!state.ghostBlock) return {};
+      return {
+        ghostBlock: {
+          ...state.ghostBlock,
+          position,
+        },
+      };
+    }),
 }));

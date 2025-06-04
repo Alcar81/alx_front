@@ -1,15 +1,20 @@
-// 📁 src/config/blockTypes.ts
+// 📁 Builder/config/blockConfig.ts
 
-export interface BlockType {
+/**
+ * Configuration statique des types de blocs disponibles dans le panneau "Éléments".
+ * Ces objets décrivent les blocs qu’on peut ajouter dynamiquement dans l’interface.
+ */
+
+export interface BlockConfig {
   id: string;
   label: string;
-  type: "text" | "image" | "button" | "custom";
-  icon: string; // emoji temporaire ou nom d'icône
+  type: "text" | "image" | "button" | "custom"; // catégorie
+  icon: string; // emoji ou nom d’icône
   defaultWidth?: number;
   defaultHeight?: number;
 }
 
-export const blockTypes: BlockType[] = [
+export const blockConfig: BlockConfig[] = [
   {
     id: "h1",
     label: "Titre H1",

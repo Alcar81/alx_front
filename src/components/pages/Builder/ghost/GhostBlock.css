@@ -11,6 +11,8 @@
   border-radius: 4px;
   padding: 4px;
   transition: border-color 0.1s ease, background-color 0.1s ease;
+  box-shadow: 0 0 6px rgb(0 0 0 / 10%);
+  cursor: grabbing;
 }
 
 /* États visuels dynamiques */
@@ -27,4 +29,16 @@
 .ghost-default {
   border-color: blue;
   background-color: rgb(0 123 255 / 5%);
+}
+
+.ghost-text {
+  font-family: serif;
+  font-style: italic;
+}
+
+.ghost-image {
+  background-image: url("../icons/landscape-placeholder-svgrepo-com.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
