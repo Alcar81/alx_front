@@ -1,6 +1,12 @@
 // 📁 Builder/blocks/BlockWrapper/BlockWrapper.tsx
 
-import React, { useRef, useState, useEffect, ReactNode } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from "react";
 import "./BlockWrapper.css";
 import { BlockStyle } from "../../types/blockStyles";
 import ContextMenu from "../../components/ContextMenu/ContextMenu";
@@ -28,24 +34,34 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   const [resizing, setResizing] = useState<ResizeDirection | null>(null);
-  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0, top: 0, left: 0 });
+  const [resizeStart, setResizeStart] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    top: 0,
+    left: 0,
+  });
 
-  const [contextMenu, setContextMenu] = useState<{ visible: boolean; x: number; y: number }>({ visible: false, x: 0, y: 0 });
-
+  const [contextMenu, setContextMenu] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+  }>({ visible: false, x: 0, y: 0 });
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDragging(true);
     setDragStart({ x: e.clientX - style.left, y: e.clientY - style.top });
-    setContextMenu({ visible: false, x: 0, y: 0 }); 
+    setContextMenu({ visible: false, x: 0, y: 0 });
   };
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    setContextMenu({ visible: true, x: e.clientX, y: e.clientY }); // ✅ à ajouter
+    setContextMenu({ visible: true, x: e.clientX, y: e.clientY });
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isDragging) {
       onUpdateStyle(id, {
         top: e.clientY - dragStart.y,
@@ -58,14 +74,16 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
       const dy = e.clientY - resizeStart.y;
       const newStyle: Partial<BlockStyle> = {};
 
-      if (resizing.includes("right")) newStyle.width = Math.max(50, resizeStart.width + dx);
+      if (resizing.includes("right"))
+        newStyle.width = Math.max(50, resizeStart.width + dx);
       if (resizing.includes("left")) {
         const newWidth = Math.max(50, resizeStart.width - dx);
         newStyle.width = newWidth;
         newStyle.left = resizeStart.left + (resizeStart.width - newWidth);
       }
 
-      if (resizing.includes("bottom")) newStyle.height = Math.max(30, resizeStart.height + dy);
+      if (resizing.includes("bottom"))
+        newStyle.height = Math.max(30, resizeStart.height + dy);
       if (resizing.includes("top")) {
         const newHeight = Math.max(30, resizeStart.height - dy);
         newStyle.height = newHeight;
@@ -74,12 +92,12 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
 
       onUpdateStyle(id, newStyle);
     }
-  };
+  }, [isDragging, resizing, dragStart, resizeStart, id, onUpdateStyle]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
     setResizing(null);
-  };
+  }, []);
 
   const handleResizeStart = (e: React.MouseEvent, direction: ResizeDirection) => {
     e.stopPropagation();
@@ -102,7 +120,7 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, resizing, dragStart, resizeStart]);
+  }, [handleMouseMove, handleMouseUp]);
 
   return (
     <>
@@ -133,7 +151,7 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
         <div className="resize-handle bottom-right" onMouseDown={(e) => handleResizeStart(e, "bottom-right")} />
       </div>
 
-      {contextMenu && (
+      {contextMenu.visible && (
         <ContextMenu
           x={contextMenu.x}
           y={contextMenu.y}

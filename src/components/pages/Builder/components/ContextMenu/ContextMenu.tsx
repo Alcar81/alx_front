@@ -1,13 +1,15 @@
 // Builder/components/ContextMenu/ContextMenu.tsx
+
 import React from "react";
 import "./ContextMenu.css";
+import type { BlockStyle } from "../../types/blockStyles";
 
 interface ContextMenuProps {
   x: number;
   y: number;
   blockId: string;
   onClose: () => void;
-  onUpdateStyle?: (id: string, updates: Partial<any>) => void;
+  onUpdateStyle?: (id: string, updates: Partial<BlockStyle>) => void;
   onDelete?: (id: string) => void;
 }
 
@@ -22,10 +24,13 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (onUpdateStyle) {
-      const parsed = name === "rotation" || name === "opacity" || name === "borderRadius"
-        ? parseFloat(value)
-        : value;
-      onUpdateStyle(blockId, { [name]: parsed });
+      const parsed =
+        name === "rotation" || name === "opacity" || name === "borderRadius"
+          ? parseFloat(value)
+          : name === "zIndex"
+          ? parseInt(value)
+          : value;
+      onUpdateStyle(blockId, { [name]: parsed } as Partial<BlockStyle>);
     }
   };
 
