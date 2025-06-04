@@ -2,39 +2,52 @@
 
 import React from "react";
 import "./Zones.css";
+
 import { useBuilderStore } from "../../store/builderStore";
-import { usePageBuilderStore, PageBlock } from "../../store/pageBuilderStore";
-import TextBlock from "../../blocks/TextBlock";
+import { usePageBuilderStore } from "../../store/pageBuilderStore";
+
+import VisualTextBlock from "../../blocks/VisualTextBlock/VisualTextBlock";
 import ImageBlock from "../../blocks/ImageBlock";
 import DraggableBlock from "../../blocks/DraggableBlock";
 
-const MainZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = ({ surfaceRefZone }) => {
+import type { PageBlock } from "../../types/blockTypes";
+
+const MainZone: React.FC<{
+  surfaceRefZone: React.RefObject<HTMLDivElement>;
+}> = ({ surfaceRefZone }) => {
   const selectedZone = useBuilderStore((state) => state.selectedZone);
   const setSelectedZone = useBuilderStore.getState().setSelectedZone;
   const setHoveredZone = useBuilderStore.getState().setHoveredZone;
 
   const blocksRaw = usePageBuilderStore((state) => state.blocks);
   const addBlock = usePageBuilderStore.getState().addBlock;
+  const removeBlock = usePageBuilderStore.getState().removeBlock;
+  const updateBlockStyle = usePageBuilderStore.getState().updateBlockStyle;
+
   const blocks = blocksRaw
     .filter((b) => b.zone === "main")
     .sort((a, b) => a.order - b.order);
 
   const isSelected = selectedZone === "main";
 
-  // ✅ Drop d’un bloc
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const type = e.dataTransfer.getData("application/block-type");
-
     if (!type || blocks.length > 0) return;
-
     addBlock("main", type as any);
   };
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
-      case "TextBlock":
-        return <TextBlock key={block.id} block={block} />;
+      case "VisualTextBlock":
+        return (
+          <VisualTextBlock
+            key={block.id}
+            block={block}
+            onDelete={removeBlock}
+            onUpdateStyle={updateBlockStyle}
+          />
+        );
       case "ImageBlock":
         return <ImageBlock key={block.id} block={block} />;
       case "DraggableBlock":
@@ -48,7 +61,11 @@ const MainZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = 
           />
         );
       default:
-        return <div key={block.id} className="block unknown-block">❓ {block.type}</div>;
+        return (
+          <div key={block.id} className="block unknown-block">
+            ❓ {block.type}
+          </div>
+        );
     }
   };
 

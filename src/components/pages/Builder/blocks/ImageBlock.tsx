@@ -1,5 +1,7 @@
+// 📁 Builder/blocks/ImageBlocks.tsx
+
 import React from "react";
-import { PageBlock } from "../store/pageBuilderStore";
+import { PageBlock } from "../types/blockTypes";
 import "./BuilderBlock.css";
 
 interface ImageBlockProps {
@@ -25,3 +27,4 @@ const ImageBlock: React.FC<ImageBlockProps> = ({ block }) => {
 };
 
 export default ImageBlock;
+

@@ -1,13 +1,16 @@
-// 📁 src/components/pages/Builder/blocks/SortableBlock.tsx
+// 📁 Builder/blocks/SortableBlock.tsx
 
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { PageBlock, usePageBuilderStore } from "@/components/pages/Builder/store/pageBuilderStore";
+
+import { usePageBuilderStore } from "../store/pageBuilderStore";
+import type { PageBlock } from "../types/blockTypes";
+import type { BlockStyle } from "../types/blockStyles";
 
 // Blocs visuels
-import TextBlock from "./TextBlock";
-import ImageBlock from "./ImageBlock"; // 👈 Nouveau bloc image
+import VisualTextBlock from "./VisualTextBlock/VisualTextBlock";
+import ImageBlock from "./ImageBlock";
 
 interface SortableBlockProps {
   block: PageBlock;
@@ -20,6 +23,7 @@ const SortableBlock: React.FC<SortableBlockProps> = ({ block }) => {
   });
 
   const removeBlock = usePageBuilderStore((state) => state.removeBlock);
+  const updateBlockStyle = usePageBuilderStore((state) => state.updateBlockStyle);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -29,8 +33,14 @@ const SortableBlock: React.FC<SortableBlockProps> = ({ block }) => {
 
   const renderBlock = () => {
     switch (block.type) {
-      case "TextBlock":
-        return <TextBlock block={block} />;
+      case "VisualTextBlock":
+        return (
+          <VisualTextBlock
+            block={block}
+            onDelete={removeBlock}
+            onUpdateStyle={updateBlockStyle}
+          />
+        );
       case "ImageBlock":
         return <ImageBlock block={block} />;
       default:

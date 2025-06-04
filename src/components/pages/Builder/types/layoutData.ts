@@ -1,6 +1,6 @@
 // 📁 Builder/types/layoutData.ts
 
-import type { BlockItem } from "./block";
+import type { BlockItem } from "./blockTypes";
 
 export interface LayoutSection {
   height: string;

@@ -1,10 +1,10 @@
 // 📁 Builder/types/GhostBlockTypes.ts
 
-import type { BlockType, ZoneKey } from "../store/pageBuilderStore";
+import type { BlockType, BlockPosition } from "./blockTypes";
 
 export interface GhostBlock {
   type: BlockType;
-  zone: ZoneKey;
+  zone: BlockPosition;
   position: {
     x: number;
     y: number;

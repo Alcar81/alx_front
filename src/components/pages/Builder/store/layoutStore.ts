@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import initialLayoutConfig from "../config/initialFullLayoutConfig";
 import type { LayoutData } from "../types/layoutData";
-import type { BlockItem } from "../types/block";
+import type { BlockItem } from "../types/blockTypes";
 
 export type LayoutZoneKey = "header" | "main" | "footer";
 

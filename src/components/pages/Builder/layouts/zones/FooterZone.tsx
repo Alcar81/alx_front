@@ -2,13 +2,17 @@
 
 import React, { useState } from "react";
 import "./Zones.css";
+
 import { useBuilderStore } from "../../store/builderStore";
-import { usePageBuilderStore, PageBlock } from "../../store/pageBuilderStore";
+import { usePageBuilderStore } from "../../store/pageBuilderStore";
 import { useResizableHandle } from "../../hooks/useResizableHandle";
+
 import ResizeGuideLine from "../../guides/ResizeGuideLine";
-import TextBlock from "../../blocks/TextBlock";
+import VisualTextBlock from "../../blocks/VisualTextBlock/VisualTextBlock";
 import ImageBlock from "../../blocks/ImageBlock";
 import DraggableBlock from "../../blocks/DraggableBlock";
+
+import type { PageBlock } from "../../types/blockTypes";
 
 const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> = ({ surfaceRefZone }) => {
   const selectedZone = useBuilderStore((state) => state.selectedZone);
@@ -17,6 +21,8 @@ const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
 
   const blocksRaw = usePageBuilderStore((state) => state.blocks);
   const addBlock = usePageBuilderStore.getState().addBlock;
+  const removeBlock = usePageBuilderStore((state) => state.removeBlock);
+  const updateBlockStyle = usePageBuilderStore((state) => state.updateBlockStyle);
 
   const blocks = blocksRaw
     .filter((b) => b.zone === "footer")
@@ -35,8 +41,15 @@ const FooterZone: React.FC<{ surfaceRefZone: React.RefObject<HTMLDivElement> }> 
 
   const renderBlock = (block: PageBlock) => {
     switch (block.type) {
-      case "TextBlock":
-        return <TextBlock key={block.id} block={block} />;
+      case "VisualTextBlock":
+        return (
+          <VisualTextBlock
+            key={block.id}
+            block={block}
+            onDelete={removeBlock}
+            onUpdateStyle={updateBlockStyle}
+          />
+        );
       case "ImageBlock":
         return <ImageBlock key={block.id} block={block} />;
       case "DraggableBlock":

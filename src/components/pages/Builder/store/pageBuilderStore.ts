@@ -2,34 +2,25 @@
 
 import { create } from "zustand";
 import type { GhostBlock } from "../types/GhostBlockTypes";
-
-export type BlockType = "TextBlock" | "ImageBlock" | "DraggableBlock";
-export type ZoneKey = "header" | "main" | "footer";
-
-export interface PageBlock {
-  id: string;
-  type: BlockType;
-  zone: ZoneKey;
-  content?: string;
-  src?: string;
-  style?: React.CSSProperties;
-  order: number;
-}
+import { defaultBlockStyle } from "../constants/blockDefaults";
+import { BlockStyle } from "../types/blockStyles";
+import type { PageBlock, BlockType, BlockPosition } from "../types/blockTypes";
 
 interface PageBuilderStore {
   blocks: PageBlock[];
   ghostBlock: GhostBlock | null;
 
-  addBlock: (zone: ZoneKey, type: BlockType) => void;
+  addBlock: (zone: BlockPosition, type: BlockType) => void;
   removeBlock: (id: string) => void;
   clearBlocks: () => void;
-  moveBlock: (fromIndex: number, toIndex: number, zone: ZoneKey) => void;
+  moveBlock: (fromIndex: number, toIndex: number, zone: BlockPosition) => void;
   updateBlock: (id: string, updates: Partial<PageBlock>) => void;
+  updateBlockStyle: (id: string, style: Partial<BlockStyle>) => void;
 
   selectedBlockId: string | null;
   setSelectedBlock: (id: string | null) => void;
 
-  getBlocksByZone: (zone: ZoneKey) => PageBlock[];
+  getBlocksByZone: (zone: BlockPosition) => PageBlock[];
   setGhostBlock: (ghost: GhostBlock | null) => void;
 }
 
@@ -41,15 +32,24 @@ export const usePageBuilderStore = create<PageBuilderStore>((set, get) => ({
   addBlock: (zone, type) =>
     set((state) => {
       const zoneBlocks = state.blocks.filter((b) => b.zone === zone);
+      const order = zoneBlocks.length;
+
+      const style: BlockStyle = {
+        ...defaultBlockStyle,
+        top: defaultBlockStyle.top + order * 20,
+        left: defaultBlockStyle.left + order * 20,
+      };
+
       const newBlock: PageBlock = {
         id: crypto.randomUUID(),
         type,
         zone,
-        order: zoneBlocks.length,
-        content: type === "TextBlock" ? "Texte exemple" : undefined,
+        order,
+        content: type === "VisualTextBlock" ? "Texte exemple" : undefined,
         src: type === "ImageBlock" ? "https://via.placeholder.com/400x200" : undefined,
-        style: {},
+        style,
       };
+
       return { blocks: [...state.blocks, newBlock] };
     }),
 
@@ -79,6 +79,22 @@ export const usePageBuilderStore = create<PageBuilderStore>((set, get) => ({
   updateBlock: (id, updates) =>
     set((state) => ({
       blocks: state.blocks.map((b) => (b.id === id ? { ...b, ...updates } : b)),
+    })),
+
+  updateBlockStyle: (id, style) =>
+    set((state) => ({
+      blocks: state.blocks.map((b) =>
+        b.id === id
+          ? {
+              ...b,
+              style: {
+                ...defaultBlockStyle,
+                ...(b.style ?? {}),
+                ...style,
+              } as BlockStyle,
+            }
+          : b
+      ),
     })),
 
   setSelectedBlock: (id) => set({ selectedBlockId: id }),
