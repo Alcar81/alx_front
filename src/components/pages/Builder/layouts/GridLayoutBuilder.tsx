@@ -1,5 +1,4 @@
 // 📁 Builder/GridLayoutBuilder.tsx
-
 import React, { useRef, useState, useEffect } from "react";
 
 // Stores
@@ -38,7 +37,7 @@ const GridLayoutBuilder: React.FC = () => {
   const [panelsVisible, setPanelsVisible] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
 
-  // 🔷 Bloc fantôme
+  // 🔷 Fantôme
   const ghostBlock = usePageBuilderStore((s) => s.ghostBlock);
   const updateGhostPosition = usePageBuilderStore((s) => s.updateGhostPosition);
   const dropGhostBlock = usePageBuilderStore((s) => s.dropGhostBlock);
@@ -52,6 +51,9 @@ const GridLayoutBuilder: React.FC = () => {
   const resizingBlock = usePageBuilderStore((s) => s.resizingBlock);
   const updateResizing = usePageBuilderStore((s) => s.updateResizing);
   const stopResizing = usePageBuilderStore((s) => s.stopResizing);
+
+  // ❌ Sélection
+  const setSelectedBlock = usePageBuilderStore((s) => s.setSelectedBlock);
 
   // 👆 Gestion des mouvements globaux
   useEffect(() => {
@@ -85,6 +87,20 @@ const GridLayoutBuilder: React.FC = () => {
     stopResizing,
   ]);
 
+  // ⌨️ Raccourci clavier : ESC pour désélectionner
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedBlock(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setSelectedBlock]);
+
   // 📏 Position initiale
   useEffect(() => {
     if (surfaceRefFull.current && !initialized) {
@@ -100,7 +116,6 @@ const GridLayoutBuilder: React.FC = () => {
         className="surface-active"
         ref={surfaceRefFull}
         onMouseDown={() => {
-          // ⛔ Clique dans le vide ➜ désélectionner tout bloc actif
           usePageBuilderStore.getState().setSelectedBlock(null);
         }}
       >
