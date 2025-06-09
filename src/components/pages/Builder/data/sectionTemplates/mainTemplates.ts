@@ -1,6 +1,7 @@
-// 📁 Builder/components/pages/Builder/data/sectionTemplates/mainTemplates.ts
+// 📁 Builder/data/sectionTemplates/mainTemplates.ts
+import type { SectionTemplate } from "../../types/sectionTemplate";
 
-export const mainTemplates = [
+export const mainTemplates: SectionTemplate[] = [
   {
     id: "mainBasic",
     label: "Contenu texte simple",

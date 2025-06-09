@@ -17,13 +17,13 @@ const GhostBlock: React.FC = () => {
   const className = `ghost-block ghost-${ghost.status ?? "default"}`;
 
   const style: React.CSSProperties = {
-    position: "absolute",
+    position: "fixed",         // ✅ garanti que c’est relatif au viewport
     top: y,
     left: x,
     width,
     height,
     pointerEvents: "none",
-    zIndex: 9998,
+    zIndex: 99999,             // ✅ au-dessus de tous les panels flottants
   };
 
   return (

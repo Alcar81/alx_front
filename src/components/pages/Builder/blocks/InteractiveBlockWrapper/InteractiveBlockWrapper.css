@@ -1,0 +1,53 @@
+/* 📁 Builder/blocks/InteractiveBlockWrapper.css */
+
+/* 🎯 Conteneur du bloc */
+.block-wrapper {
+  position: absolute;
+  border: 1px dashed rgb(0 0 0 / 10%); /* ✅ Visible mais discret */
+  background-color: rgb(0 0 0 / 1%); /* optionnel */
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  z-index: 15;
+  cursor: move;
+}
+
+/* ✅ Bloc sélectionné */
+.block-wrapper.selected {
+  border: 2px dashed #007bff;
+  background-color: rgb(0 123 255 / 10%);
+  outline: 2px dashed #007bff;
+}
+
+/* 🗑️ Bouton de suppression */
+.block-wrapper .delete-button {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+}
+
+.block-wrapper .delete-button:hover {
+  background-color: #ff1a1a;
+}
+
+/* 🔧 Poignée de redimensionnement (active uniquement en mode sélection) */
+.block-wrapper .resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: #007bff;
+  cursor: se-resize;
+  border-bottom-right-radius: 3px;
+  z-index: 20;
+  box-shadow: 0 0 2px rgb(0 0 0 / 30%);
+}

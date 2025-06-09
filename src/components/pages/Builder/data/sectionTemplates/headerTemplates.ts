@@ -1,6 +1,7 @@
-// 📁 Builder/components/pages/Builder/data/sectionTemplates/headerTemplates.ts
+// 📁 Builder/data/sectionTemplates/headerTemplates.ts
+import type { SectionTemplate } from "../../types/sectionTemplate";
 
-export const headerTemplates = [
+export const headerTemplates: SectionTemplate[] = [
   {
     id: "headerSplitCenter",
     label: "Logo centré / Menu gauche & droite / Actions",

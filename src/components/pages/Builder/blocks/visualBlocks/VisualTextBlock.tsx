@@ -1,38 +1,41 @@
-// Builder/blocks/VisualTextBlock.tsx
+// 📁 Builder/blocks/visualBlocks/VisualTextBlock.tsx
 
 import React from "react";
-import BlockWrapper from "../BlockWrapper/BlockWrapper";
+import BaseVisualBlock from "./BaseVisualBlock";
 import VisualTextContent from "./VisualTextContent";
 import { PageBlock } from "../../types/blockTypes";
 import { BlockStyle } from "../../types/blockStyles";
 import { defaultBlockStyle } from "../../constants/blockDefaults";
-import "./VisualTextBlock.css";
 
 interface VisualTextBlockProps {
   block: PageBlock;
+  isSelected: boolean;
   onDelete: (id: string) => void;
+  onSelect: () => void;
   onUpdateStyle: (id: string, newStyle: Partial<BlockStyle>) => void;
 }
 
 const VisualTextBlock: React.FC<VisualTextBlockProps> = ({
   block,
+  isSelected,
   onDelete,
+  onSelect,
   onUpdateStyle,
 }) => {
-  const mergedStyle = {
+  const mergedStyle: BlockStyle = {
     ...defaultBlockStyle,
     ...block.style,
-  } as BlockStyle;
+  };
 
   return (
-    <BlockWrapper
-      id={block.id}
-      style={mergedStyle}
-      onDelete={onDelete}
-      onUpdateStyle={onUpdateStyle}
+    <BaseVisualBlock
+      block={{ ...block, style: mergedStyle }}
+      isSelected={isSelected}
+      onDelete={() => onDelete(block.id)}
+      onSelect={onSelect}
     >
       <VisualTextContent content={block.content} />
-    </BlockWrapper>
+    </BaseVisualBlock>
   );
 };
 

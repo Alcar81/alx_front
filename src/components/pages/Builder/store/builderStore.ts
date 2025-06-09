@@ -1,8 +1,7 @@
 // 📁 src/store/builderStore.ts
 
-import { create } from "zustand";
-
-export type ZoneKey = "header" | "main" | "footer";
+import { createWithEqualityFn } from "zustand/traditional";
+import type { ZoneKey } from "../types/zoneTypes";
 
 export interface ZoneData {
   x: number;
@@ -11,7 +10,7 @@ export interface ZoneData {
   height: number;
 }
 
-interface BuilderState {
+export interface BuilderState {
   selectedZone: ZoneKey | null;
   hoveredZone: ZoneKey | null;
   panelPosition: { x: number; y: number };
@@ -25,7 +24,7 @@ interface BuilderState {
   resetLayout: () => void;
 }
 
-export const useBuilderStore = create<BuilderState>((set, get) => ({
+export const useBuilderStore = createWithEqualityFn<BuilderState>((set, get) => ({
   selectedZone: "main",
   hoveredZone: null,
   panelPosition: { x: 100, y: 100 },

@@ -6,11 +6,10 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { usePageBuilderStore } from "../store/pageBuilderStore";
 import type { PageBlock } from "../types/blockTypes";
-import type { BlockStyle } from "../types/blockStyles";
 
-// Blocs visuels
-import VisualTextBlock from "./VisualTextBlock/VisualTextBlock";
-import ImageBlock from "./ImageBlock";
+// Blocs visuels refactorisés
+import VisualTextBlock from "./visualBlocks/VisualTextBlock";
+import VisualImageBlock from "./visualBlocks/VisualImageBlock"; // ✅ renommé pour cohérence
 
 interface SortableBlockProps {
   block: PageBlock;
@@ -24,6 +23,10 @@ const SortableBlock: React.FC<SortableBlockProps> = ({ block }) => {
 
   const removeBlock = usePageBuilderStore((state) => state.removeBlock);
   const updateBlockStyle = usePageBuilderStore((state) => state.updateBlockStyle);
+  const selectedBlockId = usePageBuilderStore((state) => state.selectedBlockId);
+  const setSelectedBlock = usePageBuilderStore((state) => state.setSelectedBlock);
+
+  const isSelected = selectedBlockId === block.id;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -32,28 +35,27 @@ const SortableBlock: React.FC<SortableBlockProps> = ({ block }) => {
   };
 
   const renderBlock = () => {
+    const commonProps = {
+      block,
+      isSelected,
+      onDelete: () => removeBlock(block.id),
+      onSelect: () => setSelectedBlock(block.id),
+      onUpdateStyle: (newStyle: any) => updateBlockStyle(block.id, newStyle),
+    };
+
     switch (block.type) {
       case "VisualTextBlock":
-        return (
-          <VisualTextBlock
-            block={block}
-            onDelete={removeBlock}
-            onUpdateStyle={updateBlockStyle}
-          />
-        );
-      case "ImageBlock":
-        return <ImageBlock block={block} />;
+        return <VisualTextBlock {...commonProps} />;
+      case "VisualImageBlock":
+        return <VisualImageBlock {...commonProps} />;
       default:
-        return <div>🧱 Bloc inconnu : {block.type}</div>;
+        return <div>❓ Bloc inconnu : {block.type}</div>;
     }
   };
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {renderBlock()}
-      <div style={{ textAlign: "right", marginTop: 4 }}>
-        <button onClick={() => removeBlock(block.id)}>🗑️ Supprimer</button>
-      </div>
     </div>
   );
 };

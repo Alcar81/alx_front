@@ -1,17 +1,10 @@
-// 📁 Builder/components/pages/Builder/data/sectionTemplates/footerTemplates.ts
+// 📁 Builder/data/sectionTemplates/footerTemplates.ts
+import type { SectionTemplate } from "../../types/sectionTemplate";
 
-export const footerTemplates = [
+export const footerTemplates: SectionTemplate[] = [
   {
     id: "footerSimple",
-    label: "Pied de page simple",
-    blocks: [{ id: "footer", component: "FooterBlock" }],
-  },
-  {
-    id: "footerWithLinks",
-    label: "Liens + copyright",
-    blocks: [
-      { id: "footerLinks", component: "FooterLinksBlock" },
-      { id: "footerCopy", component: "FooterBlock" },
-    ],
+    label: "Footer simple avec texte",
+    blocks: [{ id: "footerText", component: "VisualTextBlock" }],
   },
 ];

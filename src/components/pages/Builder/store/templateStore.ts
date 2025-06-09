@@ -67,7 +67,9 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
       return {
         templates: newTemplates,
         selectedTemplate:
-          state.selectedTemplate === name ? newTemplates[0]?.name || "" : state.selectedTemplate,
+          state.selectedTemplate === name
+            ? newTemplates[0]?.name || "" // Ajoute un fallback explicite
+            : state.selectedTemplate,
       };
     });
   },

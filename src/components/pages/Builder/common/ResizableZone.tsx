@@ -3,7 +3,7 @@
 import React from "react";
 import "./ResizableZone.css";
 import { useResizableZone } from "../hooks/useResizableZone";
-import type { ZoneKey } from "../store/builderStore";
+import type { ZoneKey } from "../types/zoneTypes";
 
 interface ResizableZoneProps {
   zone: ZoneKey;

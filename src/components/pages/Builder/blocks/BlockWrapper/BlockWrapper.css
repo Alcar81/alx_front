@@ -1,7 +1,8 @@
 /* Builder/blocks/BlockWrapper.css */
 .block-wrapper {
-  border: 1px dashed #aaa;
-  background-color: #fff;
+  border: 2px dashed #007bff; /* bleu clair */
+  background-color: rgb(0 123 255 / 20%);
+  backdrop-filter: blur(1px);
   cursor: move;
   box-sizing: border-box;
   overflow: hidden;
@@ -10,7 +11,14 @@
 }
 
 .block-wrapper:hover {
+  border-style: solid;
+  background-color: rgb(0 123 255 / 5%);
   box-shadow: 0 0 0 2px rgb(0 153 255 / 40%);
+}
+
+.block-wrapper.selected {
+  border: 2px solid #28a745; /* vert pour future sélection */
+  background-color: rgb(255 255 255 / 20%);
 }
 
 .block-wrapper .delete-button {

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useBuilderStore, ZoneKey } from "../store/builderStore";
+import { useBuilderStore } from "../store/builderStore";
+import type { ZoneKey } from "../types/zoneTypes";
 
 export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTMLDivElement>) => {
   const containerRef = useRef<HTMLDivElement>(null);

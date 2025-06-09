@@ -1,6 +1,6 @@
-// 📁 Builder/panels/floatingPagePanel/FloatingPagePanel.tsx
+// Builder/panels/FloatingPagePanel.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDraggable } from "../hooks/useDraggable";
 import { usePageBuilderStore } from "../store/pageBuilderStore";
 import { useBuilderStore } from "../store/builderStore";
@@ -12,6 +12,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
 import "./Panels.css";
 
+import { validateTemplates } from "../utils/validateTemplates";
 import { headerTemplates } from "../data/sectionTemplates/headerTemplates";
 import { mainTemplates } from "../data/sectionTemplates/mainTemplates";
 import { footerTemplates } from "../data/sectionTemplates/footerTemplates";
@@ -23,7 +24,7 @@ interface FloatingPagePanelProps {
 const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => {
   const ref = useDraggable(surfaceRef);
   const { selectedZone } = useBuilderStore();
-  const { setGhostBlock } = usePageBuilderStore();
+  const { setGhostBlock, updateGhostPosition, dropGhostBlock } = usePageBuilderStore();
 
   const [activeTab, setActiveTab] = useState<"elements" | "templates">("elements");
   const [selectedCategory, setSelectedCategory] = useState<"text" | "image">("text");
@@ -39,12 +40,44 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
 
   const filteredBlocks = blockConfig.filter((b) => b.type === selectedCategory);
 
+  const castedTemplate = (tpl: any): SectionTemplate => ({
+    ...tpl,
+    blocks: tpl.blocks.map((b: any) => ({
+      id: b.id,
+      component: b.component as BlockType,
+    })),
+  });
+
   const sectionTemplates: SectionTemplate[] =
     selectedTemplateZone === "header"
-      ? headerTemplates
+      ? headerTemplates.map(castedTemplate)
       : selectedTemplateZone === "main"
-      ? mainTemplates
-      : footerTemplates;
+      ? mainTemplates.map(castedTemplate)
+      : footerTemplates.map(castedTemplate);
+
+  useEffect(() => {
+    validateTemplates(headerTemplates, "Header");
+    validateTemplates(mainTemplates, "Main");
+    validateTemplates(footerTemplates, "Footer");
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      updateGhostPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseUp = () => {
+      dropGhostBlock();
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [updateGhostPosition, dropGhostBlock]);
 
   const handleGhostStart = (blockId: string) => {
     if (!selectedZone) return;
@@ -53,7 +86,7 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
     if (!block) return;
 
     setGhostBlock({
-      type: block.id as BlockType, // ⚠️ BlockType est maintenant "VisualTextBlock" | "ImageBlock" etc.
+      type: block.id as BlockType,
       zone: selectedZone,
       position: { x: 0, y: 0 },
       size: {
@@ -97,7 +130,7 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
                 <button
                   key={block.id}
                   title={block.label}
-                  onClick={() => handleGhostStart(block.id)}
+                  onClick={() => handleGhostStart(block.id)} // ✅ déclenche seulement au clic
                 >
                   {block.icon}
                 </button>
@@ -123,7 +156,7 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
             <hr className="panel-separator" />
 
             <div className="block-subgroup">
-              {sectionTemplates.map((template: SectionTemplate) => (
+              {sectionTemplates.map((template) => (
                 <button
                   key={template.id}
                   title={template.label}

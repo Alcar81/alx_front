@@ -11,9 +11,7 @@ import { usePageBuilderStore } from "../store/pageBuilderStore";
 import { generateLayoutCSSVars } from "../utils/generateLayoutCSSVars";
 
 // Zones
-import HeaderZone from "./zones/HeaderZone";
-import MainZone from "./zones/MainZone";
-import FooterZone from "./zones/FooterZone";
+import ZoneWrapper from "./zones/ZoneWrapper";
 
 // Composants
 import TogglePanelsButton from "../ui/TogglePanelsButton";
@@ -40,24 +38,54 @@ const GridLayoutBuilder: React.FC = () => {
   const [panelsVisible, setPanelsVisible] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
 
-  const ghostBlock = usePageBuilderStore((state) => state.ghostBlock);
-  const updateGhostPosition = usePageBuilderStore((state) => state.updateGhostPosition);
+  // 🔷 Bloc fantôme
+  const ghostBlock = usePageBuilderStore((s) => s.ghostBlock);
+  const updateGhostPosition = usePageBuilderStore((s) => s.updateGhostPosition);
+  const dropGhostBlock = usePageBuilderStore((s) => s.dropGhostBlock);
 
-  // ➕ Détection position curseur quand ghost actif
+  // 🟦 Drag
+  const draggingBlock = usePageBuilderStore((s) => s.draggingBlock);
+  const updateDragging = usePageBuilderStore((s) => s.updateDragging);
+  const stopDragging = usePageBuilderStore((s) => s.stopDragging);
+
+  // 🟥 Resize
+  const resizingBlock = usePageBuilderStore((s) => s.resizingBlock);
+  const updateResizing = usePageBuilderStore((s) => s.updateResizing);
+  const stopResizing = usePageBuilderStore((s) => s.stopResizing);
+
+  // 👆 Gestion des mouvements globaux
   useEffect(() => {
-    if (!ghostBlock) return;
-
     const handleMouseMove = (e: MouseEvent) => {
-      updateGhostPosition({ x: e.clientX, y: e.clientY }); 
+      if (ghostBlock) updateGhostPosition({ x: e.clientX, y: e.clientY });
+      if (draggingBlock) updateDragging(e.clientX, e.clientY);
+      if (resizingBlock) updateResizing(e.clientX, e.clientY);
+    };
+
+    const handleMouseUp = () => {
+      if (ghostBlock) dropGhostBlock();
+      if (draggingBlock) stopDragging();
+      if (resizingBlock) stopResizing();
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [ghostBlock, updateGhostPosition]);
+  }, [
+    ghostBlock,
+    draggingBlock,
+    resizingBlock,
+    updateGhostPosition,
+    dropGhostBlock,
+    updateDragging,
+    stopDragging,
+    updateResizing,
+    stopResizing,
+  ]);
 
-  // ➕ Initialisation de l’offset global
+  // 📏 Position initiale
   useEffect(() => {
     if (surfaceRefFull.current && !initialized) {
       const rect = surfaceRefFull.current.getBoundingClientRect();
@@ -68,30 +96,54 @@ const GridLayoutBuilder: React.FC = () => {
 
   return (
     <div className="grid-builder-wrapper">
-      <div className="surface-active" ref={surfaceRefFull}>
+      <div
+        className="surface-active"
+        ref={surfaceRefFull}
+        onMouseDown={() => {
+          // ⛔ Clique dans le vide ➜ désélectionner tout bloc actif
+          usePageBuilderStore.getState().setSelectedBlock(null);
+        }}
+      >
         <div className="grid-layout-builder" style={styleVars}>
           {layout.header.visible && (
-            <HeaderZone surfaceRefZone={surfaceRefZoneHeader} />
+            <ZoneWrapper
+              zoneKey="header"
+              title="🔷 En-tête (Header)"
+              tag="header"
+              surfaceRefZone={surfaceRefZoneHeader}
+              resizable
+            />
           )}
-          <MainZone surfaceRefZone={surfaceRefZoneMain} />
+
+          <ZoneWrapper
+            zoneKey="main"
+            title="🧱 Zone principale (Main)"
+            tag="main"
+            surfaceRefZone={surfaceRefZoneMain}
+          />
+
           {layout.footer.visible && (
-            <FooterZone surfaceRefZone={surfaceRefZoneFooter} />
+            <ZoneWrapper
+              zoneKey="footer"
+              title="🔻 Pied de page (Footer)"
+              tag="footer"
+              surfaceRefZone={surfaceRefZoneFooter}
+              resizable
+            />
           )}
         </div>
 
+        {/* Bloc fantôme */}
         <GhostBlock />
 
+        {/* Grille visuelle */}
         {showGrid && <FullGridOverlay surfaceRef={surfaceRefFull} />}
 
-        <TogglePanelsButton
-          onClick={() => setPanelsVisible((v) => !v)}
-          isVisible={panelsVisible}
-        />
-        <ToggleGridButton
-          onClick={() => setShowGrid((g) => !g)}
-          isVisible={showGrid}
-        />
+        {/* Boutons visibilité */}
+        <TogglePanelsButton onClick={() => setPanelsVisible((v) => !v)} isVisible={panelsVisible} />
+        <ToggleGridButton onClick={() => setShowGrid((g) => !g)} isVisible={showGrid} />
 
+        {/* Panneaux flottants */}
         {panelsVisible && (
           <div className="floating-panel-root">
             <FloatingBuilderPanel surfaceRef={surfaceRefFull} />

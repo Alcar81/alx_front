@@ -124,9 +124,9 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
 
   return (
     <>
-      <div
+     <div
         ref={blockRef}
-        className="block-wrapper"
+        className={`block-wrapper`}
         style={{
           position: style.position || "absolute",
           top: style.top,
@@ -142,6 +142,7 @@ const BlockWrapper: React.FC<BlockWrapperProps> = ({
         onMouseDown={handleMouseDown}
         onContextMenu={handleContextMenu}
       >
+
         <button className="delete-button" onClick={() => onDelete(id)}>❌</button>
         <div className="block-content">{children}</div>
 

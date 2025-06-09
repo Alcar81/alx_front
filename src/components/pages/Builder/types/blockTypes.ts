@@ -1,34 +1,39 @@
 // 📁 Builder/types/blockTypes.ts
 
+import type { ZoneKey } from "./zoneTypes";
 import { BlockStyle } from "./blockStyles";
 
-/**
- * Les identifiants réels utilisés pour instancier un bloc dans la page.
- * Ceux-ci correspondent à des composants React affichables.
- */
-export type BlockType = "VisualTextBlock" | "ImageBlock" | "DraggableBlock";
+// 🧱 Types de blocs utilisables dans le builder
+export const VALID_BLOCK_TYPES = [
+  "VisualTextBlock",
+  "VisualImageBlock",
+  "DraggableBlock",
+  "LogoHeaderBlock",
+  "MenuLeftBlock",
+  "MenuRightBlock",
+  "UserActionsBlock",
+  "PageTitleBlock",
+  "MainBlock",
+  "SidebarBlock",
+] as const;
 
-/**
- * Position logique dans la page (zone cible dans le layout).
- */
-export type BlockPosition = "header" | "main" | "footer";
+export type BlockType = (typeof VALID_BLOCK_TYPES)[number];
 
-/**
- * Décrit un bloc instancié (posé) dans la page.
- */
+// 🧭 Zone logique où peut se trouver un bloc
+export type BlockPosition = ZoneKey;
+
+// 🧩 Définition complète d’un bloc instancié dans une page
 export interface PageBlock {
-  id: string; // identifiant unique (uuid)
-  type: BlockType; // type réel du composant
-  zone: BlockPosition; // zone dans laquelle le bloc est placé
-  content?: string; // contenu texte éventuel
-  src?: string; // image éventuelle
-  style?: BlockStyle; // style CSS appliqué
-  order: number; // ordre d’affichage dans la zone
+  id: string;
+  type: BlockType;
+  zone: BlockPosition;
+  content?: string;
+  src?: string;
+  style?: BlockStyle;
+  order: number;
 }
 
-/**
- * Variante utilisée dans certains cas pour des blocs en cours de configuration.
- */
+// 🔧 Variante simplifiée utilisée pour previews ou templates
 export interface BlockItem {
   id: string;
   component: BlockType;

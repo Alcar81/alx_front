@@ -3,7 +3,8 @@
 import { useCallback } from "react";
 import { useLayoutStore } from "../store/layoutStore";
 
-type ZoneType = "header" | "footer";
+// ✅ Type exporté pour usage global
+export type ZoneType = "header" | "main" | "footer";
 
 export function useResizableHandle(
   zone: ZoneType,
@@ -17,31 +18,31 @@ export function useResizableHandle(
       const surfaceRect = surfaceRef.current?.getBoundingClientRect();
       if (!surfaceRect) return;
 
+      const surfaceTop = surfaceRect.top;
+      const surfaceBottom = surfaceRect.bottom;
+
       const handleMouseMove = (moveEvent: MouseEvent) => {
-        const clientY = moveEvent.clientY;
-        let newY = 0;
+        const currentY = moveEvent.clientY;
+        let newGuideY = 0;
 
         if (zone === "header") {
-          newY = Math.max(40, clientY - surfaceRect.top);
+          newGuideY = Math.max(surfaceTop + 40, currentY);
         } else if (zone === "footer") {
-          const surfaceBottom = surfaceRect.bottom;
-          const newHeight = Math.max(40, surfaceBottom - clientY);
-          newY = surfaceBottom - newHeight;
+          newGuideY = Math.min(surfaceBottom - 40, currentY);
         }
 
-        setGuideY(newY);
+        setGuideY(newGuideY);
       };
 
       const handleMouseUp = (moveEvent: MouseEvent) => {
-        const setHeight = useLayoutStore.getState().setHeight; // 👈 déplacé ici
-        const clientY = moveEvent.clientY;
+        const currentY = moveEvent.clientY;
+        const setHeight = useLayoutStore.getState().setHeight;
 
         if (zone === "header") {
-          const height = Math.max(40, clientY - surfaceRect.top);
+          const height = Math.max(40, currentY - surfaceTop);
           setHeight(zone, `${height}px`);
         } else if (zone === "footer") {
-          const surfaceBottom = surfaceRect.bottom;
-          const height = Math.max(40, surfaceBottom - clientY);
+          const height = Math.max(40, surfaceBottom - currentY);
           setHeight(zone, `${height}px`);
         }
 
@@ -53,7 +54,7 @@ export function useResizableHandle(
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     },
-    [zone, surfaceRef, setGuideY] // ✅ plus de warning maintenant
+    [zone, surfaceRef, setGuideY]
   );
 
   return { startResize };
