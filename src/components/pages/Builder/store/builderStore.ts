@@ -16,12 +16,14 @@ export interface BuilderState {
   panelPosition: { x: number; y: number };
   zones: Record<ZoneKey, ZoneData>;
   surfaceOffset: { x: number; y: number };
+  surfaceSize: { width: number; height: number };
   setSurfaceOffset: (offset: { x: number; y: number }) => void;
   setSelectedZone: (zone: ZoneKey | null) => void;
   setHoveredZone: (zone: ZoneKey | null) => void;
   setPanelPosition: (pos: { x: number; y: number }) => void;
   updateZone: (zone: ZoneKey, data: Partial<ZoneData>) => void;
   resetLayout: () => void;
+  setSurfaceSize: (size: { width: number; height: number }) => void;
 }
 
 export const useBuilderStore = createWithEqualityFn<BuilderState>((set, get) => ({
@@ -29,6 +31,7 @@ export const useBuilderStore = createWithEqualityFn<BuilderState>((set, get) => 
   hoveredZone: null,
   panelPosition: { x: 100, y: 100 },
   surfaceOffset: { x: 0, y: 0 },
+  surfaceSize: { width: 1600, height: 1000 }, // Ajouté
 
   zones: {
     header: { x: 0, y: 0, width: 1200, height: 80 },
@@ -37,6 +40,8 @@ export const useBuilderStore = createWithEqualityFn<BuilderState>((set, get) => 
   },
 
   setSurfaceOffset: (offset) => set({ surfaceOffset: offset }),
+  setSurfaceSize: (size) => set({ surfaceSize: size }),
+
   setSelectedZone: (zone) => set({ selectedZone: zone }),
   setHoveredZone: (zone) => set({ hoveredZone: zone }),
   setPanelPosition: (pos) => set({ panelPosition: pos }),
