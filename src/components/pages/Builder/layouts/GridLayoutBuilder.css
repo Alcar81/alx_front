@@ -14,9 +14,9 @@
   grid-template-columns: 1fr;
   grid-template-rows:
     var(--header-height, 80px)
-    1fr
+    auto
     var(--footer-height, 60px);
-  /* stylelint-disable declaration-block-no-redundant-longhand-properties */
+    /* stylelint-disable declaration-block-no-redundant-longhand-properties */
   grid-template-areas:
     "header"
     "main"
@@ -26,6 +26,7 @@
     grid-template-rows 0.01s ease-out,
     height 0.01s ease-out;
 }
+
 
 .grid-header,
 .grid-main,
@@ -53,6 +54,7 @@
   padding: 2rem;
   background-color: #fff;
   transition: height 0.01s ease;
+  min-height: 1px;
 }
 
 .grid-footer {
@@ -71,8 +73,10 @@
 .surface-active {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh; /* ✅ autorise l'expansion naturelle */
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================

@@ -1,23 +1,18 @@
-// 📁 Builder/panels/BlockTreeViewPanel.tsx
+// 📁 Builder/panels/floatingBuilderPanel/TabTreeView.tsx
 
-import React, { useState } from "react";
-import "./BlockTreeView.css";
+import React from "react";
+import { useBuilderStore } from "../../store/builderStore";
+import { usePageBuilderStore } from "../../store/pageBuilderStore";
 
-interface PageBlock {
-  id: string;
-  type: string;
-  label?: string;
-  zone: string;
-  group?: string;
-}
+const TabTreeView: React.FC = () => {
+  const selectedZone = useBuilderStore((s) => s.selectedZone);
+  const blocks = usePageBuilderStore((s) =>
+    s.blocks.filter((b) => b.zone === selectedZone)
+  );
 
-interface Props {
-  zone: string;
-  blocks: PageBlock[];
-}
+  if (!selectedZone) return <div className="panel-content">Aucune zone sélectionnée</div>;
 
-const BlockTreeView: React.FC<Props> = ({ zone, blocks }) => {
-  const grouped = blocks.reduce<Record<string, PageBlock[]>>((acc, block) => {
+  const grouped = blocks.reduce<Record<string, typeof blocks>>((acc, block) => {
     const group = block.group || "🔓 Autonomes";
     if (!acc[group]) acc[group] = [];
     acc[group].push(block);
@@ -26,7 +21,7 @@ const BlockTreeView: React.FC<Props> = ({ zone, blocks }) => {
 
   return (
     <div className="block-tree">
-      <div className="tree-zone-title">Zone : {zone}</div>
+      <div className="tree-zone-title">Zone : {selectedZone}</div>
       <ul className="tree-list">
         {Object.entries(grouped).map(([groupName, groupBlocks]) => (
           <li key={groupName}>
@@ -50,4 +45,4 @@ const BlockTreeView: React.FC<Props> = ({ zone, blocks }) => {
   );
 };
 
-export default BlockTreeView;
+export default TabTreeView;

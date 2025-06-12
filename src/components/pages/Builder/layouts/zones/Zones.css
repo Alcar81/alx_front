@@ -20,6 +20,13 @@
   z-index: 15;
 }
 
+/* ✅ Zone survolée (hoveredZone), non sélectionnée */
+.zone-hovered {
+  outline: 6px solid limegreen;
+  outline-offset: -2px;
+  z-index: 10;
+}
+
 /* =========================
    🟩 Poignées invisibles
 ========================= */

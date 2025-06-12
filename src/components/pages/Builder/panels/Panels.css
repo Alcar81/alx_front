@@ -330,3 +330,68 @@
   color: white;
   border-color: #007bff;
 }
+
+/* =========================
+   🌲 BlockTreeView Panel
+========================= */
+
+.block-tree {
+  font-size: 13px;
+  color: #333;
+}
+
+.tree-zone-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.tree-group-name {
+  font-weight: bold;
+  color: #666;
+  margin-top: 12px;
+}
+
+.tree-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+.tree-block-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.tree-block-line:hover {
+  background-color: #f0f0f0;
+}
+
+.tree-block-line.selected {
+  background-color: #d0e8ff;
+  outline: 1px solid #1976d2;
+}
+
+.tree-icon {
+  margin-right: 6px;
+}
+
+.tree-label {
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.tree-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.tree-actions button {
+  font-size: 13px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}

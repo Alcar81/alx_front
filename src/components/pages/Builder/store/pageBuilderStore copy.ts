@@ -23,7 +23,10 @@ const generateUUID = (): string => {
 interface PageBuilderStore {
   blocks: PageBlock[];
   ghostBlock: GhostBlock | null;
+  selectedBlockId: string | null;
+  zoneRefs: Record<ZoneKey, DOMRect | null>;
 
+  setZoneRefs: (refs: Record<ZoneKey, DOMRect | null>) => void;
   addBlock: (zone: ZoneKey, type: BlockType) => void;
   removeBlock: (id: string) => void;
   clearBlocks: () => void;
@@ -31,7 +34,6 @@ interface PageBuilderStore {
   updateBlock: (id: string, updates: Partial<PageBlock>) => void;
   updateBlockStyle: (id: string, style: Partial<BlockStyle>) => void;
 
-  selectedBlockId: string | null;
   setSelectedBlock: (id: string | null) => void;
   getBlocksByZone: (zone: ZoneKey) => PageBlock[];
 
@@ -63,6 +65,9 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
   selectedBlockId: null,
   draggingBlock: null,
   resizingBlock: null,
+  zoneRefs: { header: null, main: null, footer: null },
+
+  setZoneRefs: (refs) => set({ zoneRefs: refs }),
 
   addBlock: (zone, type) => {
     const existingZoneBlocks = get().blocks.filter((b) => b.zone === zone);
@@ -146,30 +151,70 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
     const ghost = get().ghostBlock;
     if (!ghost) return;
 
-    const existingZoneBlocks = get().blocks.filter((b) => b.zone === ghost.zone);
+    const refs = get().zoneRefs;
+    const blockX = ghost.position.x;
+    const blockY = ghost.position.y;
+    const blockW = ghost.size?.width || 120;
+    const blockH = ghost.size?.height || 50;
+
+    let dominantZone: ZoneKey | null = null;
+    let maxIntersectionArea = 0;
+
+    for (const zone of Object.keys(refs) as ZoneKey[]) {
+      const ref = refs[zone];
+      if (!ref) continue;
+
+      const zoneRect = ref;
+      const xOverlap = Math.max(
+        0,
+        Math.min(zoneRect.right, blockX + blockW) - Math.max(zoneRect.left, blockX)
+      );
+      const yOverlap = Math.max(
+        0,
+        Math.min(zoneRect.bottom, blockY + blockH) - Math.max(zoneRect.top, blockY)
+      );
+      const area = xOverlap * yOverlap;
+
+      if (area > maxIntersectionArea) {
+        dominantZone = zone;
+        maxIntersectionArea = area;
+      }
+    }
+
+    const blockArea = blockW * blockH;
+    if (!dominantZone || maxIntersectionArea < blockArea * 0.5) return;
+
+    if (blockX + blockW < 0 || blockX > window.innerWidth) return;
+
+    if (dominantZone !== "main") {
+      const ref = refs[dominantZone];
+      if (ref && blockY + blockH > ref.bottom) return;
+    }
+
+    const existingZoneBlocks = get().blocks.filter((b) => b.zone === dominantZone);
     const order = existingZoneBlocks.length;
     const type = mapBlockIdToComponent(ghost.type);
 
     const newBlock: PageBlock = {
       id: generateUUID(),
       type,
-      zone: ghost.zone,
+      zone: dominantZone,
       order,
       content: type === "VisualTextBlock" ? ghost.label || "Texte" : undefined,
       src: type === "VisualImageBlock" ? ImageBlock400x200 : undefined,
       style: {
         ...defaultBlockStyle,
-        top: ghost.position.y,
-        left: ghost.position.x,
-        width: ghost.size?.width || 120,
-        height: ghost.size?.height || 50,
+        top: blockY,
+        left: blockX,
+        width: blockW,
+        height: blockH,
       },
     };
 
     set((state) => ({
       blocks: [...state.blocks, newBlock],
       ghostBlock: null,
-      selectedBlockId: newBlock.id, // ✅ sélectionne automatiquement
+      selectedBlockId: newBlock.id,
     }));
   },
 

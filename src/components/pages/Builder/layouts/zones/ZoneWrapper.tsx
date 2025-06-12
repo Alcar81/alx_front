@@ -15,7 +15,7 @@ import { usePageBuilderStore } from "../../store/pageBuilderStore";
 import type { BlockType } from "../../types/blockTypes";
 import { useLayoutStore } from "../../store/layoutStore";
 
-// ✅ Sélecteurs memoïsés avec shallow pour éviter les rerenders
+// ✅ Sélecteurs optimisés Zustand
 const selectorState = (s: BuilderState) => ({
   selectedZone: s.selectedZone,
   hoveredZone: s.hoveredZone,
@@ -59,6 +59,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
 
   const startResize = isResizableZone(zoneKey) ? resize.startResize : undefined;
   const isSelected = selectedZone === zoneKey;
+  const isHovered = hoveredZone === zoneKey;
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -67,7 +68,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     addBlock(zoneKey, type as BlockType);
   };
 
-  // ✅ Lecture de la hauteur de la zone via layoutStore
   const zoneHeight = useLayoutStore((s) =>
     parseInt(s.layout[zoneKey]?.height ?? "0", 10)
   );
@@ -77,9 +77,18 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     isBlocked ? " blocked" : ""
   }`;
 
+  const className = [
+    `grid-${zoneKey}`,
+    "zone-clickable",
+    isSelected ? "zone-selected" : "",
+    isHovered && !isSelected ? "zone-hovered" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const commonProps = {
     ref: surfaceRefZone,
-    className: `grid-${zoneKey} zone-clickable ${isSelected ? "zone-selected" : ""}`,
+    className,
     onClick: () => {
       if (isResizableZone(zoneKey) && selectedZone !== zoneKey) {
         setSelectedZone(zoneKey);
@@ -102,11 +111,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
         <BlockRenderer key={block.id} block={block} surfaceRefZone={surfaceRefZone} />
       ))}
       {resizable && isResizableZone(zoneKey) && (
-        <div
-          className={resizeClass}
-          onMouseDown={startResize}
-          title="Redimensionner la zone"
-        />
+        <div className={resizeClass} onMouseDown={startResize} title="Redimensionner la zone" />
       )}
     </>
   );

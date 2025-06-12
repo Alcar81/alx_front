@@ -31,6 +31,8 @@ export interface PageBlock {
   src?: string;
   style?: BlockStyle;
   order: number;
+  label?: string;
+  group?: string; // Permet de regrouper les blocs dans l'arborescence
 }
 
 // 🔧 Variante simplifiée utilisée pour previews ou templates

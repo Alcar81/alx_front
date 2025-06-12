@@ -17,7 +17,7 @@ import ZoneWrapper from "./zones/ZoneWrapper";
 import TogglePanelsButton from "../ui/TogglePanelsButton";
 import ToggleGridButton from "../ui/ToggleGridButton";
 import FullGridOverlay from "../ui/FullGridOverlay";
-import FloatingBuilderPanel from "../panels/FloatingBuilderPanel";
+import FloatingBuilderPanel from "../panels/FloatingBuilderPanel/FloatingBuilderPanel";
 import FloatingPagePanel from "../panels/FloatingPagePanel";
 import GhostBlock from "../ghost/GhostBlock";
 
@@ -30,6 +30,7 @@ const GridLayoutBuilder: React.FC = () => {
   const styleVars = generateLayoutCSSVars();
 
   const surfaceRefFull = useRef<HTMLDivElement>(null);
+  const surfaceRefBlock = useRef<HTMLDivElement>(null);
   const surfaceRefZoneHeader = useRef<HTMLDivElement>(null);
   const surfaceRefZoneMain = useRef<HTMLDivElement>(null);
   const surfaceRefZoneFooter = useRef<HTMLDivElement>(null);
@@ -38,26 +39,18 @@ const GridLayoutBuilder: React.FC = () => {
   const [panelsVisible, setPanelsVisible] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
 
-  // 🟦 Bloc fantôme
   const ghostBlock = usePageBuilderStore((s) => s.ghostBlock);
   const updateGhostPosition = usePageBuilderStore((s) => s.updateGhostPosition);
   const dropGhostBlock = usePageBuilderStore((s) => s.dropGhostBlock);
-
-  // 🟪 Bloc déplacé
   const draggingBlock = usePageBuilderStore((s) => s.draggingBlock);
   const updateDragging = usePageBuilderStore((s) => s.updateDragging);
   const stopDragging = usePageBuilderStore((s) => s.stopDragging);
-
-  // 🟥 Bloc redimensionné
   const resizingBlock = usePageBuilderStore((s) => s.resizingBlock);
   const updateResizing = usePageBuilderStore((s) => s.updateResizing);
   const stopResizing = usePageBuilderStore((s) => s.stopResizing);
-
-  // ❌ Bloc sélectionné
   const setSelectedBlock = usePageBuilderStore((s) => s.setSelectedBlock);
-
-  // 📦 Zones DOMRect
   const setZoneRefs = usePageBuilderStore((s) => s.setZoneRefs);
+  const setSurfaceBlockRect = usePageBuilderStore((s) => s.setSurfaceBlockRect); 
 
   const updateZoneDimensions = useCallback(() => {
     setZoneRefs({
@@ -65,9 +58,9 @@ const GridLayoutBuilder: React.FC = () => {
       main: surfaceRefZoneMain.current?.getBoundingClientRect() || null,
       footer: surfaceRefZoneFooter.current?.getBoundingClientRect() || null,
     });
-  }, [setZoneRefs, surfaceRefZoneHeader, surfaceRefZoneMain, surfaceRefZoneFooter]);
+    setSurfaceBlockRect(surfaceRefBlock.current?.getBoundingClientRect() || null);
+  }, [setZoneRefs, setSurfaceBlockRect]);
 
-  // 🖱️ Mouvements globaux
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (ghostBlock) updateGhostPosition({ x: e.clientX, y: e.clientY });
@@ -99,7 +92,6 @@ const GridLayoutBuilder: React.FC = () => {
     stopResizing,
   ]);
 
-  // ⌨️ Raccourci clavier : ESC désélectionne
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -110,7 +102,6 @@ const GridLayoutBuilder: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [setSelectedBlock]);
 
-  // 📐 Initialisation de la surface
   useEffect(() => {
     if (surfaceRefFull.current && !initialized) {
       const rect = surfaceRefFull.current.getBoundingClientRect();
@@ -120,7 +111,6 @@ const GridLayoutBuilder: React.FC = () => {
     }
   }, [initialized, setSurfaceOffset, setSurfaceSize]);
 
-  // 🔁 Mise à jour dynamique des zones visibles
   useEffect(() => {
     updateZoneDimensions();
     window.addEventListener("resize", updateZoneDimensions);
@@ -132,50 +122,46 @@ const GridLayoutBuilder: React.FC = () => {
       <div
         className="surface-active"
         ref={surfaceRefFull}
-        onMouseDown={() => {
-          usePageBuilderStore.getState().setSelectedBlock(null);
-        }}
+        onMouseDown={() => setSelectedBlock(null)}
       >
-        <div className="grid-layout-builder" style={styleVars}>
-          {layout.header.visible && (
+        <div ref={surfaceRefBlock}>
+          <div className="grid-layout-builder" style={styleVars}>
+            {layout.header.visible && (
+              <ZoneWrapper
+                zoneKey="header"
+                title="🔷 En-tête (Header)"
+                tag="header"
+                surfaceRefZone={surfaceRefZoneHeader}
+                resizable
+              />
+            )}
             <ZoneWrapper
-              zoneKey="header"
-              title="🔷 En-tête (Header)"
-              tag="header"
-              surfaceRefZone={surfaceRefZoneHeader}
-              resizable
+              zoneKey="main"
+              title="🧱 Zone principale (Main)"
+              tag="main"
+              surfaceRefZone={surfaceRefZoneMain}
             />
-          )}
-
-          <ZoneWrapper
-            zoneKey="main"
-            title="🧱 Zone principale (Main)"
-            tag="main"
-            surfaceRefZone={surfaceRefZoneMain}
-          />
-
-          {layout.footer.visible && (
-            <ZoneWrapper
-              zoneKey="footer"
-              title="🔻 Pied de page (Footer)"
-              tag="footer"
-              surfaceRefZone={surfaceRefZoneFooter}
-              resizable
-            />
-          )}
+            {layout.footer.visible && (
+              <ZoneWrapper
+                zoneKey="footer"
+                title="🔻 Pied de page (Footer)"
+                tag="footer"
+                surfaceRefZone={surfaceRefZoneFooter}
+                resizable
+              />
+            )}
+          </div>
         </div>
 
         <GhostBlock />
-
         {showGrid && <FullGridOverlay surfaceRef={surfaceRefFull} />}
-
         <TogglePanelsButton onClick={() => setPanelsVisible((v) => !v)} isVisible={panelsVisible} />
         <ToggleGridButton onClick={() => setShowGrid((g) => !g)} isVisible={showGrid} />
 
         {panelsVisible && (
           <div className="floating-panel-root">
             <FloatingBuilderPanel surfaceRef={surfaceRefFull} />
-            <FloatingPagePanel surfaceRef={surfaceRefFull} />
+            <FloatingPagePanel surfaceRef={surfaceRefFull} />            
           </div>
         )}
       </div>

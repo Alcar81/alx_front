@@ -20,13 +20,47 @@ const generateUUID = (): string => {
   });
 };
 
+// 🔍 Détection de la zone dominante à partir de la position d’un bloc
+function detectDominantZone(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  refs: Record<ZoneKey, DOMRect | null>
+): ZoneKey | null {
+  let bestZone: ZoneKey | null = null;
+  let bestArea = 0;
+
+  for (const zone of Object.keys(refs) as ZoneKey[]) {
+    const ref = refs[zone];
+    if (!ref) continue;
+
+    const xOverlap = Math.max(0, Math.min(ref.right, x + width) - Math.max(ref.left, x));
+    const yOverlap = Math.max(0, Math.min(ref.bottom, y + height) - Math.max(ref.top, y));
+    const area = xOverlap * yOverlap;
+
+    if (area > bestArea) {
+      bestZone = zone;
+      bestArea = area;
+    }
+  }
+
+  const blockArea = width * height;
+  return bestArea >= blockArea * 0.5 ? bestZone : null;
+}
+
 interface PageBuilderStore {
   blocks: PageBlock[];
   ghostBlock: GhostBlock | null;
   selectedBlockId: string | null;
   zoneRefs: Record<ZoneKey, DOMRect | null>;
+  surfaceBlockRect: DOMRect | null;
+  hoveredZoneKey: ZoneKey | null;
 
   setZoneRefs: (refs: Record<ZoneKey, DOMRect | null>) => void;
+  setSurfaceBlockRect: (rect: DOMRect | null) => void;
+  setHoveredZoneKey: (zone: ZoneKey | null) => void;
+
   addBlock: (zone: ZoneKey, type: BlockType) => void;
   removeBlock: (id: string) => void;
   clearBlocks: () => void;
@@ -66,8 +100,12 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
   draggingBlock: null,
   resizingBlock: null,
   zoneRefs: { header: null, main: null, footer: null },
+  surfaceBlockRect: null,
+  hoveredZoneKey: null,
 
   setZoneRefs: (refs) => set({ zoneRefs: refs }),
+  setSurfaceBlockRect: (rect) => set({ surfaceBlockRect: rect }),
+  setHoveredZoneKey: (zone) => set({ hoveredZoneKey: zone }),
 
   addBlock: (zone, type) => {
     const existingZoneBlocks = get().blocks.filter((b) => b.zone === zone);
@@ -126,7 +164,7 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
                 ...defaultBlockStyle,
                 ...(b.style ?? {}),
                 ...style,
-              } as BlockStyle,
+              },
             }
           : b
       ),
@@ -149,42 +187,18 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
 
   dropGhostBlock: () => {
     const ghost = get().ghostBlock;
-    if (!ghost) return;
-
+    const surfaceRect = get().surfaceBlockRect;
     const refs = get().zoneRefs;
-    const blockX = ghost.position.x;
-    const blockY = ghost.position.y;
+    if (!ghost || !surfaceRect) return;
+
+    const { x: blockX, y: blockY } = ghost.position;
     const blockW = ghost.size?.width || 120;
     const blockH = ghost.size?.height || 50;
 
-    let dominantZone: ZoneKey | null = null;
-    let maxIntersectionArea = 0;
+    if (blockX < surfaceRect.left || blockX + blockW > surfaceRect.right) return;
 
-    for (const zone of Object.keys(refs) as ZoneKey[]) {
-      const ref = refs[zone];
-      if (!ref) continue;
-
-      const zoneRect = ref;
-      const xOverlap = Math.max(
-        0,
-        Math.min(zoneRect.right, blockX + blockW) - Math.max(zoneRect.left, blockX)
-      );
-      const yOverlap = Math.max(
-        0,
-        Math.min(zoneRect.bottom, blockY + blockH) - Math.max(zoneRect.top, blockY)
-      );
-      const area = xOverlap * yOverlap;
-
-      if (area > maxIntersectionArea) {
-        dominantZone = zone;
-        maxIntersectionArea = area;
-      }
-    }
-
-    const blockArea = blockW * blockH;
-    if (!dominantZone || maxIntersectionArea < blockArea * 0.5) return;
-
-    if (blockX + blockW < 0 || blockX > window.innerWidth) return;
+    const dominantZone = detectDominantZone(blockX, blockY, blockW, blockH, refs);
+    if (!dominantZone) return;
 
     if (dominantZone !== "main") {
       const ref = refs[dominantZone];
@@ -215,6 +229,7 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
       blocks: [...state.blocks, newBlock],
       ghostBlock: null,
       selectedBlockId: newBlock.id,
+      hoveredZoneKey: null,
     }));
   },
 
@@ -228,13 +243,32 @@ export const usePageBuilderStore = createWithEqualityFn<PageBuilderStore>((set, 
 
   updateDragging: (x, y) => {
     const dragging = get().draggingBlock;
-    if (!dragging) return;
-    const newLeft = x - dragging.offsetX;
-    const newTop = y - dragging.offsetY;
+    const surfaceRect = get().surfaceBlockRect;
+    const refs = get().zoneRefs;
+    if (!dragging || !surfaceRect) return;
+
+    let newLeft = x - dragging.offsetX;
+    let newTop = y - dragging.offsetY;
+
+    const block = get().blocks.find((b) => b.id === dragging.id);
+    if (!block?.style) return;
+
+    const width = block.style.width ?? 120;
+    const height = block.style.height ?? 50;
+
+    newLeft = Math.max(surfaceRect.left, Math.min(newLeft, surfaceRect.right - width));
+    newTop = Math.max(surfaceRect.top, newTop);
+
+    const newZone = detectDominantZone(newLeft, newTop, width, height, refs);
+    if (newZone && newZone !== block.zone) {
+      get().updateBlock(dragging.id, { zone: newZone });
+    }
+
+    set({ hoveredZoneKey: newZone || null });
     get().updateBlockStyle(dragging.id, { left: newLeft, top: newTop });
   },
 
-  stopDragging: () => set({ draggingBlock: null }),
+  stopDragging: () => set({ draggingBlock: null, hoveredZoneKey: null }),
 
   startResizing: (id, startX, startY) => {
     const block = get().blocks.find((b) => b.id === id);
