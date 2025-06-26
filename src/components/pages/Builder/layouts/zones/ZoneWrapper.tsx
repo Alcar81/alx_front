@@ -1,4 +1,4 @@
-// 📁 Builder/components/ZoneWrapper.tsx
+// 📁 Builder/layouts/zones/ZoneWrapper.tsx
 
 import React, {
   useState,
@@ -31,10 +31,10 @@ const selectorSetters = (s: ReturnType<typeof useBuilderPanelsStore.getState>) =
 interface ZoneWrapperProps {
   zoneKey: LayoutZoneKey;
   title: string;
-  tag: "header" | "main" | "footer";
+  tag?: keyof JSX.IntrinsicElements;
   surfaceRefZone: React.RefObject<HTMLDivElement>;
   resizable?: boolean;
-  children?: React.ReactNode; // ✅ autorise les enfants
+  children?: React.ReactNode;
 }
 
 const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
@@ -43,8 +43,10 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   tag,
   surfaceRefZone,
   resizable = false,
-  children, // ✅ récupéré ici
+  children,
 }) => {
+  const actualTag = tag ?? "div"; // ✅ valeur par défaut si tag est undefined
+
   const { selectedZone, hoveredZoneKey } = useBuilderPanelsStore(selectorState, shallow);
   const { setSelectedZone, setHoveredZoneKey } = useBuilderPanelsStore(selectorSetters, shallow);
 
@@ -113,7 +115,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     }
   }, [hoveredZoneKey, zoneKey, setHoveredZoneKey]);
 
-  // ✅ 🔽 AJOUT : mesure dynamique de la hauteur réelle de `main`
+  // ✅ 🔽 Mesure dynamique
   const setZoneRealHeight = useBuilderPanelsStore((s) => s.setZoneRealHeight);
   const zoneRealHeight = useBuilderPanelsStore((s) => s.zoneRealHeights[zoneKey]);
   const zones = useBuilderPanelsStore((s) => s.zones);
@@ -132,7 +134,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
       setZoneRealHeight("main", height);
     }
   }, [blocks, zoneKey, surfaceRefZone, setZoneRealHeight, zoneRealHeight]);
-  // ✅ 🔼 FIN mesure dynamique
 
   const commonProps = {
     ref: surfaceRefZone,
@@ -160,7 +161,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
       {blocks.map((block) => (
         <BlockRenderer key={block.id} block={block} surfaceRefZone={surfaceRefZone} />
       ))}
-      {children} {/* ✅ Injecte les enfants ici */}
+      {children}
       {resizable && isResizableZone(zoneKey) && (
         <div
           className={resizeClass}
@@ -173,7 +174,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
 
   return (
     <>
-      {React.createElement(tag, commonProps, zoneContent)}
+      {React.createElement(actualTag, commonProps, zoneContent)}
       {resizable && isResizableZone(zoneKey) && guideY !== null && (
         <ResizeGuideLine y={guideY} />
       )}

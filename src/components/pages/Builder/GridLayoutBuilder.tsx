@@ -1,5 +1,4 @@
 // 📁 Builder/GridLayoutBuilder.tsx
-
 import React, { useRef, useState, useEffect, useCallback } from "react";
 
 // Stores
@@ -21,7 +20,7 @@ import FloatingBuilderPanel from "./panels/FloatingBuilderPanel/FloatingBuilderP
 import FloatingPagePanel from "./panels/FloatingPagePanel";
 import GhostBlock from "./ghost/GhostBlock";
 
-// ✅ CSS principal centralisé
+// ✅ CSS principal
 import "./GridLayoutBuilder.css";
 
 const GridLayoutBuilder: React.FC = () => {
@@ -39,18 +38,20 @@ const GridLayoutBuilder: React.FC = () => {
   const [showGrid, setShowGrid] = useState(false);
   const [surfaceHeight, setSurfaceHeight] = useState<number | null>(null);
 
-  const ghostBlock = useBuilderPanelsStore((s) => s.ghostBlock);
-  const updateGhostPosition = useBuilderPanelsStore((s) => s.updateGhostPosition);
-  const dropGhostBlock = useBuilderPanelsStore((s) => s.dropGhostBlock);
-  const draggingBlock = useBuilderPanelsStore((s) => s.draggingBlock);
-  const updateDragging = useBuilderPanelsStore((s) => s.updateDragging);
-  const stopDragging = useBuilderPanelsStore((s) => s.stopDragging);
-  const resizingBlock = useBuilderPanelsStore((s) => s.resizingBlock);
-  const updateResizing = useBuilderPanelsStore((s) => s.updateResizing);
-  const stopResizing = useBuilderPanelsStore((s) => s.stopResizing);
-  const setSelectedBlock = useBuilderPanelsStore((s) => s.setSelectedBlock);
-  const setZoneRefs = useBuilderPanelsStore((s) => s.setZoneRefs);
-  const setSurfaceBlockRect = useBuilderPanelsStore((s) => s.setSurfaceBlockRect);
+  const {
+    ghostBlock,
+    updateGhostPosition,
+    dropGhostBlock,
+    draggingBlock,
+    updateDragging,
+    stopDragging,
+    resizingBlock,
+    updateResizing,
+    stopResizing,
+    setSelectedBlock,
+    setZoneRefs,
+    setSurfaceBlockRect,
+  } = useBuilderPanelsStore();
 
   const updateZoneDimensions = useCallback(() => {
     setZoneRefs({
@@ -94,9 +95,7 @@ const GridLayoutBuilder: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedBlock(null);
-      }
+      if (e.key === "Escape") setSelectedBlock(null);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -123,7 +122,6 @@ const GridLayoutBuilder: React.FC = () => {
     ...(surfaceHeight ? { minHeight: `${surfaceHeight}px` } : {}),
   };
 
-  // 👇 Construction dynamique des classes CSS
   const layoutClass = [
     "grid-layout-builder",
     layout.main.height === "auto" && "main-auto-mode",
@@ -142,7 +140,7 @@ const GridLayoutBuilder: React.FC = () => {
       >
         <div ref={surfaceRefBlock}>
           <div className={layoutClass} style={styleVars}>
-            {/* Header */}
+            {/* ✅ Header */}
             {layout.header.visible && (
               <ZoneWrapper
                 zoneKey="header"
@@ -153,17 +151,18 @@ const GridLayoutBuilder: React.FC = () => {
               />
             )}
 
-            {/* Main */}
-            <ZoneWrapper
-              zoneKey="main"
-              title="🧱 Zone principale (Main)"
-              tag="main"
-              surfaceRefZone={surfaceRefZoneMain}
-            >
-              <div className="main-container" />
-
-              {/* Footer intégré */}
-              {layout.footerMode === "inline" && layout.footer.visible && (
+            {/* ✅ Main */}
+            {layout.footerMode === "inline" ? (
+              <main className="grid-main" ref={surfaceRefZoneMain}>
+                <div className="main-container" data-zone="main">
+                  <ZoneWrapper
+                    zoneKey="main"
+                    title="🧱 Zone principale (Main) Footer intégré"
+                    tag="div"
+                    surfaceRefZone={surfaceRefZoneMain}
+                    resizable={false}
+                  />
+                </div>
                 <div className="footer-container-inline">
                   <ZoneWrapper
                     zoneKey="footer"
@@ -173,10 +172,17 @@ const GridLayoutBuilder: React.FC = () => {
                     resizable
                   />
                 </div>
-              )}
-            </ZoneWrapper>
+              </main>
+            ) : (
+              <ZoneWrapper
+                zoneKey="main"
+                title="🧱 Zone principale (Main) Footer fixe"
+                tag="main"
+                surfaceRefZone={surfaceRefZoneMain}
+              />
+            )}
 
-            {/* Footer fixe */}
+            {/* ✅ Footer fixe */}
             {layout.footerMode === "fixed" && layout.footer.visible && (
               <ZoneWrapper
                 zoneKey="footer"
