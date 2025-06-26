@@ -1,12 +1,12 @@
 // 📁 Builder/ghost/GhostBlock.tsx
 
 import React from "react";
-import { usePageBuilderStore } from "../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../store/builderPanelsStore";
 import type { GhostBlock as GhostBlockType } from "../types/GhostBlockTypes";
 import "./GhostBlock.css";
 
 const GhostBlock: React.FC = () => {
-  const ghost = usePageBuilderStore((state) => state.ghostBlock) as GhostBlockType | null;
+  const ghost = useBuilderPanelsStore((state) => state.ghostBlock) as GhostBlockType | null;
 
   if (!ghost || !ghost.position) return null;
 

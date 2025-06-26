@@ -1,4 +1,5 @@
 // 📁 src/utils/generateLayoutCSSVars.ts
+
 import type React from "react";
 import { useLayoutStore } from "../store/layoutStore";
 
@@ -7,6 +8,7 @@ export function generateLayoutCSSVars(): React.CSSProperties {
 
   return {
     "--header-height": layout.header.visible ? layout.header.height : "0px",
+    "--main-height": layout.main.visible ? layout.main.height : "auto",
     "--footer-height": layout.footer.visible ? layout.footer.height : "0px",
   } as React.CSSProperties;
 }

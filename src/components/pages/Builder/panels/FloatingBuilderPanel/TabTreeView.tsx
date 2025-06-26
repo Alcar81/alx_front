@@ -1,45 +1,134 @@
 // 📁 Builder/panels/floatingBuilderPanel/TabTreeView.tsx
 
-import React from "react";
-import { useBuilderStore } from "../../store/builderStore";
-import { usePageBuilderStore } from "../../store/pageBuilderStore";
+import React, { useEffect, useRef } from "react";
+import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
+import { useLayoutStore } from "../../store/layoutStore";
+import type { PageBlock } from "../../types/blockTypes";
+import type { LayoutZoneKey } from "../../types/zoneTypes";
 
-const TabTreeView: React.FC = () => {
-  const selectedZone = useBuilderStore((s) => s.selectedZone);
-  const blocks = usePageBuilderStore((s) =>
-    s.blocks.filter((b) => b.zone === selectedZone)
-  );
+const TreeBlockItem: React.FC<{
+  block: PageBlock;
+  depth: number;
+  isLast: boolean;
+}> = ({ block, depth, isLast }) => {
+  const {
+    selectedBlockId,
+    setSelectedBlock,
+    setSelectedZone,
+    blocks,
+  } = useBuilderPanelsStore();
 
-  if (!selectedZone) return <div className="panel-content">Aucune zone sélectionnée</div>;
+  const isSelected = selectedBlockId === block.id;
+  const indentation = Array(depth).fill("│  ").join("") + (isLast ? "└─" : "├─");
 
-  const grouped = blocks.reduce<Record<string, typeof blocks>>((acc, block) => {
-    const group = block.group || "🔓 Autonomes";
-    if (!acc[group]) acc[group] = [];
-    acc[group].push(block);
-    return acc;
-  }, {});
+  const blockRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    if (isSelected && blockRef.current) {
+      blockRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [isSelected]);
 
   return (
-    <div className="block-tree">
-      <div className="tree-zone-title">Zone : {selectedZone}</div>
-      <ul className="tree-list">
-        {Object.entries(grouped).map(([groupName, groupBlocks]) => (
-          <li key={groupName}>
-            <div className="tree-group-name">{groupName}</div>
-            <ul>
-              {groupBlocks.map((block) => (
-                <li key={block.id} className="tree-block-line">
-                  <span className="tree-icon">🧱</span>
-                  <span className="tree-label">{block.label || block.type}</span>
-                  <span className="tree-actions">
-                    <button title="Masquer">👁️</button>
-                    <button title="Propriétés">🛠️</button>
-                  </span>
-                </li>
-              ))}
-            </ul>
+    <li
+      ref={blockRef}
+      className={`tree-block-line ${isSelected ? "selected-block" : ""}`}
+      onClick={() => {
+        setSelectedBlock(block.id);
+        setSelectedZone(block.zone);
+      }}
+    >
+      <span className="tree-label">
+        {indentation} {block.label || block.type}
+      </span>
+
+      {Array.isArray(block.childrenIds) &&
+        block.childrenIds.map((childId, idx) => {
+          const child = blocks.find((b) => b.id === childId);
+          return child ? (
+            <TreeBlockItem
+              key={child.id}
+              block={child}
+              depth={depth + 1}
+              isLast={idx === block.childrenIds!.length - 1}
+            />
+          ) : null;
+        })}
+    </li>
+  );
+};
+
+const TabTreeView: React.FC = () => {
+  const {
+    blocks,
+    selectedZone,
+    setSelectedZone,
+  } = useBuilderPanelsStore();
+
+  const layout = useLayoutStore((s) => s.layout);
+
+  const blocksByZone: Record<LayoutZoneKey, PageBlock[]> = {
+    header: [],
+    main: [],
+    footer: [],
+  };
+
+  blocks.forEach((block) => {
+    if (blocksByZone[block.zone]) {
+      blocksByZone[block.zone].push(block);
+    }
+  });
+
+  const baseZones: LayoutZoneKey[] = ["header", "main"];
+  const shouldShowFooter = layout.footerMode === "fixed" && layout.footer.visible;
+  const zonesToShow: LayoutZoneKey[] = shouldShowFooter
+    ? [...baseZones, "footer"]
+    : baseZones;
+
+  return (
+    <div className="block-tree panel-content">
+      <ul className="tree-zones-list">
+        {zonesToShow.map((zone: LayoutZoneKey) => {
+          const zoneBlocks = blocksByZone[zone];
+          const isSelected = selectedZone === zone;
+          const zoneIsVisible = layout[zone]?.visible !== false;
+          if (!zoneIsVisible) return null;
+
+          return (
+            <li key={zone} className="tree-zone">
+              <div
+                className={`tree-zone-title ${isSelected ? "selected-zone" : ""}`}
+                onClick={() => setSelectedZone(zone)}
+              >
+                📁 {zone}
+              </div>
+              <ul className="tree-list">
+                {zoneBlocks.map((block, index) => (
+                  <TreeBlockItem
+                    key={block.id}
+                    block={block}
+                    depth={1}
+                    isLast={index === zoneBlocks.length - 1}
+                  />
+                ))}
+              </ul>
+            </li>
+          );
+        })}
+
+        {/* Footer inline */}
+        {layout.footerMode === "inline" && layout.footer.visible && (
+          <li className="tree-zone">
+            <div
+              className={`tree-zone-title ${
+                selectedZone === "footer" ? "selected-zone" : ""
+              }`}
+              onClick={() => setSelectedZone("footer")}
+            >
+              └─ footer
+            </div>
           </li>
-        ))}
+        )}
       </ul>
     </div>
   );

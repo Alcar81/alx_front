@@ -1,6 +1,7 @@
 // 📁 Builder/types/layoutData.ts
 
 import type { BlockItem } from "./blockTypes";
+import type { FooterMode } from "./zoneTypes";
 
 export interface LayoutSection {
   height: string;
@@ -12,6 +13,7 @@ export interface LayoutSection {
 
 export interface LayoutData {
   header: LayoutSection;
-  footer: LayoutSection;
   main: LayoutSection;
+  footer: LayoutSection;
+  footerMode: FooterMode;
 }

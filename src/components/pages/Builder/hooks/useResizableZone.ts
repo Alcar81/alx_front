@@ -1,17 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useBuilderStore } from "../store/builderStore";
-import type { ZoneKey } from "../types/zoneTypes";
+// 📁 src/hooks/useResizableZone.ts
 
-export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTMLDivElement>) => {
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useBuilderPanelsStore } from "../store/builderPanelsStore";
+import type { LayoutZoneKey } from "../types/zoneTypes";
+
+export const useResizableZone = (
+  zone: LayoutZoneKey,
+  surfaceRef: React.RefObject<HTMLDivElement>
+) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { zones, updateZone, selectedZone, setSelectedZone, setHoveredZone } = useBuilderStore();
+  const { zones, updateZone, selectedZone, setSelectedZone, setHoveredZone } =
+    useBuilderPanelsStore();
 
   const zoneData = zones[zone];
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [direction, setDirection] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // 📦 Début du resize
   const startResize = useCallback((e: React.MouseEvent, dir: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -20,7 +25,6 @@ export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTML
     setStartPos({ x: e.clientX, y: e.clientY });
   }, []);
 
-  // 🖱 Début du déplacement
   const startDrag = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -29,7 +33,6 @@ export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTML
     setStartPos({ x: e.clientX, y: e.clientY });
   }, []);
 
-  // 🧠 Gestion du mouvement global
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (!surfaceRef.current || !zoneData) return;
@@ -41,14 +44,16 @@ export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTML
 
       if (direction) {
         let { width, height } = zoneData;
+        let numericHeight = height === "auto" ? 0 : height;
+
         if (direction.includes("e")) width += deltaX;
-        if (direction.includes("s")) height += deltaY;
+        if (direction.includes("s")) numericHeight += deltaY;
         if (direction.includes("w")) width -= deltaX;
-        if (direction.includes("n")) height -= deltaY;
+        if (direction.includes("n")) numericHeight -= deltaY;
 
         updateZone(zone, {
           width: Math.max(100, width),
-          height: Math.max(40, height),
+          height: Math.max(40, numericHeight),
         });
       } else if (isDragging) {
         updateZone(zone, {
@@ -74,6 +79,16 @@ export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTML
     };
   }, [handleMouseMove, stopInteraction]);
 
+  // ✅ Nouvelle fonction d’ajustement manuel (+ / –)
+  const adjustZoneHeight = useCallback(
+    (delta: number) => {
+      if (!zoneData || zoneData.height === "auto") return;
+      const newHeight = Math.max(40, zoneData.height + delta);
+      updateZone(zone, { height: newHeight });
+    },
+    [zone, zoneData, updateZone]
+  );
+
   return {
     containerRef,
     zoneData,
@@ -83,5 +98,6 @@ export const useResizableZone = (zone: ZoneKey, surfaceRef: React.RefObject<HTML
     setHoveredZone,
     startDrag,
     startResize,
+    adjustZoneHeight, // 👈 À utiliser dans MainExpandControls ou ailleurs
   };
 };

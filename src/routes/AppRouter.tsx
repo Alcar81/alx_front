@@ -5,7 +5,7 @@ import PublicRoutes from "./PublicRoutes";
 import AdminRoutes from "./AdminRoutes";
 import LandingPage from "../components/pages/LandingPage/LandingPage";
 import FlexibleLayout from "../components/Layouts/FlexibleLayout";
-import GridLayoutBuilder from "../components/pages/Builder/layouts/GridLayoutBuilder";
+import GridLayoutBuilder from "../components/pages/Builder/GridLayoutBuilder";
 
 const AppRouterContent: React.FC = () => (
   <Routes>

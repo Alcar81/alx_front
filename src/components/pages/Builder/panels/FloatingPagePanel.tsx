@@ -1,15 +1,15 @@
-// Builder/panels/FloatingPagePanel.tsx
+// 📁 Builder/panels/FloatingPagePanel.tsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // ✅ Ajout useRef
 import { useDraggable } from "../hooks/useDraggable";
-import { usePageBuilderStore } from "../store/pageBuilderStore";
-import { useBuilderStore } from "../store/builderStore";
+import { useBuilderPanelsStore } from "../store/builderPanelsStore";
 import { blockConfig } from "../config/blockConfig";
 import type { BlockType } from "../types/blockTypes";
 import type { SectionTemplate } from "../types/sectionTemplate";
 
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import "./Panels.css";
 
 import { validateTemplates } from "../utils/validateTemplates";
@@ -23,11 +23,24 @@ interface FloatingPagePanelProps {
 
 const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => {
   const ref = useDraggable(surfaceRef);
-  const { selectedZone } = useBuilderStore();
-  const { setGhostBlock, updateGhostPosition, dropGhostBlock } = usePageBuilderStore();
+
+  const {
+    hoveredZoneKey,
+    setGhostBlock,
+    updateGhostPosition,
+    dropGhostBlock,
+  } = useBuilderPanelsStore();
+
+  const lastZoneRef = useRef(hoveredZoneKey); // ✅ Ref pour mémoriser la dernière zone valide
+
+  useEffect(() => {
+    lastZoneRef.current = hoveredZoneKey;
+  }, [hoveredZoneKey]);
+
+  console.log("🧪 hoveredZoneKey =", hoveredZoneKey);
 
   const [activeTab, setActiveTab] = useState<"elements" | "templates">("elements");
-  const [selectedCategory, setSelectedCategory] = useState<"text" | "image">("text");
+  const [selectedCategory, setSelectedCategory] = useState<"text" | "image" | "group">("text");
   const [selectedTemplateZone, setSelectedTemplateZone] = useState<"header" | "main" | "footer">("header");
 
   const bounds = surfaceRef.current?.getBoundingClientRect();
@@ -80,33 +93,46 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
   }, [updateGhostPosition, dropGhostBlock]);
 
   const handleGhostStart = (blockId: string) => {
-    if (!selectedZone) return;
-
     const block = blockConfig.find((b) => b.id === blockId);
     if (!block) return;
 
+    const width = block.defaultWidth || 120;
+    const height = block.defaultHeight || 50;
+
+    // 📍 Obtiens la position du curseur
+    const initialX = window.event instanceof MouseEvent ? window.event.clientX : 0;
+    const initialY = window.event instanceof MouseEvent ? window.event.clientY : 0;
+
     setGhostBlock({
       type: block.id as BlockType,
-      zone: selectedZone,
-      position: { x: 0, y: 0 },
-      size: {
-        width: block.defaultWidth || 120,
-        height: block.defaultHeight || 50,
+      zone: "main", // provisoire
+      position: {
+        x: initialX - width / 2,
+        y: initialY - height / 2,
       },
+      size: { width, height },
       status: "default",
       label: block.label,
     });
   };
+
+
 
   return (
     <div ref={ref} className="floating-panel page-panel" style={clampedStyle}>
       <div className="floating-header">📦 Panneau Outils</div>
 
       <div className="tabs">
-        <button className={`tab ${activeTab === "elements" ? "active" : ""}`} onClick={() => setActiveTab("elements")}>
+        <button
+          className={`tab ${activeTab === "elements" ? "active" : ""}`}
+          onClick={() => setActiveTab("elements")}
+        >
           Éléments
         </button>
-        <button className={`tab ${activeTab === "templates" ? "active" : ""}`} onClick={() => setActiveTab("templates")}>
+        <button
+          className={`tab ${activeTab === "templates" ? "active" : ""}`}
+          onClick={() => setActiveTab("templates")}
+        >
           Modèles blocs
         </button>
       </div>
@@ -115,11 +141,23 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
         {activeTab === "elements" && (
           <div className="block-toolbar-group">
             <div className="block-toolbar">
-              <button className={selectedCategory === "text" ? "active" : ""} onClick={() => setSelectedCategory("text")}>
+              <button
+                className={selectedCategory === "text" ? "active" : ""}
+                onClick={() => setSelectedCategory("text")}
+              >
                 <TextFieldsIcon style={{ color: "blue" }} />
               </button>
-              <button className={selectedCategory === "image" ? "active" : ""} onClick={() => setSelectedCategory("image")}>
+              <button
+                className={selectedCategory === "image" ? "active" : ""}
+                onClick={() => setSelectedCategory("image")}
+              >
                 <ImageIcon style={{ color: "blue" }} />
+              </button>
+              <button
+                className={selectedCategory === "group" ? "active" : ""}
+                onClick={() => setSelectedCategory("group")}
+              >
+                <ViewModuleIcon style={{ color: "blue" }} />
               </button>
             </div>
 
@@ -127,11 +165,7 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
 
             <div className="block-subgroup">
               {filteredBlocks.map((block) => (
-                <button
-                  key={block.id}
-                  title={block.label}
-                  onClick={() => handleGhostStart(block.id)} // ✅ déclenche seulement au clic
-                >
+                <button key={block.id} title={block.label} onClick={() => handleGhostStart(block.id)}>
                   {block.icon}
                 </button>
               ))}
@@ -142,13 +176,22 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
         {activeTab === "templates" && (
           <div className="block-templates-group">
             <div className="template-zone-selector">
-              <button onClick={() => setSelectedTemplateZone("header")} className={selectedTemplateZone === "header" ? "active" : ""}>
+              <button
+                onClick={() => setSelectedTemplateZone("header")}
+                className={selectedTemplateZone === "header" ? "active" : ""}
+              >
                 🧱 Header
               </button>
-              <button onClick={() => setSelectedTemplateZone("main")} className={selectedTemplateZone === "main" ? "active" : ""}>
+              <button
+                onClick={() => setSelectedTemplateZone("main")}
+                className={selectedTemplateZone === "main" ? "active" : ""}
+              >
                 📄 Main
               </button>
-              <button onClick={() => setSelectedTemplateZone("footer")} className={selectedTemplateZone === "footer" ? "active" : ""}>
+              <button
+                onClick={() => setSelectedTemplateZone("footer")}
+                className={selectedTemplateZone === "footer" ? "active" : ""}
+              >
                 📥 Footer
               </button>
             </div>
@@ -160,7 +203,7 @@ const FloatingPagePanel: React.FC<FloatingPagePanelProps> = ({ surfaceRef }) => 
                 <button
                   key={template.id}
                   title={template.label}
-                  onClick={() => console.log("Glisser modèle:", template)}
+                  onClick={() => console.log("🧩 Glisser modèle:", template)}
                 >
                   🧩
                 </button>

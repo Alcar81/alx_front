@@ -1,36 +1,40 @@
-// 📁 Builder/layouts/zones/ZoneWrapper.tsx
+// 📁 Builder/components/ZoneWrapper.tsx
 
-import React, { useState } from "react";
+import React, {
+  useState,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import "./Zones.css";
 
 import BlockRenderer from "../../blocks/BlockRenderer";
 import ResizeGuideLine from "../../guides/ResizeGuideLine";
 import { useResizableHandle } from "../../hooks/useResizableHandle";
 import { isResizableZone } from "../../utils/zoneUtils";
-import type { ZoneKey } from "../../types/zoneTypes";
+import type { LayoutZoneKey } from "../../types/zoneTypes";
 
 import { shallow } from "zustand/shallow";
-import { useBuilderStore, BuilderState } from "../../store/builderStore";
-import { usePageBuilderStore } from "../../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
 import type { BlockType } from "../../types/blockTypes";
 import { useLayoutStore } from "../../store/layoutStore";
 
-// ✅ Sélecteurs optimisés Zustand
-const selectorState = (s: BuilderState) => ({
+// ✅ Zustand selectors
+const selectorState = (s: ReturnType<typeof useBuilderPanelsStore.getState>) => ({
   selectedZone: s.selectedZone,
-  hoveredZone: s.hoveredZone,
+  hoveredZoneKey: s.hoveredZoneKey,
 });
-const selectorSetters = (s: BuilderState) => ({
+const selectorSetters = (s: ReturnType<typeof useBuilderPanelsStore.getState>) => ({
   setSelectedZone: s.setSelectedZone,
-  setHoveredZone: s.setHoveredZone,
+  setHoveredZoneKey: s.setHoveredZoneKey,
 });
 
 interface ZoneWrapperProps {
-  zoneKey: ZoneKey;
+  zoneKey: LayoutZoneKey;
   title: string;
   tag: "header" | "main" | "footer";
   surfaceRefZone: React.RefObject<HTMLDivElement>;
   resizable?: boolean;
+  children?: React.ReactNode; // ✅ autorise les enfants
 }
 
 const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
@@ -39,16 +43,16 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   tag,
   surfaceRefZone,
   resizable = false,
+  children, // ✅ récupéré ici
 }) => {
-  const { selectedZone, hoveredZone } = useBuilderStore(selectorState, shallow);
-  const { setSelectedZone, setHoveredZone } = useBuilderStore(selectorSetters, shallow);
+  const { selectedZone, hoveredZoneKey } = useBuilderPanelsStore(selectorState, shallow);
+  const { setSelectedZone, setHoveredZoneKey } = useBuilderPanelsStore(selectorSetters, shallow);
 
-  const blocks = usePageBuilderStore(
+  const blocks = useBuilderPanelsStore(
     (state) => state.blocks.filter((b) => b.zone === zoneKey),
     shallow
   );
-
-  const addBlock = usePageBuilderStore((state) => state.addBlock);
+  const addBlock = useBuilderPanelsStore((state) => state.addBlock);
 
   const [guideY, setGuideY] = useState<number | null>(null);
   const resize = useResizableHandle(
@@ -56,17 +60,10 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     surfaceRefZone,
     setGuideY
   );
-
   const startResize = isResizableZone(zoneKey) ? resize.startResize : undefined;
-  const isSelected = selectedZone === zoneKey;
-  const isHovered = hoveredZone === zoneKey;
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const type = e.dataTransfer.getData("application/block-type");
-    if (!type || blocks.length > 0) return;
-    addBlock(zoneKey, type as BlockType);
-  };
+  const isSelected = selectedZone === zoneKey;
+  const isHovered = hoveredZoneKey === zoneKey;
 
   const zoneHeight = useLayoutStore((s) =>
     parseInt(s.layout[zoneKey]?.height ?? "0", 10)
@@ -81,37 +78,95 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     `grid-${zoneKey}`,
     "zone-clickable",
     isSelected ? "zone-selected" : "",
-    isHovered && !isSelected ? "zone-hovered" : "",
+    isHovered ? "zone-hovered" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
+  const handleClickZone = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setSelectedZone(zoneKey);
+    },
+    [setSelectedZone, zoneKey]
+  );
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const type = e.dataTransfer.getData("application/block-type");
+      if (!type || blocks.length > 0) return;
+      addBlock(zoneKey, type as BlockType);
+    },
+    [addBlock, blocks, zoneKey]
+  );
+
+  const handleMouseEnter = useCallback(() => {
+    if (hoveredZoneKey !== zoneKey) {
+      setHoveredZoneKey(zoneKey);
+    }
+  }, [hoveredZoneKey, zoneKey, setHoveredZoneKey]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoveredZoneKey === zoneKey) {
+      setHoveredZoneKey(null);
+    }
+  }, [hoveredZoneKey, zoneKey, setHoveredZoneKey]);
+
+  // ✅ 🔽 AJOUT : mesure dynamique de la hauteur réelle de `main`
+  const setZoneRealHeight = useBuilderPanelsStore((s) => s.setZoneRealHeight);
+  const zoneRealHeight = useBuilderPanelsStore((s) => s.zoneRealHeights[zoneKey]);
+  const zones = useBuilderPanelsStore((s) => s.zones);
+  const heightMainAdd = useBuilderPanelsStore((s) =>
+    zoneKey === "main" ? s.zones.main.heightMainAdd || 0 : 0
+  );
+
+  useLayoutEffect(() => {
+    if (zoneKey !== "main") return;
+    if (!surfaceRefZone.current) return;
+
+    const height = surfaceRefZone.current.getBoundingClientRect().height;
+    if (!height) return;
+
+    if (Math.abs(zoneRealHeight - height) > 1) {
+      setZoneRealHeight("main", height);
+    }
+  }, [blocks, zoneKey, surfaceRefZone, setZoneRealHeight, zoneRealHeight]);
+  // ✅ 🔼 FIN mesure dynamique
+
   const commonProps = {
     ref: surfaceRefZone,
     className,
-    onClick: () => {
-      if (isResizableZone(zoneKey) && selectedZone !== zoneKey) {
-        setSelectedZone(zoneKey);
-      }
-    },
-    onMouseEnter: () => {
-      if (hoveredZone !== zoneKey) setHoveredZone(zoneKey);
-    },
-    onMouseLeave: () => {
-      if (hoveredZone === zoneKey) setHoveredZone(null);
-    },
+    onMouseDown: handleClickZone,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
     onDragOver: (e: React.DragEvent) => e.preventDefault(),
     onDrop: handleDrop,
   };
 
+  const zoneSizeDisplay = isSelected ? (
+    <div className="zone-size-info">
+      {zones[zoneKey].width}×
+      {zoneKey === "main"
+        ? `${zoneRealHeight}${heightMainAdd > 0 ? ` +${heightMainAdd}` : ""}`
+        : zoneRealHeight}
+    </div>
+  ) : null;
+
   const zoneContent = (
     <>
+      {zoneSizeDisplay}
       <span className="zone-title">{title}</span>
       {blocks.map((block) => (
         <BlockRenderer key={block.id} block={block} surfaceRefZone={surfaceRefZone} />
       ))}
+      {children} {/* ✅ Injecte les enfants ici */}
       {resizable && isResizableZone(zoneKey) && (
-        <div className={resizeClass} onMouseDown={startResize} title="Redimensionner la zone" />
+        <div
+          className={resizeClass}
+          onMouseDown={startResize}
+          title="Redimensionner la zone"
+        />
       )}
     </>
   );

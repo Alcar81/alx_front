@@ -4,20 +4,9 @@ import { create } from "zustand";
 import initialLayoutConfig from "../config/initialFullLayoutConfig";
 import type { LayoutData } from "../types/layoutData";
 import type { BlockItem } from "../types/blockTypes";
+import type { LayoutZoneKey } from "../types/zoneTypes";
 
-export type LayoutZoneKey = "header" | "main" | "footer";
-
-export const MIN_HEIGHTS: Record<LayoutZoneKey, number> = {
-  header: 40,
-  main: 0,
-  footer: 40,
-};
-
-export const MAX_HEIGHTS: Record<LayoutZoneKey, number> = {
-  header: 200,
-  main: 10000,
-  footer: 300,
-};
+import { DEFAULT_HEIGHTS, MIN_HEIGHTS, MAX_HEIGHTS } from "../constants/defaultHeights";
 
 const LOCAL_STORAGE_KEY = "layout_config_v1";
 
@@ -29,8 +18,9 @@ interface LayoutStore {
   removeBlockFromSection: (section: LayoutZoneKey, blockId: string) => void;
   moveBlockInSection: (section: LayoutZoneKey, fromIndex: number, toIndex: number) => void;
   resetLayout: () => void;
-  getLayout: () => LayoutData;
   resetAllLayout: () => void;
+  getLayout: () => LayoutData;
+  setLayout: (newLayout: LayoutData) => void;
 }
 
 export const useLayoutStore = create<LayoutStore>((set, get) => {
@@ -53,15 +43,26 @@ export const useLayoutStore = create<LayoutStore>((set, get) => {
     layout: parsed,
 
     setHeight: (section, height) => {
-      const numeric = typeof height === "string" ? parseInt(height, 10) : height;
-      const clamped = Math.max(MIN_HEIGHTS[section], Math.min(MAX_HEIGHTS[section], numeric));
+      let clamped: string;
+
+      if (height === "auto") {
+        clamped = "auto";
+      } else {
+        const numeric = typeof height === "string" ? parseInt(height, 10) : height;
+        const min = MIN_HEIGHTS[section];
+        const max = MAX_HEIGHTS[section];
+        const bounded = Math.max(min, Math.min(max, numeric));
+        clamped = `${bounded}px`;
+      }
+
       const updated = {
         ...get().layout,
         [section]: {
           ...get().layout[section],
-          height: `${clamped}px`,
+          height: clamped,
         },
       };
+
       persist(updated);
     },
 
@@ -123,6 +124,11 @@ export const useLayoutStore = create<LayoutStore>((set, get) => {
       persist(updated);
     },
 
+    setLayout: (newLayout) => {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newLayout));
+      set({ layout: newLayout });
+    },
+
     resetLayout: () => {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
       set({ layout: initialLayoutConfig });
@@ -130,18 +136,13 @@ export const useLayoutStore = create<LayoutStore>((set, get) => {
 
     resetAllLayout: () => {
       const layout = get().layout;
-      const defaultHeights: Record<LayoutZoneKey, number> = {
-        header: 80,
-        footer: 60,
-        main: 400,
-      };
 
       const updated: LayoutData = { ...layout };
 
       (["header", "main", "footer"] as LayoutZoneKey[]).forEach((zone) => {
         updated[zone] = {
           ...updated[zone],
-          height: `${defaultHeights[zone]}px`,
+          height: `${DEFAULT_HEIGHTS[zone]}px`,
           visible: true,
         };
       });

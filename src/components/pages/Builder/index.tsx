@@ -2,7 +2,7 @@
 
 import React from "react";
 import { BuilderDndProvider } from "./contexts/BuilderDndProvider";
-import GridLayoutBuilder from "./layouts/GridLayoutBuilder";
+import GridLayoutBuilder from "./GridLayoutBuilder";
 
 const BuilderPage: React.FC = () => {
   return (

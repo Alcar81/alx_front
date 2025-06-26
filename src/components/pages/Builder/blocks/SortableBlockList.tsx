@@ -1,7 +1,7 @@
 // 📁 src/components/pages/Builder/blocks/SortableBlockList.tsx
 
 import React from "react";
-import { usePageBuilderStore } from "../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../store/builderPanelsStore";
 import SortableBlock from "./SortableBlock";
 
 import {
@@ -20,8 +20,8 @@ import {
 } from "@dnd-kit/sortable";
 
 const SortableBlockList: React.FC = () => {
-  const blocks = usePageBuilderStore((state) => state.blocks);
-  const setBlocks = usePageBuilderStore.setState;
+  const blocks = useBuilderPanelsStore((state) => state.blocks);
+  const setBlocks = useBuilderPanelsStore.setState;
 
   const sensors = useSensors(
     useSensor(MouseSensor, {

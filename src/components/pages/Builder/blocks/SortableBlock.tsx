@@ -4,7 +4,7 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { usePageBuilderStore } from "../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../store/builderPanelsStore";
 import type { PageBlock } from "../types/blockTypes";
 
 // Blocs visuels refactorisés
@@ -21,10 +21,10 @@ const SortableBlock: React.FC<SortableBlockProps> = ({ block }) => {
     id: block.id,
   });
 
-  const removeBlock = usePageBuilderStore((state) => state.removeBlock);
-  const updateBlockStyle = usePageBuilderStore((state) => state.updateBlockStyle);
-  const selectedBlockId = usePageBuilderStore((state) => state.selectedBlockId);
-  const setSelectedBlock = usePageBuilderStore((state) => state.setSelectedBlock);
+  const removeBlock = useBuilderPanelsStore((state) => state.removeBlock);
+  const updateBlockStyle = useBuilderPanelsStore((state) => state.updateBlockStyle);
+  const selectedBlockId = useBuilderPanelsStore((state) => state.selectedBlockId);
+  const setSelectedBlock = useBuilderPanelsStore((state) => state.setSelectedBlock);
 
   const isSelected = selectedBlockId === block.id;
 

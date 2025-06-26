@@ -34,6 +34,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
         header: { visible: true, height: "80px" },
         footer: { visible: true, height: "60px" },
         main: { visible: true, height: "400px" },
+        footerMode: "fixed",
       },
     },
     // ... autres templates initiaux

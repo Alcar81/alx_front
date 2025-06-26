@@ -338,50 +338,94 @@
 .block-tree {
   font-size: 13px;
   color: #333;
+  padding: 6px;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 100%;
+  scrollbar-width: thin; /* Firefox */
+}
+
+.tree-zones-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.tree-zone {
+  margin-bottom: 4px; /* 🔽 Moins d’espace entre les zones */
 }
 
 .tree-zone-title {
+  font-family: monospace;
+  font-size: 13px;
   font-weight: bold;
-  margin-bottom: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  line-height: 1.2;
+  transition: background-color 0.2s;
 }
 
-.tree-group-name {
-  font-weight: bold;
-  color: #666;
-  margin-top: 12px;
+.tree-zone-title:hover {
+  background-color: #f0f0f0;
+}
+
+.tree-zone-title.selected-zone {
+  background-color: #d0e8ff;
+  border-left: 4px solid #1976d2;
+}
+
+.tree-zone-title.disabled-zone {
+  opacity: 0.8;               /* ✅ atténué */
+  color: #222;                /* ✅ reste noir */
+  font-style: italic;
+  background-color: transparent;
+  cursor: default;
+  padding-left: 24px;
 }
 
 .tree-list {
-  padding-left: 0;
   list-style: none;
+  padding-left: 12px;
+  margin: 2px 0;
 }
 
 .tree-block-line {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 6px 4px;
+  padding: 2px 4px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.15s;
+  font-size: 13px;
+  font-family: monospace;
+  line-height: 1.2;
 }
 
 .tree-block-line:hover {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 
-.tree-block-line.selected {
-  background-color: #d0e8ff;
-  outline: 1px solid #1976d2;
+.tree-block-line.selected-block {
+  background-color: #e6ffe6;
+  border-left: 3px solid #4caf50;
 }
 
-.tree-icon {
-  margin-right: 6px;
+.tree-branch {
+  width: 1.5em;
+  display: inline-block;
+  font-weight: bold;
+  font-family: monospace;
 }
 
 .tree-label {
   flex-grow: 1;
   font-weight: 500;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  font-family: monospace;
 }
 
 .tree-actions {
@@ -394,4 +438,22 @@
   border: none;
   background: transparent;
   cursor: pointer;
+  padding: 2px;
+}
+
+/* 🌿 Sous-blocs hiérarchiques */
+.tree-children {
+  list-style: none;
+  padding-left: 16px;
+  margin-top: 2px;
+}
+
+/* Optional scroll styling for Webkit (Chrome, Edge) */
+.block-tree::-webkit-scrollbar {
+  width: 6px;
+}
+
+.block-tree::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
 }

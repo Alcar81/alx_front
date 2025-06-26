@@ -3,10 +3,10 @@
 import React from "react";
 import "./ResizableZone.css";
 import { useResizableZone } from "../hooks/useResizableZone";
-import type { ZoneKey } from "../types/zoneTypes";
+import type { LayoutZoneKey } from "../types/zoneTypes";
 
 interface ResizableZoneProps {
-  zone: ZoneKey;
+  zone: LayoutZoneKey;
   surfaceRef: React.RefObject<HTMLDivElement>;
   children?: React.ReactNode;
 }

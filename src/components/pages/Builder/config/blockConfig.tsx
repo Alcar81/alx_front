@@ -2,14 +2,20 @@
 
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
+import ViewModuleIcon from "@mui/icons-material/ViewModule"; // ✅ Icône pour groupe
+
 import type { BlockType } from "../types/blockTypes";
+
+// ✅ Étendre les types de blocs disponibles
+export type BlockKind = "text" | "image" | "group"; // container = groupe
+
 
 // ✅ Typage des blocs du catalogue (utilisé pour validation + menu)
 export interface BlockDefinition {
   id: BlockType;
   label: string;
   icon: JSX.Element;
-  type: "text" | "image"; // peut être élargi selon tes besoins
+  type: BlockKind;
   defaultWidth?: number;
   defaultHeight?: number;
 }
@@ -79,5 +85,13 @@ export const blockConfig: BlockDefinition[] = [
     type: "image",
     defaultWidth: 150,
     defaultHeight: 120,
+  },
+  {
+    id: "GroupBlock", 
+    label: "Groupe",
+    icon: <ViewModuleIcon />,
+    type: "group",
+    defaultWidth: 200,
+    defaultHeight: 100,
   },
 ];

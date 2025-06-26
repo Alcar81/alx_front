@@ -1,6 +1,6 @@
 // 📁 Builder/types/blockTypes.ts
 
-import type { ZoneKey } from "./zoneTypes";
+import type { LayoutZoneKey } from "./zoneTypes";
 import { BlockStyle } from "./blockStyles";
 
 // 🧱 Types de blocs utilisables dans le builder
@@ -15,12 +15,13 @@ export const VALID_BLOCK_TYPES = [
   "PageTitleBlock",
   "MainBlock",
   "SidebarBlock",
+  "GroupBlock",
 ] as const;
 
 export type BlockType = (typeof VALID_BLOCK_TYPES)[number];
 
 // 🧭 Zone logique où peut se trouver un bloc
-export type BlockPosition = ZoneKey;
+export type BlockPosition = LayoutZoneKey;
 
 // 🧩 Définition complète d’un bloc instancié dans une page
 export interface PageBlock {
@@ -33,6 +34,7 @@ export interface PageBlock {
   order: number;
   label?: string;
   group?: string; // Permet de regrouper les blocs dans l'arborescence
+  childrenIds?: string[]; // ✅ Liste d'enfants si c'est un GroupBlock
 }
 
 // 🔧 Variante simplifiée utilisée pour previews ou templates

@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import "../Panels.css";
 
 import { useDraggable } from "../../hooks/useDraggable";
-import { useBuilderStore } from "../../store/builderStore";
-import { usePageBuilderStore } from "../../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
 import { useTemplateStore } from "../../store/templateStore";
 import { useLayoutStore } from "../../store/layoutStore";
 
@@ -23,10 +22,10 @@ const FloatingBuilderPanel: React.FC<FloatingBuilderPanelProps> = ({ surfaceRef 
   const [activeTab, setActiveTab] = useState<"general" | "zones" | "tree">("zones");
   const [isDirty, setIsDirty] = useState(true);
 
-  const selectedBlockId = usePageBuilderStore((s) => s.selectedBlockId);
-  const blocks = usePageBuilderStore((s) => s.blocks);
-  const selectedZone = useBuilderStore((s) => s.selectedZone);
-  const setSelectedZone = useBuilderStore((s) => s.setSelectedZone);
+  const selectedBlockId = useBuilderPanelsStore((s) => s.selectedBlockId);
+  const blocks = useBuilderPanelsStore((s) => s.blocks);
+  const selectedZone = useBuilderPanelsStore((s) => s.selectedZone);
+  const setSelectedZone = useBuilderPanelsStore((s) => s.setSelectedZone);
   const layout = useLayoutStore((s) => s.layout);
 
   const { updateTemplateLayout, selectedTemplate } = useTemplateStore();

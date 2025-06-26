@@ -2,7 +2,7 @@
 
 import React from "react";
 import "./InteractiveBlockWrapper.css";
-import { usePageBuilderStore } from "../../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
 
 interface Props {
   id: string;
@@ -21,8 +21,8 @@ const InteractiveBlockWrapper: React.FC<Props> = ({
   onSelect,
   children,
 }) => {
-  const startDragging = usePageBuilderStore((s) => s.startDragging);
-  const startResizing = usePageBuilderStore((s) => s.startResizing);
+  const startDragging = useBuilderPanelsStore((s) => s.startDragging);
+  const startResizing = useBuilderPanelsStore((s) => s.startResizing);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();

@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { PageBlock } from "../types/blockTypes";
-import { usePageBuilderStore } from "../store/pageBuilderStore";
+import { useBuilderPanelsStore } from "../store/builderPanelsStore";
 
 import VisualTextBlock from "./visualBlocks/VisualTextBlock";
 import VisualImageBlock from "./visualBlocks/VisualImageBlock"; 
@@ -17,10 +17,10 @@ interface BlockRendererProps {
 const defaultSnapTargets = [0, 100, 200, 300, 400];
 
 const BlockRenderer: React.FC<BlockRendererProps> = ({ block, surfaceRefZone }) => {
-  const removeBlock = usePageBuilderStore((state) => state.removeBlock);
-  const updateBlockStyle = usePageBuilderStore((state) => state.updateBlockStyle);
-  const selectedBlockId = usePageBuilderStore((state) => state.selectedBlockId);
-  const setSelectedBlock = usePageBuilderStore((state) => state.setSelectedBlock);
+  const removeBlock = useBuilderPanelsStore((state) => state.removeBlock);
+  const updateBlockStyle = useBuilderPanelsStore((state) => state.updateBlockStyle);
+  const selectedBlockId = useBuilderPanelsStore((state) => state.selectedBlockId);
+  const setSelectedBlock = useBuilderPanelsStore((state) => state.setSelectedBlock);
 
   switch (block.type) {
     case "VisualTextBlock":

@@ -1,0 +1,73 @@
+/* 📁 Builder/components/Builder/ui/MainExpandControls.css */
+
+.main-expand-controls {
+  position: absolute;
+  right: 12px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 130px); /* +80px pour marge footer + espace */
+  z-index: 1000;
+  background: rgb(255 255 255 / 95%);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+}
+
+/* Groupe contenant les 2 lignes */
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px; /* ↑ Ajoute un petit espace entre les lignes */
+}
+
+/* Rangée de boutons + / - */
+.main-expand-controls .controls-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* Styles communs aux boutons */
+.main-expand-controls button,
+.control-group button {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.main-expand-controls button:hover,
+.control-group button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Menu déroulant du facteur */
+.main-expand-controls select,
+.control-group select {
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 64px;
+  text-align: center;
+}
+
+/* Affichage du total heightAdd */
+.add-display {
+  font-size: 12px;
+  color: #444;
+  margin-left: 4px;
+}
