@@ -1,17 +1,13 @@
 // 📁 Builder/layouts/zones/ZoneWrapper.tsx
 
-import React, {
-  useState,
-  useCallback,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useCallback, useLayoutEffect } from "react";
 import "./Zones.css";
 
 import BlockRenderer from "../../blocks/BlockRenderer";
 import ResizeGuideLine from "../../guides/ResizeGuideLine";
 import { useResizableHandle } from "../../hooks/useResizableHandle";
 import { isResizableZone } from "../../utils/zoneUtils";
-import type { LayoutZoneKey } from "../../types/zoneTypes";
+import type { LayoutZoneKey, ResizableZoneType } from "../../types/zoneTypes";
 
 import { shallow } from "zustand/shallow";
 import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
@@ -35,7 +31,9 @@ interface ZoneWrapperProps {
   surfaceRefZone: React.RefObject<HTMLDivElement>;
   resizable?: boolean;
   children?: React.ReactNode;
+  customContainerRef?: React.RefObject<HTMLDivElement>;
 }
+
 
 const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   zoneKey,
@@ -44,8 +42,9 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   surfaceRefZone,
   resizable = false,
   children,
+  customContainerRef,
 }) => {
-  const actualTag = tag ?? "div"; // ✅ valeur par défaut si tag est undefined
+  const actualTag = tag ?? "div";
 
   const { selectedZone, hoveredZoneKey } = useBuilderPanelsStore(selectorState, shallow);
   const { setSelectedZone, setHoveredZoneKey } = useBuilderPanelsStore(selectorSetters, shallow);
@@ -57,12 +56,17 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   const addBlock = useBuilderPanelsStore((state) => state.addBlock);
 
   const [guideY, setGuideY] = useState<number | null>(null);
+
+  // Toujours appeler le hook
   const resize = useResizableHandle(
-    isResizableZone(zoneKey) ? zoneKey : "header",
+    (isResizableZone(zoneKey) ? (zoneKey as ResizableZoneType) : "header"),
     surfaceRefZone,
     setGuideY
   );
-  const startResize = isResizableZone(zoneKey) ? resize.startResize : undefined;
+
+  // Et filtrer ensuite
+  const isZoneResizable = isResizableZone(zoneKey);
+  const startResize = isZoneResizable ? resize.startResize : undefined;
 
   const isSelected = selectedZone === zoneKey;
   const isHovered = hoveredZoneKey === zoneKey;
@@ -115,7 +119,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     }
   }, [hoveredZoneKey, zoneKey, setHoveredZoneKey]);
 
-  // ✅ 🔽 Mesure dynamique
   const setZoneRealHeight = useBuilderPanelsStore((s) => s.setZoneRealHeight);
   const zoneRealHeight = useBuilderPanelsStore((s) => s.zoneRealHeights[zoneKey]);
   const zones = useBuilderPanelsStore((s) => s.zones);
@@ -125,15 +128,17 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
 
   useLayoutEffect(() => {
     if (zoneKey !== "main") return;
-    if (!surfaceRefZone.current) return;
+    const ref = customContainerRef?.current ?? surfaceRefZone.current;
+    if (!ref) return;
 
-    const height = surfaceRefZone.current.getBoundingClientRect().height;
+    const height = ref.getBoundingClientRect().height;
     if (!height) return;
 
     if (Math.abs(zoneRealHeight - height) > 1) {
       setZoneRealHeight("main", height);
     }
-  }, [blocks, zoneKey, surfaceRefZone, setZoneRealHeight, zoneRealHeight]);
+  }, [blocks, zoneKey, surfaceRefZone, customContainerRef, setZoneRealHeight, zoneRealHeight]);
+
 
   const commonProps = {
     ref: surfaceRefZone,
@@ -162,7 +167,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
         <BlockRenderer key={block.id} block={block} surfaceRefZone={surfaceRefZone} />
       ))}
       {children}
-      {resizable && isResizableZone(zoneKey) && (
+      {resizable && isZoneResizable && (
         <div
           className={resizeClass}
           onMouseDown={startResize}
@@ -175,7 +180,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   return (
     <>
       {React.createElement(actualTag, commonProps, zoneContent)}
-      {resizable && isResizableZone(zoneKey) && guideY !== null && (
+      {resizable && isZoneResizable && guideY !== null && (
         <ResizeGuideLine y={guideY} />
       )}
     </>

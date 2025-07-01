@@ -1,4 +1,3 @@
-// 📁 Builder/GridLayoutBuilder.tsx
 import React, { useRef, useState, useEffect, useCallback } from "react";
 
 // Stores
@@ -29,9 +28,11 @@ const GridLayoutBuilder: React.FC = () => {
 
   const surfaceRefFull = useRef<HTMLDivElement>(null);
   const surfaceRefBlock = useRef<HTMLDivElement>(null);
+  const surfaceRefMainContainer = useRef<HTMLDivElement>(null);
   const surfaceRefZoneHeader = useRef<HTMLDivElement>(null);
   const surfaceRefZoneMain = useRef<HTMLDivElement>(null);
   const surfaceRefZoneFooter = useRef<HTMLDivElement>(null);
+  const surfaceRefFooterInline = useRef<HTMLDivElement>(null); // ✅ nouveau
 
   const [initialized, setInitialized] = useState(false);
   const [panelsVisible, setPanelsVisible] = useState(true);
@@ -56,11 +57,14 @@ const GridLayoutBuilder: React.FC = () => {
   const updateZoneDimensions = useCallback(() => {
     setZoneRefs({
       header: surfaceRefZoneHeader.current?.getBoundingClientRect() || null,
-      main: surfaceRefZoneMain.current?.getBoundingClientRect() || null,
+      main:
+        (layout.footerMode === "inline"
+          ? surfaceRefMainContainer.current
+          : surfaceRefZoneMain.current)?.getBoundingClientRect() || null,
       footer: surfaceRefZoneFooter.current?.getBoundingClientRect() || null,
     });
     setSurfaceBlockRect(surfaceRefBlock.current?.getBoundingClientRect() || null);
-  }, [setZoneRefs, setSurfaceBlockRect]);
+  }, [setZoneRefs, setSurfaceBlockRect, layout.footerMode]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -151,25 +155,30 @@ const GridLayoutBuilder: React.FC = () => {
               />
             )}
 
-            {/* ✅ Main */}
+            {/* ✅ Main + Footer inline */}
             {layout.footerMode === "inline" ? (
               <main className="grid-main" ref={surfaceRefZoneMain}>
-                <div className="main-container" data-zone="main">
+                <div
+                  className="main-container"
+                  data-zone="main"
+                  ref={surfaceRefMainContainer}
+                >
                   <ZoneWrapper
                     zoneKey="main"
-                    title="🧱 Zone principale (Main) Footer intégré"
+                    title="🧱 Zone principale (Main)"
                     tag="div"
-                    surfaceRefZone={surfaceRefZoneMain}
+                    surfaceRefZone={surfaceRefMainContainer}
                     resizable={false}
                   />
                 </div>
-                <div className="footer-container-inline">
+                <div className="footer-container-inline" ref={surfaceRefFooterInline}>
                   <ZoneWrapper
                     zoneKey="footer"
                     title="🔻 Pied de page (Footer intégré)"
                     tag="footer"
                     surfaceRefZone={surfaceRefZoneFooter}
                     resizable
+                    customContainerRef={surfaceRefFooterInline} // ✅ ajouté
                   />
                 </div>
               </main>
