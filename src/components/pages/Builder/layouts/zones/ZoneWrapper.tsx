@@ -55,16 +55,19 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   );
   const addBlock = useBuilderPanelsStore((state) => state.addBlock);
 
+  const updateZone = useBuilderPanelsStore((s) => s.updateZone); // ✅ ajouté
+  const zones = useBuilderPanelsStore((s) => s.zones);
+  const heightMainAdd = useBuilderPanelsStore((s) =>
+    zoneKey === "main" ? s.zones.main.heightMainAdd || 0 : 0
+  );
+
   const [guideY, setGuideY] = useState<number | null>(null);
 
-  // Toujours appeler le hook
   const resize = useResizableHandle(
     (isResizableZone(zoneKey) ? (zoneKey as ResizableZoneType) : "header"),
     surfaceRefZone,
     setGuideY
   );
-
-  // Et filtrer ensuite
   const isZoneResizable = isResizableZone(zoneKey);
   const startResize = isZoneResizable ? resize.startResize : undefined;
 
@@ -121,10 +124,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
 
   const setZoneRealHeight = useBuilderPanelsStore((s) => s.setZoneRealHeight);
   const zoneRealHeight = useBuilderPanelsStore((s) => s.zoneRealHeights[zoneKey]);
-  const zones = useBuilderPanelsStore((s) => s.zones);
-  const heightMainAdd = useBuilderPanelsStore((s) =>
-    zoneKey === "main" ? s.zones.main.heightMainAdd || 0 : 0
-  );
 
   useLayoutEffect(() => {
     if (zoneKey !== "main") return;
@@ -138,7 +137,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
       setZoneRealHeight("main", height);
     }
   }, [blocks, zoneKey, surfaceRefZone, customContainerRef, setZoneRealHeight, zoneRealHeight]);
-
 
   const commonProps = {
     ref: surfaceRefZone,
@@ -159,6 +157,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     </div>
   ) : null;
 
+
   const zoneContent = (
     <>
       {zoneSizeDisplay}
@@ -166,7 +165,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
       {blocks.map((block) => (
         <BlockRenderer key={block.id} block={block} surfaceRefZone={surfaceRefZone} />
       ))}
-      {children}
+      {children}     
       {resizable && isZoneResizable && (
         <div
           className={resizeClass}

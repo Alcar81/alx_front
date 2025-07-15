@@ -2,7 +2,7 @@
 
 import React from "react";
 import Grid4x4Icon from "@mui/icons-material/Grid4x4";
-import "./ToggleGridButton.css"; // réutilise le CSS existant
+import "../CanvasControls.css";
 
 interface Props {
   onClick: () => void;

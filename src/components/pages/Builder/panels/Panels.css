@@ -457,3 +457,28 @@
   background-color: #ccc;
   border-radius: 4px;
 }
+
+/* =========================
+   ⬆️ Ajustement hauteur main (auto)
+========================= */
+
+.row-input button {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  background: linear-gradient(to bottom, #f7f7f7, #eaeaea);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.row-input button:hover {
+  background: #dcdcdc;
+}
+
+.row-input select {
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+}

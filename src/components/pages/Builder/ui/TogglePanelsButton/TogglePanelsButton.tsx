@@ -1,7 +1,7 @@
 // 📁 src/components/builder/ui/TogglePanelsButton.tsx
 
 import React from "react";
-import "./TogglePanelsButton.css";
+import "../CanvasControls.css";
 
 interface Props {
   onClick: () => void;

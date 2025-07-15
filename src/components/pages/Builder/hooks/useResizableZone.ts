@@ -1,4 +1,4 @@
-// 📁 src/hooks/useResizableZone.ts
+// 📁 Builder/hooks/useResizableZone.ts
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useBuilderPanelsStore } from "../store/builderPanelsStore";
@@ -8,10 +8,10 @@ import type { LayoutZoneKey } from "../types/zoneTypes";
 export const useResizableZone = (
   zone: LayoutZoneKey,
   surfaceRef: React.RefObject<HTMLDivElement>,
-  customContainerRef?: React.RefObject<HTMLDivElement> // ✅ pour main inline
+  customContainerRef?: React.RefObject<HTMLDivElement> // ✅ pour footer-container
 ) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { zones, updateZone, selectedZone, setSelectedZone, setHoveredZone } =
+  const { zones, updateZone, selectedZone, setSelectedZone, setHoveredZone, setZoneRealHeight } =
     useBuilderPanelsStore();
 
   const footerMode = useLayoutStore((state) => state.layout.footerMode);
@@ -38,6 +38,18 @@ export const useResizableZone = (
     setStartPos({ x: e.clientX, y: e.clientY });
   }, []);
 
+  const updateRealMainHeight = useCallback(() => {
+    setTimeout(() => {
+      const footer = surfaceRef.current?.querySelector("#footer-container") as HTMLDivElement;
+      const main = surfaceRef.current?.querySelector("#main-container") as HTMLDivElement;
+
+      const footerH = footer?.getBoundingClientRect().height || 0;
+      const mainH = main?.getBoundingClientRect().height || 0;
+
+      setZoneRealHeight("main", footerH + mainH);
+    }, 0);
+  }, [surfaceRef, setZoneRealHeight]);
+
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (!surfaceRef.current || !zoneData) return;
@@ -62,12 +74,14 @@ export const useResizableZone = (
 
         if (isInlineMode && customContainerRef?.current) {
           customContainerRef.current.style.height = `${numericHeight}px`;
-        } else {
-          updateZone(zone, {
-            width: Math.max(100, width),
-            height: numericHeight,
-          });
+          updateRealMainHeight();
+          return;
         }
+
+        updateZone(zone, {
+          width: Math.max(100, width),
+          height: numericHeight,
+        });
       } else if (isDragging) {
         updateZone(zone, {
           x: Math.max(0, zoneData.x + deltaX),
@@ -85,6 +99,7 @@ export const useResizableZone = (
       surfaceRef,
       isInlineMode,
       customContainerRef,
+      updateRealMainHeight,
     ]
   );
 
@@ -102,7 +117,6 @@ export const useResizableZone = (
     };
   }, [handleMouseMove, stopInteraction]);
 
-  // ✅ Ajustement manuel via les boutons + / –
   const adjustZoneHeight = useCallback(
     (delta: number) => {
       if (!zoneData) return;
@@ -113,6 +127,7 @@ export const useResizableZone = (
           parseInt(current.style.height || "") || current.getBoundingClientRect().height || 0;
         const newHeight = Math.max(40, prevHeight + delta);
         current.style.height = `${newHeight}px`;
+        updateRealMainHeight();
         return;
       }
 
@@ -120,7 +135,39 @@ export const useResizableZone = (
       const newHeight = Math.max(40, zoneData.height + delta);
       updateZone(zone, { height: newHeight });
     },
-    [zoneData, zone, isInlineMode, customContainerRef, updateZone]
+    [zoneData, zone, isInlineMode, customContainerRef, updateZone, updateRealMainHeight]
+  );
+
+  // ✅ Nouveau : ajuster main-container directement
+  const adjustMainContainerHeight = useCallback(
+    (delta: number) => {
+      const main = surfaceRef.current?.querySelector("#main-container") as HTMLDivElement;
+      if (!main) return;
+
+      const currentHeight =
+        parseInt(main.style.height || "") || main.getBoundingClientRect().height || 0;
+      const newHeight = Math.max(40, currentHeight + delta);
+      main.style.height = `${newHeight}px`;
+
+      updateRealMainHeight();
+    },
+    [surfaceRef, updateRealMainHeight]
+  );
+
+  // ✅ Nouveau : ajuster footer-container directement
+  const adjustFooterContainerHeight = useCallback(
+    (delta: number) => {
+      const footer = surfaceRef.current?.querySelector("#footer-container") as HTMLDivElement;
+      if (!footer) return;
+
+      const currentHeight =
+        parseInt(footer.style.height || "") || footer.getBoundingClientRect().height || 0;
+      const newHeight = Math.max(40, currentHeight + delta);
+      footer.style.height = `${newHeight}px`;
+
+      updateRealMainHeight();
+    },
+    [surfaceRef, updateRealMainHeight]
   );
 
   return {
@@ -133,5 +180,7 @@ export const useResizableZone = (
     startDrag,
     startResize,
     adjustZoneHeight,
+    adjustMainContainerHeight,
+    adjustFooterContainerHeight,
   };
 };

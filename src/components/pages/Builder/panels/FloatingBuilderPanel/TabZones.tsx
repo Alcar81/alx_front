@@ -1,6 +1,6 @@
 // 📁 Builder/panels/floatingBuilderPanel/TabZones.tsx
 
-import React from "react";
+import React, { useState } from "react";
 import { useLayoutStore } from "../../store/layoutStore";
 import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
 import { MIN_HEIGHTS, MAX_HEIGHTS, DEFAULT_HEIGHTS } from "../../constants/defaultHeights";
@@ -13,6 +13,8 @@ interface Props {
 const zoneOptions: LayoutZoneKey[] = ["header", "main", "footer"];
 
 const TabZones: React.FC<Props> = ({ setIsDirty }) => {
+  const [multiplier, setMultiplier] = useState<number>(10);
+
   const hoveredZoneKey = useBuilderPanelsStore((s) => s.hoveredZoneKey);
   const {
     selectedZone,
@@ -59,6 +61,12 @@ const TabZones: React.FC<Props> = ({ setIsDirty }) => {
     } else {
       updateZone(selectedZone, { [name]: numericValue });
     }
+    setIsDirty(true);
+  };
+
+  const handleAdjustHeightMain = (delta: number) => {
+    const current = zones.main.heightMainAdd || 0;
+    updateZone("main", { heightMainAdd: Math.max(0, current + delta) });
     setIsDirty(true);
   };
 
@@ -193,6 +201,31 @@ const TabZones: React.FC<Props> = ({ setIsDirty }) => {
                 <option value="none">🚫 Aucun (désactivé)</option>
               </select>
             </div>
+          )}
+
+          {/* ✅ Boutons +/– pour la zone main en hauteur auto */}
+          {selectedZone === "main" && isAutoHeight && (
+            <>
+              <div className="row-input">
+                <label>Multiplicateur :</label>
+                <select
+                  value={multiplier}
+                  onChange={(e) => setMultiplier(Number(e.target.value))}
+                >
+                  <option value={1}>×1</option>
+                  <option value={10}>×10</option>
+                  <option value={100}>×100</option>
+                </select>
+              </div>
+
+              <div className="row-input" style={{ gap: "12px" }}>
+                <label>Ajouter hauteur :</label>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button onClick={() => handleAdjustHeightMain(-1 * multiplier)}>–</button>
+                  <button onClick={() => handleAdjustHeightMain(multiplier)}>+</button>
+                </div>
+              </div>
+            </>
           )}
 
           {selectedZone !== "main" && (

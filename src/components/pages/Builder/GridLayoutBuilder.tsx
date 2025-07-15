@@ -10,11 +10,9 @@ import { generateLayoutCSSVars } from "./utils/generateLayoutCSSVars";
 // Zones
 import ZoneWrapper from "./layouts/zones/ZoneWrapper";
 
-// Composants
-import TogglePanelsButton from "./ui/TogglePanelsButton";
-import ToggleGridButton from "./ui/ToggleGridButton";
-import FullGridOverlay from "./ui/FullGridOverlay";
-import MainExpandControls from "./ui/MainExpandControls";
+// Composants regroupés
+import CanvasControls from "./ui/CanvasControls";
+import FullGridOverlay from "./ui/FullGridOverlay/FullGridOverlay";
 import FloatingBuilderPanel from "./panels/FloatingBuilderPanel/FloatingBuilderPanel";
 import FloatingPagePanel from "./panels/FloatingPagePanel";
 import GhostBlock from "./ghost/GhostBlock";
@@ -32,7 +30,7 @@ const GridLayoutBuilder: React.FC = () => {
   const surfaceRefZoneHeader = useRef<HTMLDivElement>(null);
   const surfaceRefZoneMain = useRef<HTMLDivElement>(null);
   const surfaceRefZoneFooter = useRef<HTMLDivElement>(null);
-  const surfaceRefFooterInline = useRef<HTMLDivElement>(null); // ✅ nouveau
+  const surfaceRefFooterInline = useRef<HTMLDivElement>(null);
 
   const [initialized, setInitialized] = useState(false);
   const [panelsVisible, setPanelsVisible] = useState(true);
@@ -178,7 +176,7 @@ const GridLayoutBuilder: React.FC = () => {
                     tag="footer"
                     surfaceRefZone={surfaceRefZoneFooter}
                     resizable
-                    customContainerRef={surfaceRefFooterInline} // ✅ ajouté
+                    customContainerRef={surfaceRefFooterInline}
                   />
                 </div>
               </main>
@@ -206,21 +204,22 @@ const GridLayoutBuilder: React.FC = () => {
 
         <GhostBlock />
         {showGrid && <FullGridOverlay surfaceRef={surfaceRefFull} />}
-        <TogglePanelsButton
-          onClick={() => setPanelsVisible((v) => !v)}
-          isVisible={panelsVisible}
+
+        {/* ✅ Panneau des boutons (grille, panneaux, zones) */}
+        <CanvasControls
+          surfaceRef={surfaceRefFull}
+          panelsVisible={panelsVisible}
+          setPanelsVisible={setPanelsVisible}
+          showGrid={showGrid}
+          setShowGrid={setShowGrid}
         />
-        <ToggleGridButton
-          onClick={() => setShowGrid((g) => !g)}
-          isVisible={showGrid}
-        />
+
         {panelsVisible && (
           <div className="floating-panel-root">
             <FloatingBuilderPanel surfaceRef={surfaceRefFull} />
             <FloatingPagePanel surfaceRef={surfaceRefFull} />
           </div>
         )}
-        <MainExpandControls />
       </div>
     </div>
   );
