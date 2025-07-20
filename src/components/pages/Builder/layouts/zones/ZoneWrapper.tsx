@@ -14,7 +14,6 @@ import { useBuilderPanelsStore } from "../../store/builderPanelsStore";
 import type { BlockType } from "../../types/blockTypes";
 import { useLayoutStore } from "../../store/layoutStore";
 
-// ✅ Zustand selectors
 const selectorState = (s: ReturnType<typeof useBuilderPanelsStore.getState>) => ({
   selectedZone: s.selectedZone,
   hoveredZoneKey: s.hoveredZoneKey,
@@ -33,7 +32,6 @@ interface ZoneWrapperProps {
   children?: React.ReactNode;
   customContainerRef?: React.RefObject<HTMLDivElement>;
 }
-
 
 const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   zoneKey,
@@ -54,8 +52,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     shallow
   );
   const addBlock = useBuilderPanelsStore((state) => state.addBlock);
-
-  const updateZone = useBuilderPanelsStore((s) => s.updateZone); // ✅ ajouté
+  const updateZone = useBuilderPanelsStore((s) => s.updateZone);
   const zones = useBuilderPanelsStore((s) => s.zones);
   const heightMainAdd = useBuilderPanelsStore((s) =>
     zoneKey === "main" ? s.zones.main.heightMainAdd || 0 : 0
@@ -64,7 +61,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   const [guideY, setGuideY] = useState<number | null>(null);
 
   const resize = useResizableHandle(
-    (isResizableZone(zoneKey) ? (zoneKey as ResizableZoneType) : "header"),
+    isResizableZone(zoneKey) ? (zoneKey as ResizableZoneType) : "header",
     surfaceRefZone,
     setGuideY
   );
@@ -126,7 +123,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
   const zoneRealHeight = useBuilderPanelsStore((s) => s.zoneRealHeights[zoneKey]);
 
   useLayoutEffect(() => {
-    if (zoneKey !== "main") return;
     const ref = customContainerRef?.current ?? surfaceRefZone.current;
     if (!ref) return;
 
@@ -134,7 +130,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     if (!height) return;
 
     if (Math.abs(zoneRealHeight - height) > 1) {
-      setZoneRealHeight("main", height);
+      setZoneRealHeight(zoneKey, height);
     }
   }, [blocks, zoneKey, surfaceRefZone, customContainerRef, setZoneRealHeight, zoneRealHeight]);
 
@@ -152,11 +148,10 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     <div className="zone-size-info">
       {zones[zoneKey].width}×
       {zoneKey === "main"
-        ? `${zoneRealHeight}${heightMainAdd > 0 ? ` +${heightMainAdd}` : ""}`
-        : zoneRealHeight}
+        ? `${Math.floor(zoneRealHeight)}${heightMainAdd > 0 ? ` +${heightMainAdd}` : ""}`
+        : Math.floor(zoneRealHeight)}
     </div>
   ) : null;
-
 
   const zoneContent = (
     <>
@@ -165,7 +160,7 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
       {blocks.map((block) => (
         <BlockRenderer key={block.id} block={block} surfaceRefZone={surfaceRefZone} />
       ))}
-      {children}     
+      {children}
       {resizable && isZoneResizable && (
         <div
           className={resizeClass}

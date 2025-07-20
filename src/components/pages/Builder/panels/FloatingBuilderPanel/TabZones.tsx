@@ -22,13 +22,11 @@ const TabZones: React.FC<Props> = ({ setIsDirty }) => {
     zones,
     updateZone,
     zoneRealHeights,
-    zoneHeightDiffs,
   } = useBuilderPanelsStore();
 
   const { layout, setHeight, toggleSection, setLayout } = useLayoutStore();
 
   const zoneData = selectedZone ? zones[selectedZone] : null;
-  const isAutoHeight = selectedZone && layout[selectedZone]?.height === "auto";
   const isFooterDisabled = layout.footerMode === "none";
 
   const handleZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -70,6 +68,21 @@ const TabZones: React.FC<Props> = ({ setIsDirty }) => {
     setIsDirty(true);
   };
 
+  const handleToggleAuto = (checked: boolean) => {
+    if (!selectedZone) return;
+    if (checked) {
+      setHeight(selectedZone, "auto");
+      updateZone(selectedZone, { height: "auto" });
+    } else {
+      const defaultHeight = DEFAULT_HEIGHTS[selectedZone];
+      setHeight(selectedZone, `${defaultHeight}px`);
+      updateZone(selectedZone, { height: defaultHeight });
+    }
+    setIsDirty(true);
+  };
+
+  const isAutoMain = selectedZone === "main" && layout.main?.height === "auto";
+
   return (
     <>
       <div className="row-input">
@@ -106,65 +119,58 @@ const TabZones: React.FC<Props> = ({ setIsDirty }) => {
             />
           </div>
 
-          <div className="row-input">
-            <label>Hauteur (config) :</label>
-            {isAutoHeight ? (
-              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <span style={{ fontStyle: "italic", color: "#666" }}>auto</span>
-                <button
-                  onClick={() => {
-                    const defaultHeight = DEFAULT_HEIGHTS[selectedZone];
-                    setHeight(selectedZone, `${defaultHeight}px`);
-                    updateZone(selectedZone, { height: defaultHeight });
-                    setIsDirty(true);
-                  }}
-                  title="Désactiver auto"
-                  disabled={selectedZone === "footer" && isFooterDisabled}
-                >
-                  ⛔️ Désactiver auto
-                </button>
-              </div>
-            ) : (
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          {/* ✅ Nouvelle logique Auto / Hauteur pour zone main */}
+          {selectedZone === "main" && (
+            <>
+              <div className="row-input" style={{ alignItems: "center" }}>
+                <label>Auto :</label>
                 <input
-                  type="number"
-                  name="height"
-                  min={MIN_HEIGHTS[selectedZone]}
-                  max={MAX_HEIGHTS[selectedZone]}
-                  value={parseInt(layout[selectedZone]?.height ?? "0", 10)}
-                  onChange={handleInputChange}
-                  style={{ width: "80px" }}
-                  disabled={selectedZone === "footer" && isFooterDisabled}
+                  type="checkbox"
+                  checked={isAutoMain}
+                  onChange={(e) => handleToggleAuto(e.target.checked)}
                 />
-                <span style={{ fontSize: "0.9em", color: "#666" }}>px</span>
-                {selectedZone === "main" && (
-                  <button
-                    onClick={() => {
-                      setHeight(selectedZone, "auto");
-                      updateZone(selectedZone, { height: "auto" });
-                      setIsDirty(true);
-                    }}
-                    title="Activer hauteur auto"
-                  >
-                    ⚙️ Utiliser auto
-                  </button>
-                )}
               </div>
-            )}
-          </div>
+
+              {!isAutoMain && (
+                <div className="row-input">
+                  <label>Hauteur :</label>
+                  <input
+                    type="number"
+                    name="height"
+                    min={MIN_HEIGHTS[selectedZone]}
+                    max={MAX_HEIGHTS[selectedZone]}
+                    value={parseInt(layout[selectedZone]?.height ?? "0", 10)}
+                    onChange={handleInputChange}
+                    style={{ width: "80px" }}
+                  />
+                  <span style={{ fontSize: "0.9em", color: "#666" }}>px</span>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ✅ Footer et Header (pas de checkbox auto) */}
+          {selectedZone !== "main" && (
+            <div className="row-input">
+              <label>Hauteur :</label>
+              <input
+                type="number"
+                name="height"
+                min={MIN_HEIGHTS[selectedZone]}
+                max={MAX_HEIGHTS[selectedZone]}
+                value={parseInt(layout[selectedZone]?.height ?? "0", 10)}
+                onChange={handleInputChange}
+                style={{ width: "80px" }}
+                disabled={selectedZone === "footer" && isFooterDisabled}
+              />
+              <span style={{ fontSize: "0.9em", color: "#666" }}>px</span>
+            </div>
+          )}
 
           <div className="row-input">
             <label>Hauteur réelle :</label>
             <div style={{ fontSize: "0.9em", color: "#333" }}>
-              {zoneRealHeights[selectedZone]} px
-            </div>
-          </div>
-
-          <div className="row-input">
-            <label>Écart détecté :</label>
-            <div style={{ fontSize: "0.9em", color: "#333" }}>
-              {zoneHeightDiffs[selectedZone] > 0 ? "+" : ""}
-              {zoneHeightDiffs[selectedZone]} px
+              {Math.floor(zoneRealHeights[selectedZone])} px
             </div>
           </div>
 
@@ -203,8 +209,7 @@ const TabZones: React.FC<Props> = ({ setIsDirty }) => {
             </div>
           )}
 
-          {/* ✅ Boutons +/– pour la zone main en hauteur auto */}
-          {selectedZone === "main" && isAutoHeight && (
+          {selectedZone === "main" && isAutoMain && (
             <>
               <div className="row-input">
                 <label>Multiplicateur :</label>

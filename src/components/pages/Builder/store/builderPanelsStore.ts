@@ -10,6 +10,7 @@ import type { BlockStyle } from "../types/blockStyles";
 import type { PageBlock } from "../types/blockTypes";
 import ImageBlock400x200 from "../icons/400x200.svg";
 
+// 🔍 Détection zone dominante
 function detectDominantZone(
   x: number,
   y: number,
@@ -37,8 +38,10 @@ function detectDominantZone(
 }
 
 export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((set, get) => ({
+  // 🔁 États de base
   isDraggingBlock: false,
   isGhostingBlock: false,
+  zoneHeightDiffs: { header: 0, main: 0, footer: 0 },
 
   selectedZone: "main",
   hoveredZone: null,
@@ -50,8 +53,8 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
     main: { x: 0, y: 80, width: 1200, height: "auto", heightMainAdd: 0 },
     footer: { x: 0, y: 680, width: 1200, height: 60 },
   },
+
   zoneRealHeights: { header: 0, main: 0, footer: 0 },
-  zoneHeightDiffs: { header: 0, main: 0, footer: 0 },
 
   zoneRefs: { header: null, main: null, footer: null },
   surfaceBlockRect: null,
@@ -65,6 +68,7 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
   draggingBlock: null,
   resizingBlock: null,
 
+  // 🔧 Setters
   setSurfaceOffset: (offset) => set({ surfaceOffset: offset }),
   setSurfaceSize: (size) => set({ surfaceSize: size }),
   setSelectedZone: (zone) => set({ selectedZone: zone }),
@@ -78,6 +82,7 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
       lastValidHoveredZoneKey: zone ?? state.lastValidHoveredZoneKey,
     })),
 
+  // 🔁 Mise à jour des zones
   updateZone: (zone, data) =>
     set((state) => {
       const current = state.zones[zone];
@@ -85,9 +90,9 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
         data.height === "auto"
           ? "auto"
           : typeof data.height === "number"
-            ? Math.max(40, data.height)
+            ? Math.max(40, Math.floor(data.height))
             : typeof current.height === "number"
-              ? Math.max(40, current.height)
+              ? Math.max(40, Math.floor(current.height))
               : 40;
 
       const updatedZone = {
@@ -99,7 +104,7 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
         heightMainAdd:
           zone === "main"
             ? typeof data.heightMainAdd === "number"
-              ? Math.max(0, data.heightMainAdd)
+              ? Math.max(0, Math.floor(data.heightMainAdd))
               : current.heightMainAdd || 0
             : undefined,
       };
@@ -113,21 +118,12 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
     }),
 
   setZoneRealHeight: (zone, realHeight) =>
-    set((state) => {
-      const expected = state.zones[zone]?.height;
-      const expectedNum = expected === "auto" ? 0 : expected;
-      const diff = realHeight - expectedNum;
-      return {
-        zoneRealHeights: {
-          ...state.zoneRealHeights,
-          [zone]: realHeight,
-        },
-        zoneHeightDiffs: {
-          ...state.zoneHeightDiffs,
-          [zone]: diff,
-        },
-      };
-    }),
+    set((state) => ({
+      zoneRealHeights: {
+        ...state.zoneRealHeights,
+        [zone]: Math.floor(realHeight),
+      },
+    })),
 
   resetLayout: () => {
     const { x: ox, y: oy } = get().surfaceOffset;
@@ -139,10 +135,10 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
         footer: { x: ox, y: oy + 680, width, height: 60 },
       },
       zoneRealHeights: { header: 0, main: 0, footer: 0 },
-      zoneHeightDiffs: { header: 0, main: 0, footer: 0 },
     }));
   },
 
+  // 🧱 Blocs
   addBlock: (zone, type) => {
     const existing = get().blocks.filter((b) => b.zone === zone);
     const order = existing.length;
@@ -222,28 +218,19 @@ export const useBuilderPanelsStore = createWithEqualityFn<BuilderPanelsState>((s
     const zone = detectDominantZone(x, y, w, h, refs) || get().lastValidHoveredZoneKey;
     if (!zone) return;
 
-    // ✅ Limite spéciale pour la zone "main"
+    // ✅ Zone spéciale : main ➜ ajustement post-drop
     if (zone === "main") {
       const { zones, zoneRealHeights } = get();
-      const mainZone = zones.main;
-      const ref = refs.main;
+      const topY = y;
+      const paddingBottom = 10;
+      const desiredBottom = topY + h + paddingBottom;
+      const heightOrigin = zoneRealHeights.main;
+      const heightCurrent = heightOrigin + (zones.main.heightMainAdd || 0);
 
-      if (!ref || typeof ref.top !== "number") return;
-
-      const heightOrigin = zoneRealHeights.main || 0;
-      const heightAdd = mainZone.heightMainAdd || 0;
-      const maxY = ref.top + heightOrigin + heightAdd;
-
-      if (typeof maxY === "number" && y + h > maxY) {
-        console.warn("Bloc refusé : dépasse la hauteur visible de la zone main.");
-        return;
+      if (desiredBottom > heightCurrent) {
+        const delta = desiredBottom - heightOrigin;
+        get().updateZone("main", { heightMainAdd: delta });
       }
-    }
-
-    // ✅ Pour les autres zones, on évite le débordement vertical
-    if (zone !== "main") {
-      const ref = refs[zone];
-      if (ref && y + h > ref.bottom + 10) return;
     }
 
     const type = mapBlockIdToComponent(ghost.type);
