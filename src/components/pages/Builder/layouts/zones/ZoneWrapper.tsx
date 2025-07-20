@@ -52,7 +52,6 @@ const ZoneWrapper: React.FC<ZoneWrapperProps> = ({
     shallow
   );
   const addBlock = useBuilderPanelsStore((state) => state.addBlock);
-  const updateZone = useBuilderPanelsStore((s) => s.updateZone);
   const zones = useBuilderPanelsStore((s) => s.zones);
   const heightMainAdd = useBuilderPanelsStore((s) =>
     zoneKey === "main" ? s.zones.main.heightMainAdd || 0 : 0
